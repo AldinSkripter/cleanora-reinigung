@@ -135,7 +135,12 @@ plattformspezifischen Abhängigkeiten.
 Das Kontaktformular sendet Anfragen per SMTP an die konfigurierte Empfänger-Adresse
 (Standard: `kontak@cleanora-reinigung.de`).
 
-**Konfiguration im Admin-Panel** (`/admin` → „E-Mail-Einstellungen"):
+**Konfiguration im Admin-Panel** (`/admin` → „E-Mail-Einstellungen").
+
+Das Admin-Panel bietet drei Bereiche:
+- **Anfragen:** alle Kontaktanfragen aus dem Formular (auch als Backup, falls SMTP einmal fehlschlägt)
+- **E-Mail-Einstellungen:** Empfänger-Adresse + komplette SMTP-Konfiguration
+- **Firmendaten:** öffentliche E-Mail, Telefon, Adresse, Inhaber, USt-IdNr., Erreichbarkeit — Änderungen erscheinen sofort auf der Website (Footer, Kontakt, Impressum, Datenschutz)
 
 1. Postfach in Plesk anlegen (z. B. `kontak@cleanora-reinigung.de`).
 2. Im Admin-Panel eintragen:
@@ -165,11 +170,9 @@ und `frontend/src/data/site.js` (`SITE.domain`) ggf. an die finale Domain anpass
 
 ## 10. Platzhalter ersetzen
 
-Vor dem Livegang folgende Platzhalter durch echte Daten ersetzen:
-
-- Telefonnummer, Anschrift → `frontend/src/data/site.js` (`SITE`)
-- Inhaber, USt-ID → `frontend/src/pages/Impressum.js`
-- Verantwortlicher → `frontend/src/pages/Datenschutz.js`
+Alle Firmendaten (Telefon, Adresse, Inhaber, USt-IdNr., Erreichbarkeit, öffentliche E-Mail)
+können bequem im **Admin-Panel** unter `/admin` → „Firmendaten" gepflegt werden — kein
+Code-Eingriff nötig. Alternativ liegen die Standardwerte in `frontend/src/data/site.js` (`SITE`).
 
 ---
 

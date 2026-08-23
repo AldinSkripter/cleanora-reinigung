@@ -22,13 +22,16 @@ Mehrsprachig DE, responsive (Desktop/Tablet/Mobile), Local-SEO Achern & Ortenau,
 - Backend komplett: Kontakt mit Spam-Schutz, JWT-Admin-Auth, E-Mail-Settings (verschlüsselt), Anfragen-Speicherung.
 - SEO: Meta/OG/Canonical pro Seite, JSON-LD (ProfessionalService, Service, FAQPage), sitemap.xml, robots.txt.
 - Doku: README (Install/Deploy Plesk), .env.example (backend+frontend), .gitignore, auth_testing.md.
+- Admin-Panel erweitert: Tab „Firmendaten" (öffentliche E-Mail, Telefon, Adresse, Inhaber, USt-IdNr., Erreichbarkeit) — Werte werden live auf Website (Footer/Kontakt/Impressum/Datenschutz/JSON-LD) gerendert via GET /api/site-settings (öffentlich) + PUT /api/admin/settings/site (geschützt).
+- Bugfix: Seitenwechsel springt zuverlässig an den Seitenanfang (Lenis überschrieb window.scrollTo → jetzt lenis.scrollTo(0, immediate) bei Routenwechsel). E2E verifiziert.
+- GitHub: Code in https://github.com/AldinSkripter/cleanora-reinigung gepusht (Branch main).
 
 ## Backlog
-- P0: GitHub-Repo-URL vom Kunden → Push des kompletten Codes. Echte SMTP-Zugangsdaten im Admin-Panel eintragen (oder .env) und Testmail verifizieren. Platzhalter (Telefon, Anschrift, Inhaber, USt-ID) ersetzen.
+- P0: Echte SMTP-Zugangsdaten im Admin-Panel eintragen (oder .env) und Testmail verifizieren. Verbleibende Platzhalter (USt-ID, ggf. echte Adresse) im Admin-Panel unter „Firmendaten" pflegen.
 - P1: Finale Domain in SITE.domain/sitemap/robots setzen; OG-Share-Image (og:image) ergänzen; Favicon mit Cleanora-Wordmark.
 - P2: Cookie-/Consent-Hinweis falls später Tracking hinzukommt; Testimonials/Referenzen sobald echte vorliegen; mehrsprachige Version optional; Erfolgsmetriken (Core Web Vitals Messung auf Zielserver).
 
 ## Nächste Aufgaben
-1. GitHub-Push sobald Repo-URL vorliegt.
-2. SMTP produktiv konfigurieren + End-to-End-Testmail.
-3. Echte Kontaktdaten/Impressum einpflegen.
+1. SMTP produktiv konfigurieren + End-to-End-Testmail.
+2. USt-ID und finale Adresse im Admin-Panel ergänzen.
+3. Bei Domainwechsel: SITE.domain/sitemap/robots anpassen.

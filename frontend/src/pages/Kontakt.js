@@ -2,9 +2,10 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import Seo from "@/components/Seo";
 import Reveal from "@/components/Reveal";
 import ContactForm from "@/components/ContactForm";
-import { SITE } from "@/data/site";
+import { useSite } from "@/lib/SiteContext";
 
 export default function Kontakt() {
+  const site = useSite();
   return (
     <>
       <Seo
@@ -38,8 +39,8 @@ export default function Kontakt() {
                   icon: Phone,
                   label: "Telefon",
                   content: (
-                    <a data-testid="kontakt-phone" href={`tel:${SITE.phoneHref}`} className="transition-colors duration-300 hover:text-precision/60">
-                      {SITE.phone}
+                    <a data-testid="kontakt-phone" href={`tel:${site.phone_href}`} className="transition-colors duration-300 hover:text-precision/60">
+                      {site.phone}
                     </a>
                   ),
                 },
@@ -47,20 +48,20 @@ export default function Kontakt() {
                   icon: Mail,
                   label: "E-Mail",
                   content: (
-                    <a data-testid="kontakt-email" href={`mailto:${SITE.email}`} className="transition-colors duration-300 hover:text-precision/60">
-                      {SITE.email}
+                    <a data-testid="kontakt-email" href={`mailto:${site.public_email}`} className="transition-colors duration-300 hover:text-precision/60">
+                      {site.public_email}
                     </a>
                   ),
                 },
                 {
                   icon: MapPin,
                   label: "Adresse",
-                  content: <span>{SITE.street} · {SITE.city}</span>,
+                  content: <span>{site.street} · {site.city}</span>,
                 },
                 {
                   icon: Clock,
                   label: "Erreichbarkeit",
-                  content: <span>Mo–Fr 8:00–17:00 Uhr · Termine nach Vereinbarung</span>,
+                  content: <span>{site.hours}</span>,
                 },
               ].map((item) => (
                 <Reveal key={item.label} className="flex items-start gap-5">
@@ -74,12 +75,14 @@ export default function Kontakt() {
                 </Reveal>
               ))}
             </div>
-            <Reveal className="mt-12 border-l-2 border-precision/20 pl-6">
-              <p className="text-sm leading-relaxed text-precision/60">
-                Hinweis: Alle Angaben zu Adresse und Telefonnummer werden aktuell vorbereitet und
-                in Kürze ergänzt. Ihre Anfrage über das Formular erreicht uns bereits zuverlässig.
-              </p>
-            </Reveal>
+            {!site.owner_name && (
+              <Reveal className="mt-12 border-l-2 border-precision/20 pl-6">
+                <p className="text-sm leading-relaxed text-precision/60">
+                  Hinweis: Alle Angaben zu Adresse und Telefonnummer werden aktuell vorbereitet und
+                  in Kürze ergänzt. Ihre Anfrage über das Formular erreicht uns bereits zuverlässig.
+                </p>
+              </Reveal>
+            )}
           </div>
 
           <Reveal delay={0.15} className="lg:col-span-6 lg:col-start-7">

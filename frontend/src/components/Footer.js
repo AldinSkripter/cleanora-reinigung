@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, Mail, Phone } from "lucide-react";
 import Logo from "@/components/Logo";
 import { SERVICES, SITE } from "@/data/site";
+import { useSite } from "@/lib/SiteContext";
 
 export default function Footer() {
+  const site = useSite();
   return (
     <footer data-testid="site-footer" className="relative overflow-hidden bg-precision text-white grain">
       <div className="mx-auto max-w-7xl px-6 pb-12 pt-24 md:px-12 md:pt-32">
@@ -17,20 +19,20 @@ export default function Footer() {
             <div className="mt-8 space-y-3 text-sm">
               <a
                 data-testid="footer-phone"
-                href={`tel:${SITE.phoneHref}`}
+                href={`tel:${site.phone_href}`}
                 className="flex items-center gap-3 text-white/80 transition-colors duration-300 hover:text-white"
               >
-                <Phone className="h-4 w-4" /> {SITE.phone}
+                <Phone className="h-4 w-4" /> {site.phone}
               </a>
               <a
                 data-testid="footer-email"
-                href={`mailto:${SITE.email}`}
+                href={`mailto:${site.public_email}`}
                 className="flex items-center gap-3 text-white/80 transition-colors duration-300 hover:text-white"
               >
-                <Mail className="h-4 w-4" /> {SITE.email}
+                <Mail className="h-4 w-4" /> {site.public_email}
               </a>
               <p className="text-white/50">
-                {SITE.street} · {SITE.city}
+                {site.street} · {site.city}
               </p>
             </div>
           </div>

@@ -1,11 +1,12 @@
 import Seo from "@/components/Seo";
 import Reveal from "@/components/Reveal";
 import { SITE } from "@/data/site";
+import { useSite } from "@/lib/SiteContext";
 
-const SECTIONS = [
+const buildSections = (site) => [
   {
     title: "1. Verantwortlicher",
-    body: `Verantwortlicher für die Datenverarbeitung auf dieser Website ist:\n\n${SITE.legalName}\nInhaber: [Vor- und Nachname des Inhabers — wird ergänzt]\n${SITE.street}\n${SITE.city}\nE-Mail: ${SITE.email}`,
+    body: `Verantwortlicher für die Datenverarbeitung auf dieser Website ist:\n\n${SITE.legalName}\nInhaber: ${site.owner_name || "[Vor- und Nachname des Inhabers — wird ergänzt]"}\n${site.street}\n${site.city}\nE-Mail: ${site.public_email}`,
   },
   {
     title: "2. Allgemeines zur Datenverarbeitung",
@@ -30,6 +31,8 @@ const SECTIONS = [
 ];
 
 export default function Datenschutz() {
+  const site = useSite();
+  const SECTIONS = buildSections(site);
   return (
     <>
       <Seo

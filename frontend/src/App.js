@@ -3,6 +3,8 @@ import "@/App.css";
 import { BrowserRouter, Routes, Route, Outlet, useLocation } from "react-router-dom";
 import Lenis from "lenis";
 import { Toaster } from "@/components/ui/sonner";
+import { getLenis, setLenis } from "@/lib/lenis";
+import { SiteProvider } from "@/lib/SiteContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Home from "@/pages/Home";
@@ -20,7 +22,12 @@ import NotFound from "@/pages/NotFound";
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const lenis = getLenis();
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true, force: true });
+    } else {
+      window.scrollTo(0, 0);
+    }
   }, [pathname]);
   return null;
 }
@@ -41,6 +48,7 @@ function App() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+    setLenis(lenis);
     let rafId;
     const raf = (time) => {
       lenis.raf(time);
@@ -50,28 +58,31 @@ function App() {
     return () => {
       cancelAnimationFrame(rafId);
       lenis.destroy();
+      setLenis(null);
     };
   }, []);
 
   return (
     <div className="App">
       <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          <Route element={<SiteLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/leistungen" element={<Leistungen />} />
-            <Route path="/leistungen/:slug" element={<LeistungDetail />} />
-            <Route path="/ueber-uns" element={<UeberUns />} />
-            <Route path="/einsatzgebiet" element={<Einsatzgebiet />} />
-            <Route path="/kontakt" element={<Kontakt />} />
-            <Route path="/impressum" element={<Impressum />} />
-            <Route path="/datenschutz" element={<Datenschutz />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-          <Route path="/admin" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        </Routes>
+        <SiteProvider>
+          <ScrollToTop />
+          <Routes>
+            <Route element={<SiteLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/leistungen" element={<Leistungen />} />
+              <Route path="/leistungen/:slug" element={<LeistungDetail />} />
+              <Route path="/ueber-uns" element={<UeberUns />} />
+              <Route path="/einsatzgebiet" element={<Einsatzgebiet />} />
+              <Route path="/kontakt" element={<Kontakt />} />
+              <Route path="/impressum" element={<Impressum />} />
+              <Route path="/datenschutz" element={<Datenschutz />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+            <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          </Routes>
+        </SiteProvider>
       </BrowserRouter>
       <Toaster position="bottom-right" />
     </div>

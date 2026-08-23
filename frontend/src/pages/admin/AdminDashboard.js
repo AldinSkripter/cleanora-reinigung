@@ -176,6 +176,85 @@ function Requests() {
   );
 }
 
+function SiteSettingsForm() {
+  const [cfg, setCfg] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const set = (key) => (e) => setCfg((c) => ({ ...c, [key]: e.target.value }));
+
+  useEffect(() => {
+    api.get("/site-settings").then(({ data }) => setCfg(data));
+  }, []);
+
+  async function save(e) {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      await api.put("/admin/settings/site", cfg);
+      toast.success("Firmendaten gespeichert — nach Neu laden auf der Website sichtbar");
+    } catch {
+      toast.error("Speichern fehlgeschlagen");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (!cfg) {
+    return <div className="flex justify-center py-20"><Loader2 className="h-6 w-6 animate-spin text-white/40" /></div>;
+  }
+
+  return (
+    <form data-testid="site-settings-form" onSubmit={save} className="space-y-8">
+      <div className="border border-white/10 bg-white/[0.03] p-6 md:p-8">
+        <h2 className="flex items-center gap-2 font-display text-lg font-light text-white">
+          <Settings className="h-4 w-4" /> Firmendaten
+        </h2>
+        <p className="mt-2 text-xs leading-relaxed text-white/40">
+          Diese Angaben erscheinen auf der Website (Footer, Kontaktseite, Impressum, Datenschutz).
+        </p>
+        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="ss-email" className={labelCls}>Öffentliche E-Mail</label>
+            <input id="ss-email" data-testid="site-email" type="email" required value={cfg.public_email} onChange={set("public_email")} className={`${inputCls} mt-2`} />
+          </div>
+          <div>
+            <label htmlFor="ss-phone" className={labelCls}>Telefonnummer</label>
+            <input id="ss-phone" data-testid="site-phone" value={cfg.phone} onChange={set("phone")} className={`${inputCls} mt-2`} placeholder="+49 (0) 7841 …" />
+          </div>
+          <div>
+            <label htmlFor="ss-street" className={labelCls}>Straße &amp; Hausnummer</label>
+            <input id="ss-street" data-testid="site-street" value={cfg.street} onChange={set("street")} className={`${inputCls} mt-2`} />
+          </div>
+          <div>
+            <label htmlFor="ss-city" className={labelCls}>PLZ &amp; Ort</label>
+            <input id="ss-city" data-testid="site-city" value={cfg.city} onChange={set("city")} className={`${inputCls} mt-2`} />
+          </div>
+          <div>
+            <label htmlFor="ss-owner" className={labelCls}>Inhaber (Impressum)</label>
+            <input id="ss-owner" data-testid="site-owner" value={cfg.owner_name} onChange={set("owner_name")} className={`${inputCls} mt-2`} placeholder="Vor- und Nachname" />
+          </div>
+          <div>
+            <label htmlFor="ss-ust" className={labelCls}>USt-IdNr. (optional)</label>
+            <input id="ss-ust" data-testid="site-ust" value={cfg.ust_id} onChange={set("ust_id")} className={`${inputCls} mt-2`} placeholder="DE …" />
+          </div>
+          <div className="sm:col-span-2">
+            <label htmlFor="ss-hours" className={labelCls}>Erreichbarkeit</label>
+            <input id="ss-hours" data-testid="site-hours" value={cfg.hours} onChange={set("hours")} className={`${inputCls} mt-2`} />
+          </div>
+        </div>
+      </div>
+      <button
+        data-testid="site-settings-save"
+        type="submit"
+        disabled={saving}
+        className="flex items-center gap-2 border border-white bg-white px-8 py-3.5 text-sm font-medium text-precision transition-colors duration-300 hover:bg-transparent hover:text-white disabled:opacity-60"
+      >
+        {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+        Firmendaten speichern
+      </button>
+    </form>
+  );
+}
+
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [tab, setTab] = useState("requests");
@@ -235,6 +314,7 @@ export default function AdminDashboard() {
           {[
             ["requests", "Anfragen"],
             ["email", "E-Mail-Einstellungen"],
+            ["site", "Firmendaten"],
           ].map(([key, label]) => (
             <button
               key={key}
@@ -249,7 +329,7 @@ export default function AdminDashboard() {
           ))}
         </div>
         <div className="mt-10">
-          {tab === "requests" ? <Requests /> : <EmailSettings />}
+          {tab === "requests" ? <Requests /> : tab === "email" ? <EmailSettings /> : <SiteSettingsForm />}
         </div>
       </motion.main>
     </div>

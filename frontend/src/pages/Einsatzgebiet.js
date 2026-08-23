@@ -3,7 +3,8 @@ import { ArrowUpRight, MapPin } from "lucide-react";
 import Seo from "@/components/Seo";
 import Reveal from "@/components/Reveal";
 import ChapterHeading from "@/components/ChapterHeading";
-import { IMAGES, SERVICE_AREA_PLACES, SITE } from "@/data/site";
+import { IMAGES, SERVICE_AREA_PLACES } from "@/data/site";
+import { useSite } from "@/lib/SiteContext";
 
 const DISTRICTS = [
   { name: "Achern", text: "Unser Standort und Kerngebiet — von der Innenstadt bis zu den Gewerbegebieten." },
@@ -16,6 +17,7 @@ const DISTRICTS = [
 ];
 
 export default function Einsatzgebiet() {
+  const site = useSite();
   return (
     <>
       <Seo
@@ -97,11 +99,11 @@ export default function Einsatzgebiet() {
               <ArrowUpRight className="h-4 w-4" />
             </Link>
             <a
-              href={`tel:${SITE.phoneHref}`}
+              href={`tel:${site.phone_href}`}
               data-testid="area-phone"
               className="inline-flex items-center justify-center gap-2 border border-precision/25 px-8 py-4 text-sm font-medium text-precision transition-colors duration-300 hover:border-precision"
             >
-              {SITE.phone}
+              {site.phone}
             </a>
           </div>
         </Reveal>

@@ -1,8 +1,10 @@
 import Seo from "@/components/Seo";
 import Reveal from "@/components/Reveal";
 import { SITE } from "@/data/site";
+import { useSite } from "@/lib/SiteContext";
 
 export default function Impressum() {
+  const site = useSite();
   return (
     <>
       <Seo
@@ -21,29 +23,29 @@ export default function Impressum() {
             <h2 className="text-xs font-medium uppercase tracking-[0.25em] text-precision/50">Angaben gemäß § 5 TMG</h2>
             <p className="mt-4">
               {SITE.legalName}<br />
-              Inhaber: [Vor- und Nachname des Inhabers — wird ergänzt]<br />
-              {SITE.street}<br />
-              {SITE.city}
+              Inhaber: {site.owner_name || "[Vor- und Nachname des Inhabers — wird ergänzt]"}<br />
+              {site.street}<br />
+              {site.city}
             </p>
           </Reveal>
           <Reveal>
             <h2 className="text-xs font-medium uppercase tracking-[0.25em] text-precision/50">Kontakt</h2>
             <p className="mt-4">
-              Telefon: {SITE.phone} <span className="text-precision/40">(Platzhalter — wird ergänzt)</span><br />
-              E-Mail: {SITE.email}
+              Telefon: {site.phone}<br />
+              E-Mail: {site.public_email}
             </p>
           </Reveal>
           <Reveal>
             <h2 className="text-xs font-medium uppercase tracking-[0.25em] text-precision/50">Umsatzsteuer-ID</h2>
             <p className="mt-4">
               Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br />
-              [USt-IdNr. — wird ergänzt, sofern vorhanden]
+              {site.ust_id || "[USt-IdNr. — wird ergänzt, sofern vorhanden]"}
             </p>
           </Reveal>
           <Reveal>
             <h2 className="text-xs font-medium uppercase tracking-[0.25em] text-precision/50">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
             <p className="mt-4">
-              [Vor- und Nachname des Inhabers — wird ergänzt]<br />
+              {site.owner_name || "[Vor- und Nachname des Inhabers — wird ergänzt]"}<br />
               Anschrift wie oben
             </p>
           </Reveal>

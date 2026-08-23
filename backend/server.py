@@ -177,6 +177,54 @@ class ContactInput(BaseModel):
     phone: str = Field(default="", max_length=60)
     customer_type: str = Field(default="privat", max_length=20)
     service: str = Field(default="", max_length=120)
+# ------------------------------------------------------- site settings
+
+SITE_DEFAULTS = {
+    "public_email": os.environ.get("PUBLIC_EMAIL", "kontak@cleanora-reinigung.de"),
+    "phone": os.environ.get("PUBLIC_PHONE", "+49 (0) 7841 000 000"),
+    "street": os.environ.get("PUBLIC_STREET", "Musterstraße 12"),
+    "city": os.environ.get("PUBLIC_CITY", "77855 Achern"),
+    "owner_name": "",
+    "ust_id": "",
+    "hours": "Mo–Fr 8:00–17:00 Uhr · Termine nach Vereinbarung",
+}
+
+
+class SiteSettingsInput(BaseModel):
+    public_email: EmailStr
+    phone: str = Field(default="", max_length=60)
+    street: str = Field(default="", max_length=120)
+    city: str = Field(default="", max_length=120)
+    owner_name: str = Field(default="", max_length=120)
+    ust_id: str = Field(default="", max_length=40)
+    hours: str = Field(default="", max_length=120)
+
+
+async def get_site_settings() -> dict:
+    saved = await db.settings.find_one({"_id": "site"}) or {}
+    cfg = dict(SITE_DEFAULTS)
+    for key in cfg:
+        if saved.get(key) is not None:
+            cfg[key] = saved[key]
+    cfg["phone_href"] = "+" + "".join(ch for ch in cfg["phone"].replace("(0)", "") if ch.isdigit())
+    return cfg
+
+
+@api_router.get("/site-settings")
+async def public_site_settings():
+    return await get_site_settings()
+
+
+@api_router.put("/admin/settings/site")
+async def update_site_settings(data: SiteSettingsInput, admin=Depends(get_admin)):
+    doc = data.model_dump()
+    doc["updated_at"] = datetime.now(timezone.utc)
+    await db.settings.update_one({"_id": "site"}, {"$set": doc}, upsert=True)
+    logger.info("Firmendaten aktualisiert von %s", admin["email"])
+    return {"ok": True}
+
+
+# ------------------------------------------------------------ contact
     object_type: str = Field(default="", max_length=120)
     location: str = Field(default="", max_length=120)
     message: str = Field(min_length=10, max_length=5000)

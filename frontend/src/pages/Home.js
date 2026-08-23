@@ -9,6 +9,7 @@ import ChapterHeading from "@/components/ChapterHeading";
 import Faq from "@/components/Faq";
 import ContactForm from "@/components/ContactForm";
 import { FAQS, IMAGES, PROCESS_STEPS, SERVICES, SERVICE_AREA_PLACES, SITE } from "@/data/site";
+import { useSite } from "@/lib/SiteContext";
 
 const EASE = [0.16, 1, 0.3, 1];
 
@@ -304,6 +305,7 @@ function ServiceArea() {
 }
 
 function FaqSection() {
+  const site = useSite();
   return (
     <section className="mx-auto max-w-7xl px-6 py-24 md:px-12 md:py-32">
       <div className="grid gap-16 lg:grid-cols-12">
@@ -312,8 +314,8 @@ function FaqSection() {
           <Reveal>
             <p className="text-sm leading-relaxed text-precision/60">
               Ihre Frage ist nicht dabei? Rufen Sie uns an unter{" "}
-              <a data-testid="faq-phone" href={`tel:${SITE.phoneHref}`} className="font-medium text-precision underline underline-offset-4">
-                {SITE.phone}
+              <a data-testid="faq-phone" href={`tel:${site.phone_href}`} className="font-medium text-precision underline underline-offset-4">
+                {site.phone}
               </a>{" "}
               — wir helfen gern persönlich weiter.
             </p>
@@ -328,6 +330,7 @@ function FaqSection() {
 }
 
 function ContactCta() {
+  const site = useSite();
   return (
     <section className="mx-auto max-w-7xl px-6 pb-24 md:px-12 md:pb-32">
       <div className="grid gap-16 border border-precision/10 bg-white p-8 md:p-16 lg:grid-cols-12">
@@ -340,10 +343,10 @@ function ContactCta() {
             </p>
             <a
               data-testid="cta-phone"
-              href={`tel:${SITE.phoneHref}`}
+              href={`tel:${site.phone_href}`}
               className="mt-6 flex items-center gap-3 font-display text-2xl font-light tracking-tight text-precision transition-colors duration-300 hover:text-precision/60"
             >
-              <Phone className="h-5 w-5" strokeWidth={1.5} /> {SITE.phone}
+              <Phone className="h-5 w-5" strokeWidth={1.5} /> {site.phone}
             </a>
           </Reveal>
         </div>
@@ -355,23 +358,23 @@ function ContactCta() {
   );
 }
 
-const localBusinessJsonLd = {
+const buildLocalBusinessJsonLd = (site) => ({
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   name: SITE.legalName,
   description: "Professionelle Gebäudereinigung und Reinigungsservice in Achern & Umgebung: Büroreinigung, Unterhaltsreinigung, Fensterreinigung, Treppenhausreinigung und mehr.",
   url: SITE.domain,
-  email: SITE.email,
-  telephone: SITE.phone,
+  email: site.public_email,
+  telephone: site.phone,
   address: {
     "@type": "PostalAddress",
-    streetAddress: SITE.street,
+    streetAddress: site.street,
     postalCode: "77855",
     addressLocality: "Achern",
     addressCountry: "DE",
   },
   areaServed: ["Achern", "Ortenau"],
-};
+});
 
 const faqJsonLd = {
   "@context": "https://schema.org",
@@ -384,6 +387,8 @@ const faqJsonLd = {
 };
 
 export default function Home() {
+  const site = useSite();
+  const localBusinessJsonLd = buildLocalBusinessJsonLd(site);
   return (
     <>
       <Seo
