@@ -39,11 +39,11 @@ export default function Navbar() {
       <header
         data-testid="main-nav"
         className={`fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color] duration-500 ${
-          scrolled ? "border-black/10 bg-white/80 backdrop-blur-xl" : "border-transparent bg-transparent"
+          open ? "border-transparent bg-precision" : scrolled ? "border-black/10 bg-white/80 backdrop-blur-xl" : "border-transparent bg-transparent"
         }`}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 md:h-20 md:px-12">
-          <Logo />
+          <Logo dark={open} />
           <nav className="hidden items-center gap-8 lg:flex" aria-label="Hauptnavigation">
             {LINKS.map((l) => (
               <NavLink
@@ -74,7 +74,9 @@ export default function Navbar() {
               onClick={() => setOpen(!open)}
               aria-label={open ? "Menü schließen" : "Menü öffnen"}
               aria-expanded={open}
-              className="flex h-11 w-11 items-center justify-center border border-precision/20 text-precision lg:hidden"
+              className={`flex h-11 w-11 items-center justify-center border transition-colors duration-300 lg:hidden ${
+                open ? "border-white/40 text-white" : "border-precision/20 text-precision"
+              }`}
             >
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
