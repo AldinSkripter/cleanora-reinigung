@@ -27,6 +27,8 @@ Mehrsprachig DE, responsive (Desktop/Tablet/Mobile), Local-SEO Achern & Ortenau,
 - Admin-Zugang geändert auf kontakt@cleanora-reinigung.de (alter Test-Admin gelöscht).
 - Neues Hero-Bild (moderne professionelle Reinigung statt Fensterputzer auf Fassade).
 - Bugfix: Seitenwechsel springt zuverlässig an den Seitenanfang (Lenis überschrieb window.scrollTo → jetzt lenis.scrollTo(0, immediate) bei Routenwechsel). E2E verifiziert.
+- requirements.txt bereinigt (11 öffentliche Pakete, Emergent-interne entfernt) und gegen öffentlichen PyPI verifiziert.
+- Frontend-Dependencies deploymentfest: date-fns/react-day-picker + ungenutzte ui/calendar.jsx entfernt (React-19-Peer-Konflikt), @emergentbase/visual-edits aus devDependencies entfernt (interner Tarball; craco.config.js toleriert Fehlen), package-lock.json für npm hinzugefügt. Sauberer Test in isolierter Umgebung: npm install (1559 Pakete, kein ERESOLVE) + npm run build (build/ korrekt erzeugt).
 - GitHub: Code in https://github.com/AldinSkripter/cleanora-reinigung gepusht (Branch main).
 
 ## Backlog
