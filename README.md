@@ -118,14 +118,15 @@ yarn build          # erzeugt frontend/build/ (statische Dateien)
    ```bash
    pip install gunicorn
    ```
-   systemd-Unit `/etc/systemd/system/cleanora-api.service` anlegen:
+   systemd-Unit `/etc/systemd/system/cleanora-api.service` anlegen
+   (Port **8002**, da 8001 auf dem Server bereits vom JonuzovicDesign-Docker-Backend belegt ist):
    ```ini
    [Unit]
    Description=Cleanora API
    After=network.target
    [Service]
    WorkingDirectory=/var/www/vhosts/ihre-domain.de/cleanora/backend
-   ExecStart=/var/www/vhosts/ihre-domain.de/cleanora/backend/.venv/bin/gunicorn -k uvicorn.workers.UvicornWorker server:app -w 2 -b 127.0.0.1:8001
+   ExecStart=/var/www/vhosts/ihre-domain.de/cleanora/backend/.venv/bin/gunicorn -k uvicorn.workers.UvicornWorker server:app -w 2 -b 127.0.0.1:8002
    Restart=always
    [Install]
    WantedBy=multi-user.target
@@ -156,12 +157,13 @@ yarn build          # erzeugt frontend/build/ (statische Dateien)
    ```
 
 7. **API anbinden** — Plesk → Domain → *Apache- & nginx-Einstellungen* →
-   „Zusätzliche Apache-Anweisungen" (HTTPS):
+   „Zusätzliche Apache-Anweisungen" (HTTPS). Wichtig: Port **8002** verwenden
+   (8001 ist durch das bestehende Projekt belegt):
    ```apache
-   ProxyPass /api http://127.0.0.1:8001/api
-   ProxyPassReverse /api http://127.0.0.1:8001/api
+   ProxyPass /api http://127.0.0.1:8002/api
+   ProxyPassReverse /api http://127.0.0.1:8002/api
    ```
-   (Falls nginx als Proxy: entsprechende proxy_pass-Weisung für `/api`.)
+   (Falls nginx als Proxy: entsprechende proxy_pass-Weisung für `/api` auf Port 8002.)
 
 8. **SSL aktivieren**: Plesk → *SSL/TLS-Zertifikate* → Let's Encrypt (kostenlos).
 

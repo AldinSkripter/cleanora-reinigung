@@ -27,7 +27,7 @@ Mehrsprachig DE, responsive (Desktop/Tablet/Mobile), Local-SEO Achern & Ortenau,
 - Admin-Zugang geändert auf kontakt@cleanora-reinigung.de (alter Test-Admin gelöscht).
 - Neues Hero-Bild (moderne professionelle Reinigung statt Fensterputzer auf Fassade).
 - Bugfix: Seitenwechsel springt zuverlässig an den Seitenanfang (Lenis überschrieb window.scrollTo → jetzt lenis.scrollTo(0, immediate) bei Routenwechsel). E2E verifiziert.
-- requirements.txt bereinigt (11 öffentliche Pakete, Emergent-interne entfernt) und gegen öffentlichen PyPI verifiziert.
+- requirements.txt bereinigt (12 öffentliche Pakete, Emergent-interne entfernt) und gegen öffentlichen PyPI verifiziert; motor==3.7.1 + pymongo==4.17.0 gepinnt (motor 3.3.1 war inkompatibel mit pymongo 4.17 — _QUERY_OPTIONS-ImportError), verifiziert mit frischem venv + echtem Gunicorn-Start auf 127.0.0.1:8002 (Port 8001 ist auf dem Kundenserver durch JonuzovicDesign-Docker belegt — Cleanora läuft dauerhaft auf 8002).
 - Frontend-Dependencies deploymentfest: date-fns/react-day-picker + ungenutzte ui/calendar.jsx entfernt (React-19-Peer-Konflikt), @emergentbase/visual-edits aus devDependencies entfernt (interner Tarball; craco.config.js toleriert Fehlen), package-lock.json für npm hinzugefügt. Sauberer Test in isolierter Umgebung: npm install (1559 Pakete, kein ERESOLVE) + npm run build (build/ korrekt erzeugt).
 - GitHub: Code in https://github.com/AldinSkripter/cleanora-reinigung gepusht (Branch main).
 
