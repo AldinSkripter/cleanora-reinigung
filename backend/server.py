@@ -177,6 +177,27 @@ class ContactInput(BaseModel):
     phone: str = Field(default="", max_length=60)
     customer_type: str = Field(default="privat", max_length=20)
     service: str = Field(default="", max_length=120)
+    object_type: str = Field(default="", max_length=120)
+    location: str = Field(default="", max_length=120)
+    message: str = Field(min_length=10, max_length=5000)
+    privacy: bool
+    website: str = Field(default="", max_length=120)  # Honeypot
+
+    @field_validator("name", "message", "phone", "service", "object_type", "location")
+    @classmethod
+    def strip_controls(cls, v: str) -> str:
+        if any(ord(c) < 32 and c not in "\n\r\t" for c in v):
+            raise ValueError("Ungültige Zeichen")
+        return v.strip()
+
+    @field_validator("privacy")
+    @classmethod
+    def privacy_accepted(cls, v: bool) -> bool:
+        if not v:
+            raise ValueError("Datenschutz-Zustimmung erforderlich")
+        return v
+
+
 # ------------------------------------------------------- site settings
 
 SITE_DEFAULTS = {
@@ -227,25 +248,6 @@ async def update_site_settings(data: SiteSettingsInput, admin=Depends(get_admin)
 
 
 # ------------------------------------------------------------ contact
-    object_type: str = Field(default="", max_length=120)
-    location: str = Field(default="", max_length=120)
-    message: str = Field(min_length=10, max_length=5000)
-    privacy: bool
-    website: str = Field(default="", max_length=120)  # Honeypot
-
-    @field_validator("name", "message", "phone", "service", "object_type", "location")
-    @classmethod
-    def strip_controls(cls, v: str) -> str:
-        if any(ord(c) < 32 and c not in "\n\r\t" for c in v):
-            raise ValueError("Ungültige Zeichen")
-        return v.strip()
-
-    @field_validator("privacy")
-    @classmethod
-    def privacy_accepted(cls, v: bool) -> bool:
-        if not v:
-            raise ValueError("Datenschutz-Zustimmung erforderlich")
-        return v
 
 
 def build_email(data: ContactInput, cfg: dict) -> EmailMessage:
