@@ -22,7 +22,10 @@ Mehrsprachig DE, responsive (Desktop/Tablet/Mobile), Local-SEO Achern & Ortenau,
 - Backend komplett: Kontakt mit Spam-Schutz, JWT-Admin-Auth, E-Mail-Settings (verschlüsselt), Anfragen-Speicherung.
 - SEO: Meta/OG/Canonical pro Seite, JSON-LD (ProfessionalService, Service, FAQPage), sitemap.xml, robots.txt.
 - Doku: README (Install/Deploy Plesk), .env.example (backend+frontend), .gitignore, auth_testing.md.
-- Admin-Panel erweitert: Tab „Firmendaten" (öffentliche E-Mail, Telefon, Adresse, Inhaber, USt-IdNr., Erreichbarkeit) — Werte werden live auf Website (Footer/Kontakt/Impressum/Datenschutz/JSON-LD) gerendert via GET /api/site-settings (öffentlich) + PUT /api/admin/settings/site (geschützt).
+- Admin-Panel erweitert: Tab „Firmendaten" (Firmenname, öffentliche E-Mail, Telefon, Adresse, Inhaber, USt-IdNr., Erreichbarkeit) — Werte werden live auf Website (Footer/Kontakt/Impressum/Datenschutz/JSON-LD) gerendert via GET /api/site-settings (öffentlich) + PUT /api/admin/settings/site (geschützt).
+- Admin-Panel Tab „Rechtstexte": Impressum & Datenschutz komplett im Admin editierbar (GET /api/legal-texts öffentlich, PUT /api/admin/settings/legal geschützt); leer = Standardtext mit Firmendaten.
+- Admin-Zugang geändert auf kontakt@cleanora-reinigung.de (alter Test-Admin gelöscht).
+- Neues Hero-Bild (moderne professionelle Reinigung statt Fensterputzer auf Fassade).
 - Bugfix: Seitenwechsel springt zuverlässig an den Seitenanfang (Lenis überschrieb window.scrollTo → jetzt lenis.scrollTo(0, immediate) bei Routenwechsel). E2E verifiziert.
 - GitHub: Code in https://github.com/AldinSkripter/cleanora-reinigung gepusht (Branch main).
 

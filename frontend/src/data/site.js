@@ -11,7 +11,7 @@ export const SITE = {
 };
 
 export const IMAGES = {
-  hero: "https://images.pexels.com/photos/38921234/pexels-photo-38921234.jpeg?auto=compress&cs=tinysrgb&w=1600",
+  hero: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=1600&q=80",
   office: "https://images.unsplash.com/photo-1577412647305-991150c7d163?auto=format&fit=crop&w=1600&q=80",
   desk: "https://images.unsplash.com/photo-1627905646269-7f034dcc5738?auto=format&fit=crop&w=1600&q=80",
   living: "https://images.pexels.com/photos/8135492/pexels-photo-8135492.jpeg?auto=compress&cs=tinysrgb&w=1600",

@@ -3,10 +3,11 @@
 # Testing agent reads this before auth tests. Fork/continuation agents read on startup.
 
 ## Admin-Login (Cleanora Admin-Panel, /admin)
-- E-Mail: admin@cleanora-reinigung.de
-- Passwort: Cleanora-Admin-2026!
+- E-Mail: kontakt@cleanora-reinigung.de
+- Passwort: Mercedes6699@
 - Rolle: admin
 - Quelle: Backend-Env `ADMIN_EMAIL` / `ADMIN_PASSWORD` (bei Backend-Start automatisch geseedet; Passwortänderung in .env aktualisiert den Hash beim nächsten Start)
+- Hinweis: Der frühere Test-Admin (admin@cleanora-reinigung.de) wurde entfernt.
 
 ## Auth-Endpunkte
 - POST /api/auth/login {email, password} → {token}

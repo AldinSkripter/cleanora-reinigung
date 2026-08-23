@@ -1,12 +1,12 @@
 import Seo from "@/components/Seo";
 import Reveal from "@/components/Reveal";
-import { SITE } from "@/data/site";
+import LegalText from "@/components/LegalText";
 import { useSite } from "@/lib/SiteContext";
 
 const buildSections = (site) => [
   {
     title: "1. Verantwortlicher",
-    body: `Verantwortlicher für die Datenverarbeitung auf dieser Website ist:\n\n${SITE.legalName}\nInhaber: ${site.owner_name || "[Vor- und Nachname des Inhabers — wird ergänzt]"}\n${site.street}\n${site.city}\nE-Mail: ${site.public_email}`,
+    body: `Verantwortlicher für die Datenverarbeitung auf dieser Website ist:\n\n${site.legal_name}\nInhaber: ${site.owner_name || "[Vor- und Nachname des Inhabers — wird ergänzt]"}\n${site.street}\n${site.city}\nE-Mail: ${site.public_email}`,
   },
   {
     title: "2. Allgemeines zur Datenverarbeitung",
@@ -49,6 +49,9 @@ export default function Datenschutz() {
             Stand: {new Date().toLocaleDateString("de-DE", { month: "long", year: "numeric" })}
           </p>
         </Reveal>
+        {site.legal.datenschutz ? (
+          <LegalText text={site.legal.datenschutz} />
+        ) : (
         <div className="mt-16 space-y-12 text-sm leading-relaxed text-precision/75">
           {SECTIONS.map((s) => (
             <Reveal key={s.title}>
@@ -57,6 +60,7 @@ export default function Datenschutz() {
             </Reveal>
           ))}
         </div>
+        )}
       </section>
     </>
   );

@@ -213,6 +213,10 @@ function SiteSettingsForm() {
         </p>
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <div>
+            <label htmlFor="ss-legal-name" className={labelCls}>Firmenname (rechtlich)</label>
+            <input id="ss-legal-name" data-testid="site-legal-name" required value={cfg.legal_name || ""} onChange={set("legal_name")} className={`${inputCls} mt-2`} />
+          </div>
+          <div>
             <label htmlFor="ss-email" className={labelCls}>Öffentliche E-Mail</label>
             <input id="ss-email" data-testid="site-email" type="email" required value={cfg.public_email} onChange={set("public_email")} className={`${inputCls} mt-2`} />
           </div>
@@ -250,6 +254,80 @@ function SiteSettingsForm() {
       >
         {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
         Firmendaten speichern
+      </button>
+    </form>
+  );
+}
+
+function LegalTextsForm() {
+  const [texts, setTexts] = useState(null);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    api.get("/legal-texts").then(({ data }) => setTexts(data));
+  }, []);
+
+  async function save(e) {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      await api.put("/admin/settings/legal", texts);
+      toast.success("Rechtstexte gespeichert — nach Neu laden auf der Website sichtbar");
+    } catch {
+      toast.error("Speichern fehlgeschlagen");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (!texts) {
+    return <div className="flex justify-center py-20"><Loader2 className="h-6 w-6 animate-spin text-white/40" /></div>;
+  }
+
+  const areaCls =
+    "mt-2 w-full border border-white/15 bg-white/5 px-4 py-3 font-mono text-xs leading-relaxed text-white placeholder:text-white/30 outline-none transition-colors duration-300 focus:border-white/50";
+
+  return (
+    <form data-testid="legal-texts-form" onSubmit={save} className="space-y-8">
+      <div className="border border-white/10 bg-white/[0.03] p-6 md:p-8">
+        <p className="text-xs leading-relaxed text-white/40">
+          Leer lassen = der Standardtext (mit den hinterlegten Firmendaten) wird automatisch verwendet.
+          Eigener Text ersetzt die jeweilige Seite komplett. Formatierung: Zeilen, die mit
+          „## “ beginnen, werden als Zwischenüberschrift dargestellt; Leerzeilen trennen Absätze.
+        </p>
+        <div className="mt-6">
+          <label htmlFor="lt-impressum" className={labelCls}>Impressum (eigener Text)</label>
+          <textarea
+            id="lt-impressum"
+            data-testid="legal-impressum"
+            rows={12}
+            value={texts.impressum}
+            onChange={(e) => setTexts((t) => ({ ...t, impressum: e.target.value }))}
+            className={areaCls}
+            placeholder={"## Angaben gemäß § 5 TMG\nCleanora Gebäudereinigung\n…"}
+          />
+        </div>
+        <div className="mt-6">
+          <label htmlFor="lt-datenschutz" className={labelCls}>Datenschutzerklärung (eigener Text)</label>
+          <textarea
+            id="lt-datenschutz"
+            data-testid="legal-datenschutz"
+            rows={12}
+            value={texts.datenschutz}
+            onChange={(e) => setTexts((t) => ({ ...t, datenschutz: e.target.value }))}
+            className={areaCls}
+            placeholder={"## 1. Verantwortlicher\n…"}
+          />
+        </div>
+      </div>
+      <button
+        data-testid="legal-save"
+        type="submit"
+        disabled={saving}
+        className="flex items-center gap-2 border border-white bg-white px-8 py-3.5 text-sm font-medium text-precision transition-colors duration-300 hover:bg-transparent hover:text-white disabled:opacity-60"
+      >
+        {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+        Rechtstexte speichern
       </button>
     </form>
   );
@@ -315,6 +393,7 @@ export default function AdminDashboard() {
             ["requests", "Anfragen"],
             ["email", "E-Mail-Einstellungen"],
             ["site", "Firmendaten"],
+            ["legal", "Rechtstexte"],
           ].map(([key, label]) => (
             <button
               key={key}
@@ -329,7 +408,7 @@ export default function AdminDashboard() {
           ))}
         </div>
         <div className="mt-10">
-          {tab === "requests" ? <Requests /> : tab === "email" ? <EmailSettings /> : <SiteSettingsForm />}
+          {tab === "requests" ? <Requests /> : tab === "email" ? <EmailSettings /> : tab === "site" ? <SiteSettingsForm /> : <LegalTextsForm />}
         </div>
       </motion.main>
     </div>

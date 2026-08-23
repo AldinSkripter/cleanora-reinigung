@@ -93,15 +93,59 @@ yarn build          # erzeugt frontend/build/ (statische Dateien)
 
 ## 7. Production Start / Deployment (Plesk VPS)
 
-### Variante A — Node/Python auf dem VPS (empfohlen)
+### Schritt-für-Schritt auf Plesk
 
-1. Repository auf den Server klonen, Abhängigkeiten installieren (s. oben).
-2. **Frontend:** `yarn build` ausführen. Das Verzeichnis `frontend/build/` in Plesk als
-   DocumentRoot der Domain ausliefern (Apache/Nginx). Folgende Rewrite-Regel einrichten,
-   damit React-Routing funktioniert (alle Pfade → `index.html`):
+1. **Code auf den Server bringen**
+   - Variante 1: Plesk → Website & Domains → *Git* → Repository `https://github.com/AldinSkripter/cleanora-reinigung` hinzufügen und ins Verzeichnis (z. B. `/cleanora`) klonen lassen.
+   - Variante 2: Per SSH: `git clone <repo> /var/www/vhosts/ihre-domain.de/cleanora`
 
+2. **Backend vorbereiten (per SSH)**
+   ```bash
+   cd /var/www/vhosts/ihre-domain.de/cleanora/backend
+   python3 -m venv .venv && source .venv/bin/activate
+   pip install -r requirements.txt
+   cp .env.example .env   # danach mit echten Werten füllen (Editor: nano .env)
+   ```
+   In `.env` mindestens setzen: `MONGO_URL`, `DB_NAME=cleanora`, `JWT_SECRET`
+   (`openssl rand -hex 32`), `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `CONFIG_ENCRYPTION_KEY`
+   (Generierbefehl steht in .env.example), `CONTACT_RECIPIENT`.
+
+3. **MongoDB bereitstellen**
+   - Entweder lokal auf dem VPS installieren (nur an 127.0.0.1 binden) oder einen
+     MongoDB-Atlas-Cluster (kostenlos) verwenden und `MONGO_URL` entsprechend setzen.
+
+4. **Backend als Dienst starten** (einfachste Variante ohne Plesk-Python-Extension):
+   ```bash
+   pip install gunicorn
+   ```
+   systemd-Unit `/etc/systemd/system/cleanora-api.service` anlegen:
+   ```ini
+   [Unit]
+   Description=Cleanora API
+   After=network.target
+   [Service]
+   WorkingDirectory=/var/www/vhosts/ihre-domain.de/cleanora/backend
+   ExecStart=/var/www/vhosts/ihre-domain.de/cleanora/backend/.venv/bin/gunicorn -k uvicorn.workers.UvicornWorker server:app -w 2 -b 127.0.0.1:8001
+   Restart=always
+   [Install]
+   WantedBy=multi-user.target
+   ```
+   Dann: `systemctl enable --now cleanora-api`
+
+5. **Frontend bauen**
+   ```bash
+   cd ../frontend
+   cp .env.example .env   # REACT_APP_BACKEND_URL=https://ihre-domain.de
+   yarn install && yarn build
+   ```
+   In Plesk → *Hosting-Einstellungen* der Domain: **DocumentRoot** auf
+   `cleanora/frontend/build` setzen. (Kein Node-Server nötig — es werden nur
+   statische Dateien ausgeliefert.)
+
+6. **Rewrite-Regel für React-Routing** — Datei `.htaccess` in `frontend/build/` anlegen
+   (wird bei jedem Build neu erzeugt, daher zusätzlich unter `frontend/public/.htaccess`
+   hinterlegen):
    ```apache
-   # .htaccess im DocumentRoot (Apache)
    <IfModule mod_rewrite.c>
      RewriteEngine On
      RewriteCond %{REQUEST_URI} !^/api
@@ -111,24 +155,30 @@ yarn build          # erzeugt frontend/build/ (statische Dateien)
    </IfModule>
    ```
 
-3. **Backend:** mit Gunicorn/Uvicorn als Systemdienst betreiben:
-
-   ```bash
-   pip install gunicorn
-   gunicorn -k uvicorn.workers.UvicornWorker server:app -w 2 -b 127.0.0.1:8001
+7. **API anbinden** — Plesk → Domain → *Apache- & nginx-Einstellungen* →
+   „Zusätzliche Apache-Anweisungen" (HTTPS):
+   ```apache
+   ProxyPass /api http://127.0.0.1:8001/api
+   ProxyPassReverse /api http://127.0.0.1:8001/api
    ```
+   (Falls nginx als Proxy: entsprechende proxy_pass-Weisung für `/api`.)
 
-   (Alternativ: Plesk „Python"-Erweiterung mit Startup-Datei `server.py` / App `server:app`.)
+8. **SSL aktivieren**: Plesk → *SSL/TLS-Zertifikate* → Let's Encrypt (kostenlos).
 
-4. **Reverse Proxy:** Requests auf `/api/*` an `http://127.0.0.1:8001` weiterleiten
-   (in Plesk: Apache/Nginx-Weisungen der Domain, z. B. `ProxyPass /api http://127.0.0.1:8001/api`).
-5. **MongoDB:** lokal installieren (nur localhost binden) oder MongoDB Atlas nutzen.
-6. **Umgebungsvariablen** in Plesk bzw. `.env` setzen — nicht ins Webroot legen.
+9. **Postfach & SMTP**: In Plesk unter *E-Mail* das Postfach `kontak@cleanora-reinigung.de`
+   anlegen. Danach im Admin-Panel (`https://ihre-domain.de/admin`) unter
+   „E-Mail-Einstellungen" Host (`mail.ihre-domain.de`), Port 587 + STARTTLS, Benutzer
+   und Passwort eintragen und eine Testanfrage über das Kontaktformular senden.
 
-### Variante B — Docker
+10. **Abschluss**: Im Admin-Panel unter „Firmendaten" Adresse, Telefon, Inhaber und
+    USt-IdNr. pflegen; unter „Rechtstexte" bei Bedarf eigene Texte hinterlegen.
 
-Beliebige Standard-Node/Python-Container verwenden; das Projekt hat keine
-plattformspezifischen Abhängigkeiten.
+### Hinweise
+
+- Der Admin-Zugang wird beim ersten Backend-Start aus `ADMIN_EMAIL`/`ADMIN_PASSWORD`
+  angelegt (Änderung der Werte in `.env` + Neustart aktualisiert das Passwort).
+- Die Website ist komplett hosting-unabhängig: React-Build (statisch) + FastAPI +
+  MongoDB — keine proprietären Plattformdienste.
 
 ## 8. Kontaktformular / E-Mail-Konfiguration
 

@@ -180,6 +180,7 @@ class ContactInput(BaseModel):
 # ------------------------------------------------------- site settings
 
 SITE_DEFAULTS = {
+    "legal_name": os.environ.get("LEGAL_NAME", "Cleanora Gebäudereinigung"),
     "public_email": os.environ.get("PUBLIC_EMAIL", "kontak@cleanora-reinigung.de"),
     "phone": os.environ.get("PUBLIC_PHONE", "+49 (0) 7841 000 000"),
     "street": os.environ.get("PUBLIC_STREET", "Musterstraße 12"),
@@ -191,6 +192,7 @@ SITE_DEFAULTS = {
 
 
 class SiteSettingsInput(BaseModel):
+    legal_name: str = Field(default="Cleanora Gebäudereinigung", max_length=120)
     public_email: EmailStr
     phone: str = Field(default="", max_length=60)
     street: str = Field(default="", max_length=120)
@@ -334,6 +336,28 @@ async def delete_request(request_id: str, admin=Depends(get_admin)):
 @api_router.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+# ------------------------------------------------------- legal texts
+
+class LegalTextsInput(BaseModel):
+    impressum: str = Field(default="", max_length=30000)
+    datenschutz: str = Field(default="", max_length=30000)
+
+
+@api_router.get("/legal-texts")
+async def public_legal_texts():
+    saved = await db.settings.find_one({"_id": "legal"}) or {}
+    return {"impressum": saved.get("impressum", ""), "datenschutz": saved.get("datenschutz", "")}
+
+
+@api_router.put("/admin/settings/legal")
+async def update_legal_texts(data: LegalTextsInput, admin=Depends(get_admin)):
+    doc = data.model_dump()
+    doc["updated_at"] = datetime.now(timezone.utc)
+    await db.settings.update_one({"_id": "legal"}, {"$set": doc}, upsert=True)
+    logger.info("Rechtstexte aktualisiert von %s", admin["email"])
+    return {"ok": True}
 
 
 # ------------------------------------------------------------ startup

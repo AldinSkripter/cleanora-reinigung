@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight, Mail, Phone } from "lucide-react";
 import Logo from "@/components/Logo";
-import { SERVICES, SITE } from "@/data/site";
+import { SERVICES } from "@/data/site";
 import { useSite } from "@/lib/SiteContext";
 
 export default function Footer() {
@@ -13,7 +13,7 @@ export default function Footer() {
           <div className="md:col-span-5">
             <Logo dark />
             <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/60">
-              {SITE.legalName} — Ihr Reinigungsservice für Achern &amp; Umgebung.
+              {site.legal_name} — Ihr Reinigungsservice für Achern &amp; Umgebung.
               Sauberkeit, Qualität und Zuverlässigkeit für Privat- und Gewerbekunden.
             </p>
             <div className="mt-8 space-y-3 text-sm">
@@ -78,7 +78,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 flex flex-col items-start justify-between gap-6 border-t border-white/10 pt-8 text-xs text-white/40 md:flex-row md:items-center">
-          <p>© {new Date().getFullYear()} {SITE.legalName} · Achern &amp; Umgebung</p>
+          <p>© {new Date().getFullYear()} {site.legal_name} · Achern &amp; Umgebung</p>
           <div className="flex gap-8">
             <Link data-testid="footer-impressum" to="/impressum" className="transition-colors duration-300 hover:text-white">
               Impressum

@@ -361,7 +361,7 @@ function ContactCta() {
 const buildLocalBusinessJsonLd = (site) => ({
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
-  name: SITE.legalName,
+  name: site.legal_name,
   description: "Professionelle Gebäudereinigung und Reinigungsservice in Achern & Umgebung: Büroreinigung, Unterhaltsreinigung, Fensterreinigung, Treppenhausreinigung und mehr.",
   url: SITE.domain,
   email: site.public_email,

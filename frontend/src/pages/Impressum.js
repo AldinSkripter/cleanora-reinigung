@@ -1,6 +1,6 @@
 import Seo from "@/components/Seo";
 import Reveal from "@/components/Reveal";
-import { SITE } from "@/data/site";
+import LegalText from "@/components/LegalText";
 import { useSite } from "@/lib/SiteContext";
 
 export default function Impressum() {
@@ -18,11 +18,14 @@ export default function Impressum() {
             Impressum
           </h1>
         </Reveal>
+        {site.legal.impressum ? (
+          <LegalText text={site.legal.impressum} />
+        ) : (
         <div className="mt-16 space-y-12 text-sm leading-relaxed text-precision/75">
           <Reveal>
             <h2 className="text-xs font-medium uppercase tracking-[0.25em] text-precision/50">Angaben gemäß § 5 TMG</h2>
             <p className="mt-4">
-              {SITE.legalName}<br />
+              {site.legal_name}<br />
               Inhaber: {site.owner_name || "[Vor- und Nachname des Inhabers — wird ergänzt]"}<br />
               {site.street}<br />
               {site.city}
@@ -75,6 +78,7 @@ export default function Impressum() {
             </p>
           </Reveal>
         </div>
+        )}
       </section>
     </>
   );
