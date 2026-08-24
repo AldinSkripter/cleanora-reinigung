@@ -32,112 +32,126 @@ function MaskedLine({ children, delay = 0, className = "" }) {
 function Hero() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const yImg = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const yImg = useTransform(scrollYProgress, [0, 1], [0, 110]);
   const reduce = useReducedMotion();
 
   return (
-    <section ref={ref} data-testid="hero-section" className="relative overflow-hidden pt-32 md:pt-44">
-      <div aria-hidden="true" className="pointer-events-none absolute -right-32 -top-32 h-[420px] w-[420px] rounded-full border border-precision/10" />
-      <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 h-[220px] w-[220px] rounded-full bg-pristine" />
-      <div aria-hidden="true" className="pointer-events-none absolute -left-40 top-1/2 h-[300px] w-[300px] rounded-full border border-precision/5" />
-      <div className="relative mx-auto grid max-w-7xl gap-16 px-6 md:px-12 lg:grid-cols-12">
-        <div className="lg:col-span-7">
-          <motion.p
-            initial={reduce ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="mb-8 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.25em] text-precision/50"
-          >
-            <span className="h-px w-10 bg-precision/40" />
-            Cleanora · Gebäudereinigung Achern
-          </motion.p>
-          <h1 className="font-display text-5xl font-light leading-[1.0] tracking-tighter text-precision sm:text-6xl lg:text-[5.2rem]">
-            <MaskedLine delay={0.1}>Professionelle</MaskedLine>
-            <MaskedLine delay={0.25}>Gebäudereinigung</MaskedLine>
-            <MaskedLine delay={0.4} className="italic text-precision/40">in Achern &amp; Umgebung.</MaskedLine>
-          </h1>
-          <motion.p
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.8, ease: EASE }}
-            className="mt-8 max-w-md text-base leading-relaxed text-precision/70"
-          >
-            Cleanora ist Ihr Reinigungsservice für Büros, Praxen, Treppenhäuser und Privathaushalte
-            in Achern und der Ortenau — gründlich, zuverlässig und mit einem Anspruch: makellos.
-          </motion.p>
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.85, duration: 0.8, ease: EASE }}
-            className="mt-10 flex flex-col gap-4 sm:flex-row"
-          >
-            <motion.div whileTap={{ scale: 0.98 }}>
-              <Link
-                to="/kontakt"
-                data-testid="hero-cta-quote"
-                className="flex items-center justify-center gap-2 border border-precision bg-precision px-8 py-4 text-sm font-medium text-white transition-all duration-300 hover:bg-transparent hover:text-precision hover:shadow-[0_10px_40px_rgba(15,23,42,0.18)]"
-              >
-                Kostenloses Angebot anfordern
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+    <section ref={ref} data-testid="hero-section" className="relative overflow-hidden bg-precision text-white grain">
+      <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-40 h-[520px] w-[520px] rounded-full border border-white/10" />
+      <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-20 h-[260px] w-[260px] rounded-full bg-white/[0.04]" />
+      <div aria-hidden="true" className="pointer-events-none absolute -left-48 top-1/3 h-96 w-96 rounded-full bg-pristine/10 blur-3xl" />
+      <p
+        aria-hidden="true"
+        className="pointer-events-none absolute right-8 top-1/2 hidden -translate-y-1/2 text-[10px] font-medium uppercase tracking-[0.5em] text-white/25 [writing-mode:vertical-rl] xl:block"
+      >
+        Gebäudereinigung — Achern &amp; Umgebung
+      </p>
+
+      <div className="relative mx-auto max-w-7xl px-6 pt-36 md:px-12 md:pt-48">
+        <motion.p
+          initial={reduce ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
+          className="mb-8 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.25em] text-white/50"
+        >
+          <span className="h-px w-10 bg-white/40" />
+          Cleanora · Gebäudereinigung Achern
+        </motion.p>
+
+        <h1 className="font-display text-5xl font-light leading-[1.0] tracking-tighter sm:text-7xl lg:text-[5.6rem]">
+          <MaskedLine delay={0.1}>Professionelle</MaskedLine>
+          <MaskedLine delay={0.25}>Gebäudereinigung</MaskedLine>
+          <MaskedLine delay={0.4} className="italic text-white/45">in Achern &amp; Umgebung.</MaskedLine>
+        </h1>
+
+        <div className="mt-14 grid gap-14 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7">
+            <motion.p
+              initial={reduce ? false : { opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.8, ease: EASE }}
+              className="max-w-md text-base leading-relaxed text-white/65"
+            >
+              Cleanora ist Ihr Reinigungsservice für Büros, Praxen, Treppenhäuser und Privathaushalte
+              in Achern und der Ortenau — gründlich, zuverlässig und mit einem Anspruch: makellos.
+            </motion.p>
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.85, duration: 0.8, ease: EASE }}
+              className="mt-10 flex flex-col gap-4 sm:flex-row"
+            >
+              <motion.div whileTap={{ scale: 0.98 }}>
+                <Link
+                  to="/kontakt"
+                  data-testid="hero-cta-quote"
+                  className="flex items-center justify-center gap-2 border border-white bg-white px-8 py-4 text-sm font-medium text-precision transition-all duration-300 hover:bg-transparent hover:text-white hover:shadow-[0_10px_40px_rgba(255,255,255,0.12)]"
+                >
+                  Kostenloses Angebot anfordern
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </motion.div>
+              <motion.div whileTap={{ scale: 0.98 }}>
+                <Link
+                  to="/kontakt"
+                  data-testid="hero-cta-contact"
+                  className="flex items-center justify-center gap-2 border border-white/25 px-8 py-4 text-sm font-medium text-white transition-colors duration-300 hover:border-white"
+                >
+                  Kontakt aufnehmen
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              </motion.div>
             </motion.div>
-            <motion.div whileTap={{ scale: 0.98 }}>
-              <Link
-                to="/kontakt"
-                data-testid="hero-cta-contact"
-                className="flex items-center justify-center gap-2 border border-precision/25 px-8 py-4 text-sm font-medium text-precision transition-colors duration-300 hover:border-precision"
-              >
-                Kontakt aufnehmen
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
+            <motion.ul
+              initial={reduce ? false : { opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.05, duration: 0.8, ease: EASE }}
+              className="mt-12 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-8"
+            >
+              {["Kostenlos & unverbindlich", "Fester Ansprechpartner", "Termintreu & gründlich"].map((t) => (
+                <li key={t} className="flex items-center gap-2.5 text-sm text-white/55">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/25">
+                    <Check className="h-3 w-3 text-white" strokeWidth={2.5} />
+                  </span>
+                  {t}
+                </li>
+              ))}
+            </motion.ul>
+          </div>
+
+          <div className="relative hidden lg:col-span-5 lg:block">
+            <motion.div
+              initial={reduce ? false : { clipPath: "inset(100% 0 0 0)" }}
+              animate={{ clipPath: "inset(0% 0 0 0)" }}
+              transition={{ duration: 1.2, delay: 0.5, ease: EASE }}
+              className="relative aspect-[4/5] overflow-hidden"
+            >
+              <motion.img
+                src={IMAGES.hero}
+                alt="Professionelle Reinigungskraft bei der Gebäudereinigung in Achern"
+                className="h-full w-full object-cover"
+                style={reduce ? undefined : { y: yImg, scale: 1.15 }}
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-precision/50 via-transparent to-transparent" />
             </motion.div>
-          </motion.div>
-          <motion.ul
-            initial={reduce ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.05, duration: 0.8, ease: EASE }}
-            className="mt-12 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-8"
-          >
-            {["Kostenlos & unverbindlich", "Fester Ansprechpartner", "Termintreu & gründlich"].map((t) => (
-              <li key={t} className="flex items-center gap-2.5 text-sm text-precision/60">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-precision/20">
-                  <Check className="h-3 w-3 text-precision" strokeWidth={2.5} />
-                </span>
-                {t}
-              </li>
-            ))}
-          </motion.ul>
-        </div>
-        <div className="relative hidden lg:col-span-5 lg:block">
-          <motion.div
-            initial={reduce ? false : { clipPath: "inset(100% 0 0 0)" }}
-            animate={{ clipPath: "inset(0% 0 0 0)" }}
-            transition={{ duration: 1.2, delay: 0.5, ease: EASE }}
-            className="relative aspect-[3/4] overflow-hidden"
-          >
-            <motion.img
-              src={IMAGES.hero}
-              alt="Professionelle Reinigungskraft bei der Gebäudereinigung in Achern"
-              className="h-full w-full object-cover"
-              style={reduce ? undefined : { y: yImg, scale: 1.15 }}
-              loading="eager"
-            />
-          </motion.div>
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.8, ease: EASE }}
-            className="absolute -bottom-8 -left-16 border border-black/5 bg-white/85 p-6 backdrop-blur-xl"
-          >
-            <p className="font-display text-3xl font-light tracking-tight text-precision">Achern &amp; Ortenau</p>
-            <p className="mt-1 flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-precision/50">
-              <MapPin className="h-3.5 w-3.5" /> Regional · Persönlich · Zuverlässig
-            </p>
-          </motion.div>
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.15, duration: 0.8, ease: EASE }}
+              className="absolute -bottom-10 -left-12 border border-white/15 bg-white/10 p-6 backdrop-blur-xl"
+            >
+              <p className="font-display text-2xl font-light tracking-tight text-white">Achern &amp; Ortenau</p>
+              <p className="mt-1 flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-white/55">
+                <MapPin className="h-3.5 w-3.5" /> Regional · Persönlich · Zuverlässig
+              </p>
+            </motion.div>
+          </div>
         </div>
       </div>
-      <div className="mt-24 md:mt-32">
-        <Marquee />
+
+      <div className="relative mt-20 border-t border-white/10 md:mt-28">
+        <Marquee dark />
       </div>
     </section>
   );
@@ -168,48 +182,17 @@ function Intro() {
           </Link>
         </Reveal>
         <Reveal delay={0.15} className="lg:col-span-6 lg:col-start-7">
-          <div className="relative aspect-[4/3] overflow-hidden">
-            <img
-              src={IMAGES.desk}
-              alt="Sorgfältige Reinigung einer Arbeitsfläche"
-              className="h-full w-full object-cover"
-              loading="lazy"
-            />
+          <div className="group relative">
+            <div aria-hidden="true" className="absolute -right-4 -top-4 h-full w-full border border-precision/15" />
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <img
+                src={IMAGES.desk}
+                alt="Sorgfältige Reinigung einer Arbeitsfläche"
+                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                loading="lazy"
+              />
+            </div>
           </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-function ManifestoBand() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
-  const reduce = useReducedMotion();
-  return (
-    <section ref={ref} data-testid="manifesto-band" className="relative flex min-h-[70vh] items-center overflow-hidden">
-      <motion.img
-        src={IMAGES.window}
-        alt="Streifenfreie Glasreinigung durch Cleanora"
-        loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover"
-        style={reduce ? undefined : { y, scale: 1.18 }}
-      />
-      <div className="absolute inset-0 bg-precision/60" />
-      <div className="relative mx-auto w-full max-w-7xl px-6 py-24 md:px-12">
-        <Reveal>
-          <p className="flex items-center gap-3 text-xs font-medium uppercase tracking-[0.25em] text-white/60">
-            <span className="h-px w-10 bg-white/40" />
-            Manifest
-          </p>
-          <p className="mt-8 max-w-3xl font-display text-4xl font-light italic leading-[1.15] tracking-tight text-white md:text-6xl">
-            „Makellos ist kein Zufall — es ist das Ergebnis von Sorgfalt, System und dem Willen, es jedes Mal richtig zu machen."
-          </p>
-          <p className="mt-8 max-w-xl text-sm leading-relaxed text-white/70">
-            Das ist der Anspruch, mit dem wir bei Cleanora jedes Objekt betreten —
-            vom kleinen Treppenhaus in Achern bis zur großen Gewerbefläche in der Ortenau.
-          </p>
         </Reveal>
       </div>
     </section>
@@ -307,8 +290,8 @@ function Process() {
       <ChapterHeading number="04" label="Ablauf" title="Von der Anfrage zur sauberen Fläche — in vier Schritten." />
       <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
         {PROCESS_STEPS.map((step, i) => (
-          <Reveal key={step.n} delay={i * 0.1} className="border-t border-precision/20 pt-8">
-            <span className="font-display text-5xl font-extralight tracking-tighter text-precision/25">{step.n}</span>
+          <Reveal key={step.n} delay={i * 0.1} className="group border-t border-precision/20 pt-8 transition-colors duration-500 hover:border-precision">
+            <span className="font-display text-5xl font-extralight tracking-tighter text-precision/25 transition-colors duration-500 group-hover:text-precision/60">{step.n}</span>
             <h3 className="mt-6 font-display text-xl font-light tracking-tight text-precision">{step.title}</h3>
             <p className="mt-3 text-sm leading-relaxed text-precision/60">{step.text}</p>
           </Reveal>
@@ -451,7 +434,6 @@ export default function Home() {
       />
       <Hero />
       <Intro />
-      <ManifestoBand />
       <ServicesList />
       <WhyUs />
       <Process />

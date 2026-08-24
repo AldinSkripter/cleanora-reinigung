@@ -34,7 +34,7 @@ Mehrsprachig DE, responsive (Desktop/Tablet/Mobile), Local-SEO Achern & Ortenau,
 - Admin-Tab „Medien": Share-Bild (1200×630, JPG/PNG/WebP ≤2 MB) + Favicon (PNG/SVG/ICO ≤512 KB) hochladen/ersetzen/löschen; Persistenz in backend/uploads; öffentliche Endpunkte /api/media/share-image + /api/media/favicon mit Fallback (og-default.jpg / favicon.svg).
 - Code-Splitting: Admin-Bereich + alle Unterseiten per React.lazy/Suspense aus dem Initial-Bundle; Vendor-Chunks via rolldown output.codeSplitting (react-vendor 228 kB, motion 120 kB, App 152 kB, Admin 22 kB, Seiten 1–5 kB) — keine Chunk-Size-Warnung, Audit 0.
 - Footer-Wordmark-Fix: Riesen-„CLEANORA" als skalierbares SVG (viewBox) statt vw-Fontgröße — nie mehr abgeschnitten, weder Desktop noch Mobile.
-- Home-Premium-Feinschliff: Hero mit größerer Typo (Italic-Akzentzeile), Vertrauenszeile (3 Checks), Editorial-Manifest-Band mit Parallax („Makellos ist kein Zufall") zwischen Intro und Leistungen.
+- Home-Redesign V2 (auf Kundenwunsch): dunkler kinematischer Vollbild-Hero (precision-blue, riesige Typo mit Italic-Akzent, weiße Nav im Hero-Zustand → Glas beim Scrollen, vertikales Seitenlabel, Marquee am Hero-Fuß, Vertrauenszeile, Glas-Badge), Manifest-Band wieder entfernt. Navbar mit onDark-Modus für die Startseite.
 
 ## Backlog
 - P0: Echte SMTP-Zugangsdaten im Admin-Panel eintragen (oder .env) und Testmail verifizieren. Verbleibende Platzhalter (USt-ID, ggf. echte Adresse) im Admin-Panel unter „Firmendaten" pflegen.
