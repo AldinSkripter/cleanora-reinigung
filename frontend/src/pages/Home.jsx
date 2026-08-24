@@ -58,7 +58,7 @@ function Hero() {
           Cleanora · Gebäudereinigung Achern
         </motion.p>
 
-        <h1 className="font-display text-5xl font-light leading-[1.0] tracking-tighter sm:text-7xl lg:text-[5.6rem]">
+        <h1 className="font-display text-[2.55rem] font-light leading-[1.02] tracking-tighter [hyphens:auto] sm:text-6xl sm:[hyphens:none] lg:text-[5.6rem]">
           <MaskedLine delay={0.1}>Professionelle</MaskedLine>
           <MaskedLine delay={0.25}>Gebäudereinigung</MaskedLine>
           <MaskedLine delay={0.4} className="italic text-white/45">in Achern &amp; Umgebung.</MaskedLine>
