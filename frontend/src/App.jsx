@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, Outlet, useLocation } from "react-router-dom";
 import Lenis from "lenis";
@@ -9,16 +9,17 @@ import api from "@/lib/api";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Home from "@/pages/Home";
-import Leistungen from "@/pages/Leistungen";
-import LeistungDetail from "@/pages/LeistungDetail";
-import UeberUns from "@/pages/UeberUns";
-import Einsatzgebiet from "@/pages/Einsatzgebiet";
-import Kontakt from "@/pages/Kontakt";
-import Impressum from "@/pages/Impressum";
-import Datenschutz from "@/pages/Datenschutz";
-import AdminLogin from "@/pages/admin/AdminLogin";
-import AdminDashboard from "@/pages/admin/AdminDashboard";
-import NotFound from "@/pages/NotFound";
+
+const Leistungen = lazy(() => import("@/pages/Leistungen"));
+const LeistungDetail = lazy(() => import("@/pages/LeistungDetail"));
+const UeberUns = lazy(() => import("@/pages/UeberUns"));
+const Einsatzgebiet = lazy(() => import("@/pages/Einsatzgebiet"));
+const Kontakt = lazy(() => import("@/pages/Kontakt"));
+const Impressum = lazy(() => import("@/pages/Impressum"));
+const Datenschutz = lazy(() => import("@/pages/Datenschutz"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
+const AdminLogin = lazy(() => import("@/pages/admin/AdminLogin"));
+const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -82,21 +83,23 @@ function App() {
       <BrowserRouter>
         <SiteProvider>
           <ScrollToTop />
-          <Routes>
-            <Route element={<SiteLayout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/leistungen" element={<Leistungen />} />
-              <Route path="/leistungen/:slug" element={<LeistungDetail />} />
-              <Route path="/ueber-uns" element={<UeberUns />} />
-              <Route path="/einsatzgebiet" element={<Einsatzgebiet />} />
-              <Route path="/kontakt" element={<Kontakt />} />
-              <Route path="/impressum" element={<Impressum />} />
-              <Route path="/datenschutz" element={<Datenschutz />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-            <Route path="/admin" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          </Routes>
+          <Suspense fallback={<div className="min-h-screen bg-background" />}>
+            <Routes>
+              <Route element={<SiteLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/leistungen" element={<Leistungen />} />
+                <Route path="/leistungen/:slug" element={<LeistungDetail />} />
+                <Route path="/ueber-uns" element={<UeberUns />} />
+                <Route path="/einsatzgebiet" element={<Einsatzgebiet />} />
+                <Route path="/kontakt" element={<Kontakt />} />
+                <Route path="/impressum" element={<Impressum />} />
+                <Route path="/datenschutz" element={<Datenschutz />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+              <Route path="/admin" element={<AdminLogin />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            </Routes>
+          </Suspense>
         </SiteProvider>
       </BrowserRouter>
       <Toaster position="bottom-right" />
