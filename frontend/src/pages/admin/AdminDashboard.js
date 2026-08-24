@@ -145,7 +145,7 @@ function Requests() {
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="font-medium text-white">{r.name}</p>
-              <p className="mt-1 text-xs text-white/40">
+              <p className="mt-1 text-xs break-all text-white/40">
                 {r.email} {r.phone && `· ${r.phone}`} · {r.customer_type === "gewerbe" ? "Gewerbe" : "Privat"}
                 {r.service && ` · ${r.service}`} {r.location && `· ${r.location}`}
               </p>
@@ -388,7 +388,7 @@ export default function AdminDashboard() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="mx-auto max-w-5xl px-6 py-12"
       >
-        <div className="flex gap-2 border-b border-white/10">
+        <div className="flex flex-wrap gap-2 border-b border-white/10">
           {[
             ["requests", "Anfragen"],
             ["email", "E-Mail-Einstellungen"],
@@ -399,7 +399,7 @@ export default function AdminDashboard() {
               key={key}
               data-testid={`admin-tab-${key}`}
               onClick={() => setTab(key)}
-              className={`-mb-px border-b-2 px-4 py-3 text-sm transition-colors duration-300 ${
+              className={`-mb-px border-b-2 px-3 py-3 text-xs transition-colors duration-300 sm:px-4 sm:text-sm ${
                 tab === key ? "border-white text-white" : "border-transparent text-white/40 hover:text-white/70"
               }`}
             >

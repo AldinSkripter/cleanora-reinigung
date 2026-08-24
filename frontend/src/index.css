@@ -34,6 +34,9 @@
     html {
         scroll-behavior: auto;
     }
+    html, body {
+        overflow-x: clip;
+    }
     body {
         @apply bg-background text-foreground font-body antialiased;
         font-weight: 400;

@@ -37,7 +37,10 @@ function Hero() {
 
   return (
     <section ref={ref} data-testid="hero-section" className="relative overflow-hidden pt-32 md:pt-44">
-      <div className="mx-auto grid max-w-7xl gap-16 px-6 md:px-12 lg:grid-cols-12">
+      <div aria-hidden="true" className="pointer-events-none absolute -right-32 -top-32 h-[420px] w-[420px] rounded-full border border-precision/10" />
+      <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 h-[220px] w-[220px] rounded-full bg-pristine" />
+      <div aria-hidden="true" className="pointer-events-none absolute -left-40 top-1/2 h-[300px] w-[300px] rounded-full border border-precision/5" />
+      <div className="relative mx-auto grid max-w-7xl gap-16 px-6 md:px-12 lg:grid-cols-12">
         <div className="lg:col-span-7">
           <motion.p
             initial={reduce ? false : { opacity: 0 }}
@@ -72,7 +75,7 @@ function Hero() {
               <Link
                 to="/kontakt"
                 data-testid="hero-cta-quote"
-                className="flex items-center justify-center gap-2 border border-precision bg-precision px-8 py-4 text-sm font-medium text-white transition-colors duration-300 hover:bg-transparent hover:text-precision"
+                className="flex items-center justify-center gap-2 border border-precision bg-precision px-8 py-4 text-sm font-medium text-white transition-all duration-300 hover:bg-transparent hover:text-precision hover:shadow-[0_10px_40px_rgba(15,23,42,0.18)]"
               >
                 Kostenloses Angebot anfordern
                 <ArrowRight className="h-4 w-4" />
@@ -179,11 +182,11 @@ function ServicesList() {
                     to={`/leistungen/${s.slug}`}
                     data-testid={`service-link-${s.slug}`}
                     onMouseEnter={() => setActive(i)}
-                    className="group flex items-center justify-between gap-6 py-5 md:py-6"
+                    className="group flex items-center justify-between gap-6 py-5 transition-colors duration-300 hover:bg-white/70 md:py-6"
                   >
                     <div className="flex items-baseline gap-5">
                       <span className="text-xs font-medium text-precision/40">{String(i + 1).padStart(2, "0")}</span>
-                      <span className="font-display text-xl font-light tracking-tight text-precision transition-colors duration-300 group-hover:text-precision/60 md:text-2xl">
+                      <span className="font-display text-xl font-light tracking-tight text-precision transition-all duration-300 group-hover:translate-x-1.5 group-hover:text-precision/60 md:text-2xl">
                         {s.title}
                       </span>
                     </div>
@@ -230,7 +233,7 @@ function WhyUs() {
         <ChapterHeading dark number="03" label="Warum Cleanora" title="Unser Qualitätsversprechen — schwarz auf weiß." />
         <div className="grid gap-px bg-white/10 md:grid-cols-2">
           {WHY_POINTS.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.08} className="bg-precision p-10 md:p-14">
+            <Reveal key={p.title} delay={i * 0.08} className="bg-precision p-10 transition-colors duration-500 hover:bg-[#141f3a] md:p-14">
               <span className="text-xs font-medium tracking-[0.25em] text-white/40">{String(i + 1).padStart(2, "0")}</span>
               <h3 className="mt-6 font-display text-2xl font-light tracking-tight">{p.title}</h3>
               <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">{p.text}</p>
