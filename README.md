@@ -4,7 +4,7 @@ Premium-Unternehmenswebsite für **Cleanora Gebäudereinigung** mit voll funktio
 Kontaktformular (E-Mail-Versand via SMTP) und Admin-Panel zur Verwaltung der
 E-Mail-Einstellungen und eingegangenen Anfragen.
 
-**Stack:** React (Frontend) · FastAPI (Backend) · MongoDB (Datenbank)
+**Stack:** React + Vite (Frontend) · FastAPI (Backend) · MongoDB (Datenbank)
 
 ---
 
@@ -17,13 +17,16 @@ E-Mail-Einstellungen und eingegangenen Anfragen.
 ## 2. Projektstruktur
 
 ```
-├── backend/            # FastAPI-API (Kontaktformular, Admin, Auth)
+├── backend/            # FastAPI-API (Kontaktformular, Admin, Auth, Medien-Uploads)
 │   ├── server.py
 │   ├── requirements.txt
+│   ├── uploads/        # hochgeladene Share-Bilder/Favicons (wird zur Laufzeit erstellt)
 │   └── .env.example
-├── frontend/           # React-Website
+├── frontend/           # React-Website (Vite)
+│   ├── index.html      # Vite-Entry mit statischen OG-/Twitter-Meta-Tags
+│   ├── vite.config.js
 │   ├── src/
-│   ├── public/         # index.html, robots.txt, sitemap.xml
+│   ├── public/         # robots.txt, sitemap.xml, og-default.jpg, favicon.svg
 │   ├── package.json
 │   └── .env.example
 └── README.md
@@ -133,6 +136,11 @@ yarn build          # erzeugt frontend/build/ (statische Dateien)
    ```
    Dann: `systemctl enable --now cleanora-api`
 
+   **Wichtig:** Das Verzeichnis `backend/uploads/` muss vom Service schreibbar sein —
+   dort werden die im Admin-Panel hochgeladenen Share-Bilder/Favicons dauerhaft gespeichert.
+   (Wird beim ersten Start automatisch angelegt; bei Rechteproblemen:
+   `mkdir -p backend/uploads && chown <service-user> backend/uploads`)
+
 5. **Frontend bauen**
    ```bash
    cd ../frontend
@@ -189,10 +197,24 @@ Das Kontaktformular sendet Anfragen per SMTP an die konfigurierte Empfänger-Adr
 
 **Konfiguration im Admin-Panel** (`/admin` → „E-Mail-Einstellungen").
 
-Das Admin-Panel bietet drei Bereiche:
+Das Admin-Panel bietet fünf Bereiche:
 - **Anfragen:** alle Kontaktanfragen aus dem Formular (auch als Backup, falls SMTP einmal fehlschlägt)
 - **E-Mail-Einstellungen:** Empfänger-Adresse + komplette SMTP-Konfiguration
 - **Firmendaten:** öffentliche E-Mail, Telefon, Adresse, Inhaber, USt-IdNr., Erreichbarkeit — Änderungen erscheinen sofort auf der Website (Footer, Kontakt, Impressum, Datenschutz)
+- **Rechtstexte:** eigene Texte für Impressum & Datenschutz (leer = Standardtext)
+- **Medien:** Social-Media-Vorschaubild (Open Graph, empfohlen 1200 × 630 px, JPG/PNG/WebP bis 2 MB) und Favicon (PNG/SVG/ICO bis 512 KB) hochladen, ersetzen oder löschen
+
+## 8a. Social-Share-Bild / Open Graph
+
+Das Share-Bild wird serverseitig in `backend/uploads/` gespeichert und über den öffentlichen
+Endpunkt `/api/media/share-image` ausgeliefert. Die Open-Graph- und Twitter-Card-Tags stehen
+**statisch im initialen HTML** (`frontend/index.html`), sodass Crawler von WhatsApp, Facebook,
+LinkedIn & Co. sie ohne JavaScript auslesen können. `og:image` zeigt dabei auf die stabile,
+öffentlich erreichbare URL `https://ihre-domain.de/api/media/share-image` — beim Hochladen
+eines neuen Bildes im Admin-Panel bleibt die URL gleich, der Inhalt aktualisiert sich.
+Ohne eigenes Bild liefert der Endpunkt automatisch das mitgelieferte Standardbild
+(`frontend/public/og-default.jpg`) aus. Das Favicon wird analog über `/api/media/favicon`
+bedient (Fallback: `frontend/public/favicon.svg`).
 
 1. Postfach in Plesk anlegen (z. B. `kontak@cleanora-reinigung.de`).
 2. Im Admin-Panel eintragen:

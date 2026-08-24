@@ -333,6 +333,134 @@ function LegalTextsForm() {
   );
 }
 
+function MediaCard({ kind, title, hint, accept, maxBytes, testid }) {
+  const [info, setInfo] = useState(null);
+  const [file, setFile] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const key = kind === "share-image" ? "share_image" : "favicon";
+  const base = api.defaults.baseURL;
+
+  const load = () => api.get("/media/info").then(({ data }) => setInfo(data));
+  useEffect(() => { load(); }, []);
+
+  const hasImage = Boolean(info?.[key]);
+  const previewUrl = `${base}/media/${kind}?v=${encodeURIComponent(info?.updated_at || "")}`;
+
+  function pick(e) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    if (f.size > maxBytes) {
+      toast.error(`Datei zu groß (max. ${Math.round(maxBytes / 1024)} KB)`);
+      e.target.value = "";
+      return;
+    }
+    setFile(f);
+  }
+
+  async function upload() {
+    if (!file) return;
+    setBusy(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      await api.post(`/admin/media/${kind}`, fd, { headers: { "Content-Type": "multipart/form-data" } });
+      toast.success(`${title} gespeichert`);
+      setFile(null);
+      load();
+    } catch (err) {
+      toast.error(err?.response?.data?.detail || "Upload fehlgeschlagen");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function remove() {
+    setBusy(true);
+    try {
+      await api.delete(`/admin/media/${kind}`);
+      toast.success(`${title} entfernt — Standard wird verwendet`);
+      load();
+    } catch {
+      toast.error("Löschen fehlgeschlagen");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="border border-white/10 bg-white/[0.03] p-6 md:p-8">
+      <h2 className="font-display text-lg font-light text-white">{title}</h2>
+      <p className="mt-2 text-xs leading-relaxed text-white/40">{hint}</p>
+      <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-start">
+        <div className="w-full max-w-xs shrink-0 border border-white/10 bg-precision">
+          <img
+            data-testid={`${testid}-preview`}
+            src={previewUrl}
+            alt={`${title} Vorschau`}
+            className={kind === "share-image" ? "aspect-[1200/630] w-full object-cover" : "h-24 w-24 object-contain p-4"}
+          />
+        </div>
+        <div className="flex w-full flex-col gap-4">
+          <input
+            data-testid={`${testid}-input`}
+            type="file"
+            accept={accept}
+            onChange={pick}
+            className="w-full text-xs text-white/60 file:mr-4 file:border file:border-white/20 file:bg-transparent file:px-4 file:py-2 file:text-xs file:text-white file:transition-colors hover:file:border-white/60"
+          />
+          <div className="flex flex-wrap gap-3">
+            <button
+              data-testid={`${testid}-upload`}
+              onClick={upload}
+              disabled={!file || busy}
+              className="flex items-center gap-2 border border-white bg-white px-5 py-2.5 text-xs font-medium text-precision transition-colors duration-300 hover:bg-transparent hover:text-white disabled:opacity-40"
+            >
+              {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+              {hasImage ? "Ersetzen & speichern" : "Hochladen & speichern"}
+            </button>
+            {hasImage && (
+              <button
+                data-testid={`${testid}-delete`}
+                onClick={remove}
+                disabled={busy}
+                className="flex items-center gap-2 border border-white/20 px-5 py-2.5 text-xs text-white/60 transition-colors duration-300 hover:border-red-400/60 hover:text-red-300"
+              >
+                <Trash2 className="h-3.5 w-3.5" /> Entfernen
+              </button>
+            )}
+          </div>
+          <p className="text-xs text-white/30">
+            {hasImage ? "Eigenes Bild aktiv." : "Kein eigenes Bild — Standard wird verwendet."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MediaPanel() {
+  return (
+    <div data-testid="media-panel" className="space-y-8">
+      <MediaCard
+        kind="share-image"
+        title="Social-Media Vorschaubild (Share-Bild)"
+        hint="Wird angezeigt, wenn die Website über WhatsApp, Facebook, LinkedIn u. a. geteilt wird. Empfohlene Größe: 1200 × 630 Pixel. Erlaubt: JPG, PNG oder WebP (max. 2 MB) — für maximale Kompatibilität JPG oder PNG empfohlen, WebP wird von einzelnen Diensten (z. B. teils LinkedIn) nicht zuverlässig dargestellt."
+        accept="image/jpeg,image/png,image/webp"
+        maxBytes={2 * 1024 * 1024}
+        testid="media-share"
+      />
+      <MediaCard
+        kind="favicon"
+        title="Favicon / Browser-Icon"
+        hint="Das kleine Icon im Browser-Tab. Erlaubt: PNG, SVG oder ICO (max. 512 KB). Empfohlen: quadratisches PNG, mindestens 64 × 64 Pixel."
+        accept="image/png,image/jpeg,image/svg+xml,image/x-icon"
+        maxBytes={512 * 1024}
+        testid="media-favicon"
+      />
+    </div>
+  );
+}
+
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [tab, setTab] = useState("requests");
@@ -394,6 +522,7 @@ export default function AdminDashboard() {
             ["email", "E-Mail-Einstellungen"],
             ["site", "Firmendaten"],
             ["legal", "Rechtstexte"],
+            ["media", "Medien"],
           ].map(([key, label]) => (
             <button
               key={key}
@@ -408,7 +537,7 @@ export default function AdminDashboard() {
           ))}
         </div>
         <div className="mt-10">
-          {tab === "requests" ? <Requests /> : tab === "email" ? <EmailSettings /> : tab === "site" ? <SiteSettingsForm /> : <LegalTextsForm />}
+          {tab === "requests" ? <Requests /> : tab === "email" ? <EmailSettings /> : tab === "site" ? <SiteSettingsForm /> : tab === "legal" ? <LegalTextsForm /> : <MediaPanel />}
         </div>
       </motion.main>
     </div>

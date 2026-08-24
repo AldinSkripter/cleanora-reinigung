@@ -17,7 +17,8 @@ import bcrypt
 import jwt
 from bson import ObjectId
 from cryptography.fernet import Fernet
-from fastapi import APIRouter, Depends, FastAPI, HTTPException, Request
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, Request, UploadFile
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, EmailStr, Field, field_validator
@@ -338,6 +339,115 @@ async def delete_request(request_id: str, admin=Depends(get_admin)):
 @api_router.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+# ------------------------------------------------------- media (Share-Bild / Favicon)
+
+UPLOAD_DIR = ROOT_DIR / "uploads"
+UPLOAD_DIR.mkdir(exist_ok=True)
+
+MEDIA_CONFIG = {
+    "share-image": {
+        "key": "share_image",
+        "mimes": {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp"},
+        "max_bytes": 2 * 1024 * 1024,
+        "fallback": "/og-default.jpg",
+        "allowed": "JPG, PNG oder WebP (max. 2 MB)",
+    },
+    "favicon": {
+        "key": "favicon",
+        "mimes": {"image/png": ".png", "image/jpeg": ".jpg", "image/svg+xml": ".svg",
+                  "image/x-icon": ".ico", "image/vnd.microsoft.icon": ".ico"},
+        "max_bytes": 512 * 1024,
+        "fallback": "/favicon.svg",
+        "allowed": "PNG, SVG oder ICO (max. 512 KB)",
+    },
+}
+
+
+async def get_media_state() -> dict:
+    return await db.settings.find_one({"_id": "media"}) or {}
+
+
+@api_router.get("/media/info")
+async def media_info():
+    state = await get_media_state()
+    return {
+        "share_image": bool(state.get("share_image")),
+        "favicon": bool(state.get("favicon")),
+        "updated_at": state.get("updated_at"),
+    }
+
+
+async def serve_media(kind: str):
+    cfg = MEDIA_CONFIG[kind]
+    state = await get_media_state()
+    filename = state.get(cfg["key"])
+    if filename:
+        path = UPLOAD_DIR / filename
+        if path.exists():
+            return FileResponse(path, headers={"Cache-Control": "no-cache"})
+    return RedirectResponse(cfg["fallback"])
+
+
+@api_router.get("/media/share-image")
+async def public_share_image():
+    return await serve_media("share-image")
+
+
+@api_router.get("/media/favicon")
+async def public_favicon():
+    return await serve_media("favicon")
+
+
+@api_router.post("/admin/media/{kind}")
+async def upload_media(kind: str, file: UploadFile, admin=Depends(get_admin)):
+    if kind not in MEDIA_CONFIG:
+        raise HTTPException(status_code=404, detail="Unbekannter Medientyp")
+    cfg = MEDIA_CONFIG[kind]
+    content_type = (file.content_type or "").lower()
+    if content_type not in cfg["mimes"]:
+        raise HTTPException(status_code=415, detail=f"Nicht unterstütztes Format. Erlaubt: {cfg['allowed']}")
+    content = await file.read()
+    if not content:
+        raise HTTPException(status_code=400, detail="Leere Datei")
+    if len(content) > cfg["max_bytes"]:
+        raise HTTPException(status_code=413, detail=f"Datei zu groß. Erlaubt: {cfg['allowed']}")
+
+    state = await get_media_state()
+    filename = f"{cfg['key']}{cfg['mimes'][content_type]}"
+    (UPLOAD_DIR / filename).write_bytes(content)
+    old = state.get(cfg["key"])
+    if old and old != filename:
+        old_path = UPLOAD_DIR / old
+        if old_path.exists():
+            old_path.unlink()
+    await db.settings.update_one(
+        {"_id": "media"},
+        {"$set": {cfg["key"]: filename, "updated_at": datetime.now(timezone.utc)}},
+        upsert=True,
+    )
+    logger.info("Medium '%s' aktualisiert von %s", kind, admin["email"])
+    return {"ok": True, "filename": filename}
+
+
+@api_router.delete("/admin/media/{kind}")
+async def delete_media(kind: str, admin=Depends(get_admin)):
+    if kind not in MEDIA_CONFIG:
+        raise HTTPException(status_code=404, detail="Unbekannter Medientyp")
+    cfg = MEDIA_CONFIG[kind]
+    state = await get_media_state()
+    old = state.get(cfg["key"])
+    if old:
+        old_path = UPLOAD_DIR / old
+        if old_path.exists():
+            old_path.unlink()
+    await db.settings.update_one(
+        {"_id": "media"},
+        {"$unset": {cfg["key"]: ""}, "$set": {"updated_at": datetime.now(timezone.utc)}},
+        upsert=True,
+    )
+    return {"ok": True}
 
 
 # ------------------------------------------------------- legal texts

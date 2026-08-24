@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import { Toaster } from "@/components/ui/sonner";
 import { getLenis, setLenis } from "@/lib/lenis";
 import { SiteProvider } from "@/lib/SiteContext";
+import api from "@/lib/api";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Home from "@/pages/Home";
@@ -45,6 +46,20 @@ function SiteLayout() {
 }
 
 function App() {
+  useEffect(() => {
+    api.get("/media/info").then(({ data }) => {
+      if (data.favicon) {
+        let link = document.querySelector('link[rel="icon"]');
+        if (!link) {
+          link = document.createElement("link");
+          link.rel = "icon";
+          document.head.appendChild(link);
+        }
+        link.href = `${import.meta.env.REACT_APP_BACKEND_URL}/api/media/favicon?v=${encodeURIComponent(data.updated_at || "")}`;
+      }
+    }).catch(() => {});
+  }, []);
+
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
