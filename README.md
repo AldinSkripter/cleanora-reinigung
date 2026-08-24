@@ -175,6 +175,11 @@ yarn build          # erzeugt frontend/build/ (statische Dateien)
 
 8. **SSL aktivieren**: Plesk → *SSL/TLS-Zertifikate* → Let's Encrypt (kostenlos).
 
+   **Upload-Limit beachten:** Falls Logo/Share-Bild-Uploads mit einem Fehler abbrechen,
+   in den Apache/nginx-Weisungen das Body-Limit erhöhen — nginx:
+   `client_max_body_size 10m;` bzw. Apache: `LimitRequestBody 10485760`.
+   (Das Admin-Panel erlaubt Dateien bis 2 MB.)
+
 9. **Postfach & SMTP**: In Plesk unter *E-Mail* das Postfach `kontak@cleanora-reinigung.de`
    anlegen. Danach im Admin-Panel (`https://ihre-domain.de/admin`) unter
    „E-Mail-Einstellungen" Host (`mail.ihre-domain.de`), Port 587 + STARTTLS, Benutzer

@@ -47,7 +47,7 @@ function Hero() {
         Gebäudereinigung — Achern &amp; Umgebung
       </p>
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-36 md:px-12 md:pt-48">
+      <div className="relative mx-auto max-w-7xl px-6 pt-28 md:px-12 md:pt-36">
         <motion.p
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -64,7 +64,7 @@ function Hero() {
           <MaskedLine delay={0.4} className="italic text-precision/45">in Achern &amp; Umgebung.</MaskedLine>
         </h1>
 
-        <div className="mt-14 grid gap-14 lg:grid-cols-12 lg:items-end">
+        <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:items-center">
           <div className="lg:col-span-7">
             <motion.p
               initial={reduce ? false : { opacity: 0, y: 24 }}
@@ -150,7 +150,7 @@ function Hero() {
         </div>
       </div>
 
-      <div className="relative mt-20 md:mt-28">
+      <div className="relative mt-14 md:mt-20">
         <Marquee />
       </div>
     </section>
