@@ -17,7 +17,7 @@ export default defineConfig({
     outDir: "build",
     rolldownOptions: {
       output: {
-        advancedChunks: {
+        codeSplitting: {
           groups: [
             {
               name: "react-vendor",
