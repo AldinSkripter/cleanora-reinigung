@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useSite } from "@/lib/SiteContext";
 
 export default function Logo({ dark = false }) {
-  const { media } = useSite();
+  const { media, logo_scale } = useSite();
   return (
     <Link
       to="/"
@@ -14,7 +14,8 @@ export default function Logo({ dark = false }) {
         <img
           src={`${import.meta.env.REACT_APP_BACKEND_URL}/api/media/logo?v=${encodeURIComponent(media.updated_at || "")}`}
           alt="Cleanora — Gebäudereinigung Achern"
-          className="h-10 w-auto max-w-[180px] object-contain md:h-11 md:max-w-[220px]"
+          style={{ height: `${Math.round(40 * (logo_scale || 1))}px` }}
+          className="w-auto max-w-[260px] object-contain"
         />
       ) : (
         <span className="font-display text-xl font-black tracking-tighter md:text-2xl">CLEANORA</span>

@@ -17,7 +17,6 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const onDark = location.pathname === "/" && !scrolled;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -44,7 +43,7 @@ export default function Navbar() {
         }`}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 md:h-20 md:px-12">
-          <Logo dark={open || onDark} />
+          <Logo dark={open} />
           <nav className="hidden items-center gap-8 lg:flex" aria-label="Hauptnavigation">
             {LINKS.map((l) => (
               <NavLink
@@ -53,13 +52,7 @@ export default function Navbar() {
                 data-testid={`nav-${l.label.toLowerCase().replace(/ü/g, "ue")}`}
                 className={({ isActive }) =>
                   `text-sm tracking-wide transition-colors duration-300 ${
-                    onDark
-                      ? isActive
-                        ? "text-white font-medium"
-                        : "text-white/65 hover:text-white"
-                      : isActive
-                        ? "text-precision font-medium"
-                        : "text-precision/60 hover:text-precision"
+                    isActive ? "text-precision font-medium" : "text-precision/60 hover:text-precision"
                   }`
                 }
               >
@@ -71,11 +64,7 @@ export default function Navbar() {
             <button
               data-testid="nav-cta-button"
               onClick={() => navigate("/kontakt")}
-              className={`hidden items-center gap-2 border px-5 py-2.5 text-sm font-medium transition-colors duration-300 lg:flex ${
-                onDark
-                  ? "border-white bg-white text-precision hover:bg-transparent hover:text-white"
-                  : "border-precision bg-precision text-white hover:bg-transparent hover:text-precision"
-              }`}
+              className="hidden items-center gap-2 border border-precision bg-precision px-5 py-2.5 text-sm font-medium text-white transition-colors duration-300 hover:bg-transparent hover:text-precision lg:flex"
             >
               Angebot anfordern
               <ArrowUpRight className="h-4 w-4" />
@@ -86,7 +75,7 @@ export default function Navbar() {
               aria-label={open ? "Menü schließen" : "Menü öffnen"}
               aria-expanded={open}
               className={`flex h-11 w-11 items-center justify-center border transition-colors duration-300 lg:hidden ${
-                open || onDark ? "border-white/40 text-white" : "border-precision/20 text-precision"
+                open ? "border-white/40 text-white" : "border-precision/20 text-precision"
               }`}
             >
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

@@ -12,6 +12,7 @@ const DEFAULTS = {
   owner_name: "",
   ust_id: "",
   hours: "Mo–Fr 8:00–17:00 Uhr · Termine nach Vereinbarung",
+  logo_scale: 1.0,
   legal: { impressum: "", datenschutz: "" },
   media: { share_image: false, favicon: false, logo: false, updated_at: null },
 };

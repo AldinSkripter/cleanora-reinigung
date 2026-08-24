@@ -438,6 +438,82 @@ function MediaCard({ kind, title, hint, accept, maxBytes, testid }) {
   );
 }
 
+function LogoScale() {
+  const [cfg, setCfg] = useState(null);
+  const [scale, setScale] = useState(1);
+  const [saving, setSaving] = useState(false);
+  const base = api.defaults.baseURL;
+
+  useEffect(() => {
+    api.get("/site-settings").then(({ data }) => {
+      setCfg(data);
+      setScale(data.logo_scale || 1);
+    });
+  }, []);
+
+  async function save() {
+    setSaving(true);
+    try {
+      await api.put("/admin/settings/site", { ...cfg, logo_scale: scale });
+      toast.success("Logo-Größe gespeichert — auf der Website sofort aktiv (nach Neu laden)");
+    } catch {
+      toast.error("Speichern fehlgeschlagen");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (!cfg) {
+    return <div className="flex justify-center py-10"><Loader2 className="h-5 w-5 animate-spin text-white/40" /></div>;
+  }
+
+  return (
+    <div className="border border-white/10 bg-white/[0.03] p-6 md:p-8">
+      <h2 className="font-display text-lg font-light text-white">Logo-Größe</h2>
+      <p className="mt-2 text-xs leading-relaxed text-white/40">
+        Skalieren Sie Ihr Logo, bis es perfekt in der Navigation sitzt — die Vorschau zeigt die Wirkung sofort.
+      </p>
+      <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-center">
+        <div className="flex h-24 w-full max-w-xs items-center justify-center border border-white/10 bg-white p-4">
+          <img
+            data-testid="logo-scale-preview"
+            src={`${base}/media/logo`}
+            alt="Logo Größenvorschau"
+            style={{ height: `${Math.round(40 * scale)}px` }}
+            className="w-auto object-contain"
+          />
+        </div>
+        <div className="flex w-full flex-col gap-4">
+          <div className="flex items-center gap-4">
+            <input
+              data-testid="logo-scale-slider"
+              type="range"
+              min="0.5"
+              max="2"
+              step="0.05"
+              value={scale}
+              onChange={(e) => setScale(parseFloat(e.target.value))}
+              className="w-full accent-white"
+            />
+            <span data-testid="logo-scale-value" className="w-14 shrink-0 text-right font-mono text-sm text-white/70">
+              {Math.round(scale * 100)} %
+            </span>
+          </div>
+          <button
+            data-testid="logo-scale-save"
+            onClick={save}
+            disabled={saving}
+            className="flex w-fit items-center gap-2 border border-white bg-white px-5 py-2.5 text-xs font-medium text-precision transition-colors duration-300 hover:bg-transparent hover:text-white disabled:opacity-40"
+          >
+            {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+            Größe speichern
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MediaPanel() {
   return (
     <div data-testid="media-panel" className="space-y-8">
@@ -449,6 +525,7 @@ function MediaPanel() {
         maxBytes={512 * 1024}
         testid="media-logo"
       />
+      <LogoScale />
       <MediaCard
         kind="share-image"
         title="Social-Media Vorschaubild (Share-Bild)"
