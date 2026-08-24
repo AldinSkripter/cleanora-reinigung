@@ -220,7 +220,7 @@ SITE_DEFAULTS = {
     "owner_name": "",
     "ust_id": "",
     "hours": "Mo–Fr 8:00–17:00 Uhr · Termine nach Vereinbarung",
-    "logo_scale": 1.0,
+    "logo_scale": 1.5,
 }
 
 
@@ -233,7 +233,7 @@ class SiteSettingsInput(BaseModel):
     owner_name: str = Field(default="", max_length=120)
     ust_id: str = Field(default="", max_length=40)
     hours: str = Field(default="", max_length=120)
-    logo_scale: float = Field(default=1.0, ge=0.5, le=2.5)
+    logo_scale: float = Field(default=1.5, ge=0.5, le=7.0)
 
 
 async def get_site_settings() -> dict:

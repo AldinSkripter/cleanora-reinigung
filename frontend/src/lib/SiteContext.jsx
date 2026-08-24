@@ -12,7 +12,7 @@ const DEFAULTS = {
   owner_name: "",
   ust_id: "",
   hours: "Mo–Fr 8:00–17:00 Uhr · Termine nach Vereinbarung",
-  logo_scale: 1.0,
+  logo_scale: 1.5,
   legal: { impressum: "", datenschutz: "" },
   media: { share_image: false, favicon: false, logo: false, updated_at: null },
 };
@@ -22,18 +22,23 @@ const SiteContext = createContext(DEFAULTS);
 export function SiteProvider({ children }) {
   const [site, setSite] = useState(DEFAULTS);
   useEffect(() => {
-    api
-      .get("/site-settings")
-      .then(({ data }) => setSite((s) => ({ ...s, ...data })))
-      .catch(() => {});
+    const refresh = () => {
+      api
+        .get("/site-settings")
+        .then(({ data }) => setSite((s) => ({ ...s, ...data })))
+        .catch(() => {});
+      api
+        .get("/media/info")
+        .then(({ data }) => setSite((s) => ({ ...s, media: data })))
+        .catch(() => {});
+    };
+    refresh();
     api
       .get("/legal-texts")
       .then(({ data }) => setSite((s) => ({ ...s, legal: data })))
       .catch(() => {});
-    api
-      .get("/media/info")
-      .then(({ data }) => setSite((s) => ({ ...s, media: data })))
-      .catch(() => {});
+    window.addEventListener("cleanora-media-changed", refresh);
+    return () => window.removeEventListener("cleanora-media-changed", refresh);
   }, []);
   return <SiteContext.Provider value={site}>{children}</SiteContext.Provider>;
 }

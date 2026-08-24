@@ -1,0 +1,29 @@
+{
+  "summary": "Tested the new 'Standard-Logo + improved logo scaling' feature set end-to-end. Backend: new pytest suite (15 tests) for logo_scale bounds (0.5-7.0 accepted, 7.5/8/0.4/0/-1 -> 422), persistence via GET, auth requirement (401), static SVG delivery (both /logo-standard.svg and /logo-standard-light.svg return 200 + image/svg+xml), /api/media/info shape and no _id leak — 15/15 passed. Frontend (Playwright, 1920/768/390): navbar shows the standard SVG (no text wordmark) at exactly 60px height with logo_scale=1.5; footer and open mobile menu correctly use the light variant; Admin > Medien 'Standard-Logo' card shows both variants with correct backgrounds and download links (href + download attribute); slider reaches 50% and 700% with correct percentage readout and live preview scaling; INSTANT-APPLY verified: saving 300% then SPA-navigating to '/' without reload immediately rendered the navbar logo at 120px (style height:120px); persistence after full reload confirmed; mobile 390px capped at 44px, tablet 768px at 56px, no horizontal overflow (scrollWidth=390/768), menu toggle not overlapped; custom logo upload (transparent PNG) instantly appeared in navbar without reload and deletion instantly restored the standard SVG. No console errors and no >=400 responses in any flow. Cleanup done: test logo deleted, logo_scale restored to 1.5.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Desktop navbar (logo scaling >~290%)", "issues": ["The <img> is capped by max-w-[420px] with object-contain, so above scale ~2.7 the artwork stops growing visually (SVG aspect 340:88 -> 420px width = ~109px visual height) while the element box keeps growing (e.g. 120px box at 300%, 280px box at 700%), adding empty vertical padding inside the header. Consequence: slider values above ~290% have virtually no visible effect on desktop and none on mobile/tablet (44/56px caps), which makes the advertised 700% range misleading. Suggest capping the slider at a value that is actually effective on desktop or using width-based scaling."]},
+      {"screen": "Mobile navbar (390px)", "issues": ["At the 44px height cap the 'GEBÄUDEREINIGUNG' sub-line of the standard SVG renders ~4px tall and is barely legible; consider a compact mobile logo variant (drop icon + CLEANORA only)."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_logo_scale.py", "/app/backend/tests/test_media_logo.py"],
+  "action_items": [
+    "Optional: reconsider effective max slider value / scaling model — desktop visual height saturates at ~109px because of max-w-[420px]; 300%-700% look nearly identical.",
+    "Optional: compact standard-logo variant for mobile (sub-line unreadable at 44px cap)."
+  ],
+  "critical_code_review_comments": [
+    "LogoScale.save() PUTs {...cfg, logo_scale} where cfg comes from GET /site-settings — safe today, but any extra read-only field added to that response would be echoed back into the update payload; prefer sending an explicit whitelist of fields.",
+    "Logo height is computed as 40 * logo_scale in two places (Logo.jsx and AdminDashboard LogoScale preview) — extract the 40px base + cap logic into one shared helper so admin preview and site rendering can never diverge (they already diverge: the admin preview has no mobile caps and no 420px width cap)."
+  ],
+  "updated_files": ["/app/backend/tests/test_logo_scale.py"],
+  "success_rate": {"backend": "100% (15/15 new tests)", "frontend": "100% of the 13 requested feature checks passed"},
+  "seed_data_creation": "Temporary transparent PNG /tmp/TEST_logo.png uploaded as custom logo, then deleted; logo_scale temporarily set to 0.5/3/7 and restored to 1.5.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "kontakt@cleanora-reinigung.de / Mercedes6699@ (from /app/memory/test_credentials.md)",
+  "context_for_next_testing_agent": "New suite: /app/backend/tests/test_logo_scale.py (bounds/persistence/static SVG). Correct admin testids: admin-tab-media, media-logo-input/upload/delete (NOT media-file-logo), logo-scale-slider/value/save/preview, standard-logo-dark/light + standard-logo-download-dark/light. Use scoped selectors for the logo image: '[data-testid=\"main-nav\"] [data-testid=\"logo-link\"] img' and '[data-testid=\"site-footer\"] ...' — the plain testid matches 2 elements (strict-mode violation). Instant-apply can be exercised with history.pushState + popstate to simulate SPA navigation without reload. State left clean: no custom logo, logo_scale=1.5.",
+  "rca_of_the_issue": "No functional defect found. The only deviation from the stated expectation is cosmetic: at 300% the navbar image box is 120px as designed, but the visible artwork is ~109px tall because the desktop width cap (max-w-[420px]) plus object-contain letterboxes the 340x88 SVG."
+}

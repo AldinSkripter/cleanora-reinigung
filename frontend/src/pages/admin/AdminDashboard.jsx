@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Inbox, Loader2, LogOut, MailCheck, MailX, Save, Settings, Trash2 } from "lucide-react";
+import { Download, Inbox, Loader2, LogOut, MailCheck, MailX, Save, Settings, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import api from "@/lib/api";
 import Logo from "@/components/Logo";
@@ -402,6 +402,13 @@ function MediaCard({ kind, title, hint, accept, maxBytes, testid }) {
               alt={`${title} Vorschau`}
               className={kind === "share-image" ? "aspect-[1200/630] w-full object-cover" : "h-24 w-24 object-contain p-4"}
             />
+          ) : kind === "logo" ? (
+            <div
+              data-testid={`${testid}-preview-placeholder`}
+              className="flex h-24 w-full items-center justify-center bg-white p-4"
+            >
+              <img src="/logo-standard.svg" alt="Cleanora Standard-Logo" className="h-12 w-auto object-contain" />
+            </div>
           ) : (
             <div
               data-testid={`${testid}-preview-placeholder`}
@@ -451,7 +458,7 @@ function MediaCard({ kind, title, hint, accept, maxBytes, testid }) {
 
 function LogoScale() {
   const [cfg, setCfg] = useState(null);
-  const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(1.5);
   const [saving, setSaving] = useState(false);
   const [logoStamp, setLogoStamp] = useState(null);
   const base = api.defaults.baseURL;
@@ -459,7 +466,7 @@ function LogoScale() {
   useEffect(() => {
     api.get("/site-settings").then(({ data }) => {
       setCfg(data);
-      setScale(data.logo_scale || 1);
+      setScale(data.logo_scale || 1.5);
     });
     const loadMedia = () =>
       api.get("/media/info").then(({ data }) => setLogoStamp(data?.logo ? data.updated_at : null));
@@ -472,7 +479,9 @@ function LogoScale() {
     setSaving(true);
     try {
       await api.put("/admin/settings/site", { ...cfg, logo_scale: scale });
-      toast.success("Logo-Größe gespeichert — auf der Website sofort aktiv (nach Neu laden)");
+      setCfg((c) => ({ ...c, logo_scale: scale }));
+      window.dispatchEvent(new Event("cleanora-media-changed"));
+      toast.success("Logo-Größe gespeichert — sofort auf der Website aktiv");
     } catch {
       toast.error("Speichern fehlgeschlagen");
     } finally {
@@ -491,20 +500,14 @@ function LogoScale() {
         Skalieren Sie Ihr Logo, bis es perfekt in der Navigation sitzt — die Vorschau zeigt die Wirkung sofort.
       </p>
       <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-center">
-        <div className="flex h-24 w-full max-w-xs items-center justify-center border border-white/10 bg-white p-4">
-          {logoStamp ? (
-            <img
-              data-testid="logo-scale-preview"
-              src={`${base}/media/logo?v=${encodeURIComponent(logoStamp)}`}
-              alt="Logo Größenvorschau"
-              style={{ height: `${Math.round(40 * scale)}px` }}
-              className="w-auto object-contain"
-            />
-          ) : (
-            <p data-testid="logo-scale-preview-placeholder" className="text-center text-xs text-precision/50">
-              Standard-Schriftzug aktiv — laden Sie ein Logo hoch
-            </p>
-          )}
+        <div className="flex min-h-24 w-full max-w-xs items-center justify-center border border-white/10 bg-white p-4">
+          <img
+            data-testid="logo-scale-preview"
+            src={logoStamp ? `${base}/media/logo?v=${encodeURIComponent(logoStamp)}` : "/logo-standard.svg"}
+            alt="Logo Größenvorschau"
+            style={{ height: `${Math.round(40 * scale)}px` }}
+            className="w-auto max-w-full object-contain"
+          />
         </div>
         <div className="flex w-full flex-col gap-4">
           <div className="flex items-center gap-4">
@@ -512,7 +515,7 @@ function LogoScale() {
               data-testid="logo-scale-slider"
               type="range"
               min="0.5"
-              max="2"
+              max="7"
               step="0.05"
               value={scale}
               onChange={(e) => setScale(parseFloat(e.target.value))}
@@ -522,6 +525,7 @@ function LogoScale() {
               {Math.round(scale * 100)} %
             </span>
           </div>
+          <p className="text-xs text-white/30">50 % – 700 % · Standard: 150 % · Mobil wird die Höhe automatisch begrenzt, damit das Menü frei bleibt.</p>
           <button
             data-testid="logo-scale-save"
             onClick={save}
@@ -537,13 +541,47 @@ function LogoScale() {
   );
 }
 
+function StandardLogoCard() {
+  const btn =
+    "flex w-fit items-center gap-2 border border-white/20 px-4 py-2 text-xs text-white/60 transition-colors duration-300 hover:border-white/60 hover:text-white";
+  return (
+    <div className="border border-white/10 bg-white/[0.03] p-6 md:p-8">
+      <h2 className="font-display text-lg font-light text-white">Standard-Logo</h2>
+      <p className="mt-2 text-xs leading-relaxed text-white/40">
+        Das offizielle Cleanora-Logo — aktiv, solange kein eigenes Logo hochgeladen ist. Es existiert in zwei Varianten:
+        für helle und für dunkle Hintergründe (z. B. mobiles Menü). Beide stehen als SVG (verlustfrei skalierbar,
+        geeignet für Website, Visitenkarten, Fahrzeuge und Social Media) zum Download bereit.
+      </p>
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-3">
+          <div className="flex h-28 items-center justify-center border border-white/10 bg-white p-4">
+            <img data-testid="standard-logo-dark" src="/logo-standard.svg" alt="Cleanora Standard-Logo für helle Hintergründe" className="h-14 w-auto object-contain" />
+          </div>
+          <a data-testid="standard-logo-download-dark" href="/logo-standard.svg" download="cleanora-logo.svg" className={btn}>
+            <Download className="h-3.5 w-3.5" /> Variante für helle Hintergründe (SVG)
+          </a>
+        </div>
+        <div className="flex flex-col gap-3">
+          <div className="flex h-28 items-center justify-center border border-white/10 bg-precision p-4">
+            <img data-testid="standard-logo-light" src="/logo-standard-light.svg" alt="Cleanora Standard-Logo für dunkle Hintergründe" className="h-14 w-auto object-contain" />
+          </div>
+          <a data-testid="standard-logo-download-light" href="/logo-standard-light.svg" download="cleanora-logo-hell.svg" className={btn}>
+            <Download className="h-3.5 w-3.5" /> Variante für dunkle Hintergründe (SVG)
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MediaPanel() {
   return (
     <div data-testid="media-panel" className="space-y-8">
+      <StandardLogoCard />
       <MediaCard
         kind="logo"
-        title="Logo"
-        hint="Ihr offizielles Logo für die Website (Navigation & Footer). Empfohlen: 500 × 500 Pixel, PNG mit transparentem Hintergrund. Erlaubt: PNG, SVG, WebP oder JPG (max. 512 KB). Die Website skaliert das Logo automatisch passend — ohne Upload wird der Schriftzug CLEANORA angezeigt."
+        title="Eigenes Logo"
+        hint="Ihr offizielles Logo für die Website (Navigation & Footer). Empfohlen: 500 × 500 Pixel, PNG mit transparentem Hintergrund. Erlaubt: PNG, SVG, WebP oder JPG (max. 512 KB). Ohne Upload wird automatisch das Cleanora Standard-Logo angezeigt."
         accept="image/png,image/svg+xml,image/webp,image/jpeg"
         maxBytes={512 * 1024}
         testid="media-logo"
