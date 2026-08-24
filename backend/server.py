@@ -362,6 +362,13 @@ MEDIA_CONFIG = {
         "fallback": "/favicon.svg",
         "allowed": "PNG, SVG oder ICO (max. 512 KB)",
     },
+    "logo": {
+        "key": "logo",
+        "mimes": {"image/png": ".png", "image/jpeg": ".jpg", "image/svg+xml": ".svg", "image/webp": ".webp"},
+        "max_bytes": 512 * 1024,
+        "fallback": None,
+        "allowed": "PNG, SVG, WebP oder JPG (max. 512 KB)",
+    },
 }
 
 
@@ -375,6 +382,7 @@ async def media_info():
     return {
         "share_image": bool(state.get("share_image")),
         "favicon": bool(state.get("favicon")),
+        "logo": bool(state.get("logo")),
         "updated_at": state.get("updated_at"),
     }
 
@@ -387,17 +395,16 @@ async def serve_media(kind: str):
         path = UPLOAD_DIR / filename
         if path.exists():
             return FileResponse(path, headers={"Cache-Control": "no-cache"})
-    return RedirectResponse(cfg["fallback"])
+    if cfg["fallback"]:
+        return RedirectResponse(cfg["fallback"])
+    raise HTTPException(status_code=404, detail="Nichts hinterlegt")
 
 
-@api_router.get("/media/share-image")
-async def public_share_image():
-    return await serve_media("share-image")
-
-
-@api_router.get("/media/favicon")
-async def public_favicon():
-    return await serve_media("favicon")
+@api_router.get("/media/{kind}")
+async def public_media(kind: str):
+    if kind not in MEDIA_CONFIG:
+        raise HTTPException(status_code=404, detail="Unbekannter Medientyp")
+    return await serve_media(kind)
 
 
 @api_router.post("/admin/media/{kind}")

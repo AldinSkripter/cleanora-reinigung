@@ -13,6 +13,7 @@ const DEFAULTS = {
   ust_id: "",
   hours: "Mo–Fr 8:00–17:00 Uhr · Termine nach Vereinbarung",
   legal: { impressum: "", datenschutz: "" },
+  media: { share_image: false, favicon: false, logo: false, updated_at: null },
 };
 
 const SiteContext = createContext(DEFAULTS);
@@ -27,6 +28,10 @@ export function SiteProvider({ children }) {
     api
       .get("/legal-texts")
       .then(({ data }) => setSite((s) => ({ ...s, legal: data })))
+      .catch(() => {});
+    api
+      .get("/media/info")
+      .then(({ data }) => setSite((s) => ({ ...s, media: data })))
       .catch(() => {});
   }, []);
   return <SiteContext.Provider value={site}>{children}</SiteContext.Provider>;

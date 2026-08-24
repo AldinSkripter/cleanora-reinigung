@@ -337,7 +337,7 @@ function MediaCard({ kind, title, hint, accept, maxBytes, testid }) {
   const [info, setInfo] = useState(null);
   const [file, setFile] = useState(null);
   const [busy, setBusy] = useState(false);
-  const key = kind === "share-image" ? "share_image" : "favicon";
+  const key = { "share-image": "share_image", favicon: "favicon", logo: "logo" }[kind];
   const base = api.defaults.baseURL;
 
   const load = () => api.get("/media/info").then(({ data }) => setInfo(data));
@@ -441,6 +441,14 @@ function MediaCard({ kind, title, hint, accept, maxBytes, testid }) {
 function MediaPanel() {
   return (
     <div data-testid="media-panel" className="space-y-8">
+      <MediaCard
+        kind="logo"
+        title="Logo"
+        hint="Ihr offizielles Logo für die Website (Navigation & Footer). Empfohlen: 500 × 500 Pixel, PNG mit transparentem Hintergrund. Erlaubt: PNG, SVG, WebP oder JPG (max. 512 KB). Die Website skaliert das Logo automatisch passend — ohne Upload wird der Schriftzug CLEANORA angezeigt."
+        accept="image/png,image/svg+xml,image/webp,image/jpeg"
+        maxBytes={512 * 1024}
+        testid="media-logo"
+      />
       <MediaCard
         kind="share-image"
         title="Social-Media Vorschaubild (Share-Bild)"
