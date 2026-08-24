@@ -1,5 +1,24 @@
 # Changelog — Cleanora Gebäudereinigung
 
+## 2026-07 — Professionelles Standard-Logo + Skalierung 50–700 % (Commit 2a66515)
+- Neues Standard-Logo als SVG: Wassertropfen mit Glanz-Stern + CLEANORA-Schriftzug + GEBÄUDEREINIGUNG.
+  4 Varianten in frontend/public: logo-standard.svg / logo-standard-light.svg (hell/dunkel),
+  logo-compact.svg / logo-compact-light.svg (ohne Sub-Zeile, für Mobile/Tablet < lg).
+- Logo.jsx: Standard-SVG statt Text-Schriftzug; dunkle Flächen (Mobile-Menü, Footer) nutzen automatisch
+  die helle Variante; Kompakt-Variante unter lg; Desktop max-w 560px.
+- Skalierung: Slider 50–700 % (Standard 150 %); Backend logo_scale ge=0.5/le=7.0/default 1.5.
+- Sofort-Anzeige ohne Refresh: LogoScale.save() dispatcht 'cleanora-media-changed', SiteContext lädt
+  site-settings + media/info neu (Navbar aktualisiert sofort).
+- Responsive Caps: Mobile max-h-11 (44px), Tablet max-h-14 (56px) — Menü bleibt immer frei.
+- Admin Medien-Tab: Karte 'Standard-Logo' mit Vorschau beider Varianten + SVG-Download-Buttons;
+  Logo-Vorschauen zeigen Standard-SVG statt leerem Platzhalter.
+- Verifiziert (iteration_3): 15/15 neue Backend-Tests (Bounds/Persistenz/SVG-Auslieferung), alle 13
+  Frontend-Checks grün inkl. Instant-Apply ohne Reload, Mobile-Caps, helle Variante im Menü, Downloads.
+  Hinweis: bei sehr breiten Logos saturiert die sichtbare Höhe auf Desktop bei ~360 % (Breitenlimit 560px).
+
+
+# Changelog — Cleanora Gebäudereinigung
+
 ## 2026-07 — Verifikations- und Bugfix-Runde (Commit e23dd63)
 Vollständiger Testlauf (testing_agent, iteration_1 + iteration_2) nach Nutzer-Bugmeldung
 (Logo-Upload/Löschen „Fehler“, Desktop-Abstände zu groß). Ergebnis: 28/28 Backend-Tests grün,
