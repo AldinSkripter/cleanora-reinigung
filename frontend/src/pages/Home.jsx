@@ -51,10 +51,10 @@ function Hero() {
             <span className="h-px w-10 bg-precision/40" />
             Cleanora · Gebäudereinigung Achern
           </motion.p>
-          <h1 className="font-display text-5xl font-light leading-[1.02] tracking-tighter text-precision sm:text-6xl lg:text-7xl">
+          <h1 className="font-display text-5xl font-light leading-[1.0] tracking-tighter text-precision sm:text-6xl lg:text-[5.2rem]">
             <MaskedLine delay={0.1}>Professionelle</MaskedLine>
             <MaskedLine delay={0.25}>Gebäudereinigung</MaskedLine>
-            <MaskedLine delay={0.4} className="text-precision/40">in Achern &amp; Umgebung</MaskedLine>
+            <MaskedLine delay={0.4} className="italic text-precision/40">in Achern &amp; Umgebung.</MaskedLine>
           </h1>
           <motion.p
             initial={reduce ? false : { opacity: 0, y: 24 }}
@@ -92,6 +92,21 @@ function Hero() {
               </Link>
             </motion.div>
           </motion.div>
+          <motion.ul
+            initial={reduce ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.05, duration: 0.8, ease: EASE }}
+            className="mt-12 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-8"
+          >
+            {["Kostenlos & unverbindlich", "Fester Ansprechpartner", "Termintreu & gründlich"].map((t) => (
+              <li key={t} className="flex items-center gap-2.5 text-sm text-precision/60">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-precision/20">
+                  <Check className="h-3 w-3 text-precision" strokeWidth={2.5} />
+                </span>
+                {t}
+              </li>
+            ))}
+          </motion.ul>
         </div>
         <div className="relative hidden lg:col-span-5 lg:block">
           <motion.div
@@ -161,6 +176,40 @@ function Intro() {
               loading="lazy"
             />
           </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function ManifestoBand() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+  const reduce = useReducedMotion();
+  return (
+    <section ref={ref} data-testid="manifesto-band" className="relative flex min-h-[70vh] items-center overflow-hidden">
+      <motion.img
+        src={IMAGES.window}
+        alt="Streifenfreie Glasreinigung durch Cleanora"
+        loading="lazy"
+        className="absolute inset-0 h-full w-full object-cover"
+        style={reduce ? undefined : { y, scale: 1.18 }}
+      />
+      <div className="absolute inset-0 bg-precision/60" />
+      <div className="relative mx-auto w-full max-w-7xl px-6 py-24 md:px-12">
+        <Reveal>
+          <p className="flex items-center gap-3 text-xs font-medium uppercase tracking-[0.25em] text-white/60">
+            <span className="h-px w-10 bg-white/40" />
+            Manifest
+          </p>
+          <p className="mt-8 max-w-3xl font-display text-4xl font-light italic leading-[1.15] tracking-tight text-white md:text-6xl">
+            „Makellos ist kein Zufall — es ist das Ergebnis von Sorgfalt, System und dem Willen, es jedes Mal richtig zu machen."
+          </p>
+          <p className="mt-8 max-w-xl text-sm leading-relaxed text-white/70">
+            Das ist der Anspruch, mit dem wir bei Cleanora jedes Objekt betreten —
+            vom kleinen Treppenhaus in Achern bis zur großen Gewerbefläche in der Ortenau.
+          </p>
         </Reveal>
       </div>
     </section>
@@ -402,6 +451,7 @@ export default function Home() {
       />
       <Hero />
       <Intro />
+      <ManifestoBand />
       <ServicesList />
       <WhyUs />
       <Process />

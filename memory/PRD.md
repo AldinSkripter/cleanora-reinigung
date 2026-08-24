@@ -32,7 +32,9 @@ Mehrsprachig DE, responsive (Desktop/Tablet/Mobile), Local-SEO Achern & Ortenau,
 - GitHub: Code in https://github.com/AldinSkripter/cleanora-reinigung gepusht (Branch main).
 - Vite-Migration (ersetzt CRA5/CRACO): npm audit 38 → 0 Vulnerabilities, keine ERESOLVE-/Deprecated-Warnungen, Build ~1,4 s. Dateien .js→.jsx, vite.config.js, index.html ins Root (statische OG-/Twitter-Tags), craco.config.js/jsconfig entfernt, postcss/tailwind → .cjs.
 - Admin-Tab „Medien": Share-Bild (1200×630, JPG/PNG/WebP ≤2 MB) + Favicon (PNG/SVG/ICO ≤512 KB) hochladen/ersetzen/löschen; Persistenz in backend/uploads; öffentliche Endpunkte /api/media/share-image + /api/media/favicon mit Fallback (og-default.jpg / favicon.svg).
-- Code-Splitting: Admin-Bereich + alle Unterseiten per React.lazy/Suspense aus dem Initial-Bundle; Vendor-Chunks via rolldown advancedChunks (react-vendor 228 kB, motion 120 kB, App 152 kB, Admin 22 kB, Seiten 1–5 kB) — keine Chunk-Size-Warnung, Audit 0.
+- Code-Splitting: Admin-Bereich + alle Unterseiten per React.lazy/Suspense aus dem Initial-Bundle; Vendor-Chunks via rolldown output.codeSplitting (react-vendor 228 kB, motion 120 kB, App 152 kB, Admin 22 kB, Seiten 1–5 kB) — keine Chunk-Size-Warnung, Audit 0.
+- Footer-Wordmark-Fix: Riesen-„CLEANORA" als skalierbares SVG (viewBox) statt vw-Fontgröße — nie mehr abgeschnitten, weder Desktop noch Mobile.
+- Home-Premium-Feinschliff: Hero mit größerer Typo (Italic-Akzentzeile), Vertrauenszeile (3 Checks), Editorial-Manifest-Band mit Parallax („Makellos ist kein Zufall") zwischen Intro und Leistungen.
 
 ## Backlog
 - P0: Echte SMTP-Zugangsdaten im Admin-Panel eintragen (oder .env) und Testmail verifizieren. Verbleibende Platzhalter (USt-ID, ggf. echte Adresse) im Admin-Panel unter „Firmendaten" pflegen.

@@ -71,10 +71,21 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-24 select-none overflow-hidden" aria-hidden="true">
-          <p className="whitespace-nowrap font-display text-[13vw] font-black leading-none tracking-tighter text-white/5">
-            CLEANORA
-          </p>
+        <div className="mt-24 select-none" aria-hidden="true">
+          <svg viewBox="0 0 1200 190" className="block w-full" preserveAspectRatio="xMidYMid meet">
+            <text
+              x="600"
+              y="152"
+              textAnchor="middle"
+              fontFamily="'Outfit Variable', Outfit, sans-serif"
+              fontWeight="900"
+              fontSize="172"
+              letterSpacing="-5"
+              fill="rgba(255,255,255,0.05)"
+            >
+              CLEANORA
+            </text>
+          </svg>
         </div>
 
         <div className="mt-8 flex flex-col items-start justify-between gap-6 border-t border-white/10 pt-8 text-xs text-white/40 md:flex-row md:items-center">
