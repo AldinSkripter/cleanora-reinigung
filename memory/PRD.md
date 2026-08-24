@@ -31,6 +31,7 @@ Mehrsprachig DE, responsive (Desktop/Tablet/Mobile), Local-SEO Achern & Ortenau,
 - Frontend-Dependency-Großbereinigung (Juli 2026): 53 ungenutzte Pakete entfernt (alle @radix-ui außer Nutzung, react-query, recharts, zod, react-hook-form, lodash, Testing-Library u. a.), 43 ungenutzte ui/*-Template-Dateien entfernt (nur sonner bleibt), ESLint auf CRA5-kompatible 8.57.1-Kette, npm-overrides + yarn-resolutions synchronisiert. npm audit: 38 (13L/6M/19H) → 5 high (ausschließlich CRA5-Toolchain svgo/SVGR, dev-only, kein Production-Code). Verifiziert: npm install/ci/build + yarn build + vollständiger E2E-Funktionstest.
 - GitHub: Code in https://github.com/AldinSkripter/cleanora-reinigung gepusht (Branch main).
 - Vite-Migration (ersetzt CRA5/CRACO): npm audit 38 → 0 Vulnerabilities, keine ERESOLVE-/Deprecated-Warnungen, Build ~1,4 s. Dateien .js→.jsx, vite.config.js, index.html ins Root (statische OG-/Twitter-Tags), craco.config.js/jsconfig entfernt, postcss/tailwind → .cjs.
+- Admin-Tab „Medien": Share-Bild (1200×630, JPG/PNG/WebP ≤2 MB) + Favicon (PNG/SVG/ICO ≤512 KB) hochladen/ersetzen/löschen; Persistenz in backend/uploads; öffentliche Endpunkte /api/media/share-image + /api/media/favicon mit Fallback (og-default.jpg / favicon.svg).
 - Code-Splitting: Admin-Bereich + alle Unterseiten per React.lazy/Suspense aus dem Initial-Bundle; Vendor-Chunks via rolldown advancedChunks (react-vendor 228 kB, motion 120 kB, App 152 kB, Admin 22 kB, Seiten 1–5 kB) — keine Chunk-Size-Warnung, Audit 0.
 
 ## Backlog
