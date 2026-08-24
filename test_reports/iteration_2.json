@@ -1,0 +1,37 @@
+{
+  "summary": "Retest after bugfix round (Cleanora). Backend: pytest suite /app/backend/tests/test_media_logo.py 28/28 green against the public preview URL, incl. the previously CRITICAL brute-force lockout regression (now 429 instead of 500) plus a new test that the correct password is also 429 while locked. Frontend (Playwright, public URL): admin login OK, Medien tab placeholders render when no logo is set (no broken <img>, no 404 for /api/media/logo), PNG upload updates logo-scale-preview immediately WITHOUT page reload (cache-buster ?v=updated_at, naturalWidth=400), slider live-scales the preview (40px -> 72px / 180%), JPEG replace refreshes the preview with a new stamp, delete switches both previews back to the placeholder and the navbar keeps the default CLEANORA wordmark. Desktop 1920: section padding now 112px (was 160px), hero headline->intro gap 40px, no horizontal overflow. Mobile 390: no overflow, menu X icon visible (white, 20x20), mobile nav navigation works. Zero JS console errors and zero >=400 responses across all flows. All 5 previously reported iteration_1 issues are verified fixed. Test data cleaned up: logo deleted (uploads dir empty, media state logo unset), TEST_lockout_probe entries removed from login_attempts.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "CORS middleware", "issue": "allow_credentials=True combined with CORS_ORIGINS='*' is an invalid CORS combination (browsers reject credentialed wildcard). Currently harmless because auth uses a Bearer token, but should be an explicit origin list."},
+      {"endpoint": "auth/login (token storage)", "issue": "JWT is returned in the JSON body and stored in localStorage (frontend/src/lib/api.js) instead of an httpOnly cookie -> XSS-exfiltratable token. Playbook item 'httpOnly cookies on login' is not implemented (design decision, non-blocking)."},
+      {"endpoint": "pytest run stability", "issue": "Tests live under /app/backend/tests, which uvicorn --reload watches. Editing test files mid-session restarts the backend and caused 2 spurious media-lifecycle failures (upload 200 then GET 404). Recommend --reload-exclude tests/* or moving tests to /app/tests."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Admin > Medien > Logo card", "issues": ["MediaCard logo preview sits on the dark 'precision' background; a transparent/dark PNG logo is barely visible there (the LogoScale preview correctly uses a white backdrop). Cosmetic only."]},
+      {"screen": "Home desktop 1920", "issues": ["Two non-Home sections (CTA/FAQ area, rendered from other components) still use 128px lg padding while Home.jsx sections are 112px - slight vertical rhythm inconsistency, cosmetic."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_media_logo.py", "/app/backend/tests/conftest.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Optional: set explicit CORS_ORIGINS instead of '*' since allow_credentials=True",
+    "Optional: exclude tests/ from uvicorn reload watcher to avoid flaky local test runs",
+    "Optional cosmetic: white backdrop for the MediaCard logo preview"
+  ],
+  "critical_code_review_comments": [
+    "server.py login: locked_until tz-normalisation is correct now; consider storing timestamps consistently tz-aware to avoid the same class of bug elsewhere (contact_requests.created_at etc.).",
+    "Brute-force key is '{client_ip}:{email}'; behind the ingress the forwarded IP can rotate, so lockout can be diluted across keys. Consider an additional email-only counter."
+  ],
+  "updated_files": ["/app/backend/tests/conftest.py", "/app/backend/tests/test_media_logo.py"],
+  "success_rate": {"backend": "100% (28/28)", "frontend": "100% (all tested flows)"},
+  "seed_data_creation": "Temporary logo uploads (PNG + JPEG) via admin UI - deleted afterwards; login_attempts probe entries TEST_lockout_probe / TEST_lockout_probe2 - purged by the new clean_login_attempts fixture (verified empty).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "kontakt@cleanora-reinigung.de / Mercedes6699@ (unchanged, bcrypt hash verified $2b$12$)",
+  "context_for_next_testing_agent": "Admin tab testids are admin-tab-{requests|email|site|legal|media} (NOT German labels). Login needs a ~1s settle wait after page load before filling the form, otherwise the submit is swallowed. Added conftest fixture clean_login_attempts (pymongo, case-insensitive purge of test_lockout_probe keys) - required because server lowercases the email in the lockout key and a stale 15-min lock makes the brute-force test fail. Do not edit files under /app/backend while a test run is in progress (uvicorn reload).",
+  "rca_of_the_issue": "Iteration_1 lockout 500 was caused by comparing a naive Mongo datetime with an aware now(); the fix normalises locked_until to UTC and is verified (429 for wrong AND correct password while locked). The first retest run of the lockout test failed only due to test isolation (leftover 15-min lock from the previous run) - fixed inside the test fixture, no product change. The two media-lifecycle failures in that same run were caused by the backend hot-reloading when I edited files inside /app/backend; both passed on a clean run."
+}

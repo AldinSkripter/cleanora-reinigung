@@ -1,0 +1,104 @@
+{
+  "summary": "Vollständige Verifikation des Logo-/Medien-Features (Backend + Frontend) auf der Preview-URL. 27 Pytest-Tests (26 pass / 1 fail) plus 4 Playwright-Flows (Admin-Login, Logo-Upload PNG-transparent + JPEG, Ersetzen, Löschen, Größen-Slider, Navbar Desktop 1920 + Mobile 390, Fehlerbehandlung .txt). Das komplette Logo-Feature funktioniert einwandfrei: Upload transparentes PNG (Alpha bleibt erhalten, Bytes identisch), JPEG-Upload, Ersetzen (alte Datei wird gelöscht, Content-Type wechselt korrekt), Löschen (Standard-Wordmark CLEANORA kehrt in der Navbar zurück), logo_scale 50-200% persistiert (nach Reload 100%/180% korrekt), Navbar rendert das Logo mit exakt 40*scale px auf Desktop und Mobile, keine JS-Errors, kein horizontaler Overflow, Mobile-Menü mit sichtbarem X-Button funktioniert. GEFUNDEN: 1 kritischer Auth-Bug (Login liefert HTTP 500 statt 429 nach 5 Fehlversuchen, Sperre greift nicht) und 2 UI-Bugs bei den Logo-Vorschaubildern im Admin.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "POST /api/auth/login",
+        "issue": "Nach 5 Fehlversuchen antwortet der Endpunkt 15 Minuten lang mit HTTP 500 (nicht 429) - auch bei KORREKTEM Passwort. Ursache: server.py:83 vergleicht das aus MongoDB gelesene naive datetime 'locked_until' mit dem tz-aware 'now' -> TypeError: can't compare offset-naive and offset-aware datetimes. Folge: Brute-Force-Sperre wird nie durchgesetzt UND der Admin sperrt sich mit 5 Tippfehlern selbst per 500-Fehler aus. Fix: locked_until beim Lesen mit .replace(tzinfo=timezone.utc) versehen (oder AsyncIOMotorClient(mongo_url, tz_aware=True)).",
+        "priority": "CRITICAL"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "POST /api/contact + POST /api/auth/login",
+        "issue": "Rate-Limit/Lockout-Key nutzt request.client.host. Hinter Reverse-Proxy/Ingress ist das die Proxy-IP (in der Preview wechselnd zwischen 10.79.139.10/.11). Konsequenz live: das Kontakt-Rate-Limit (5/Min) gilt effektiv GLOBAL fuer alle Besucher, und der Login-Lockout ist nicht pro echtem Client. X-Forwarded-For (mit Trusted-Proxy-Logik) verwenden."
+      },
+      {
+        "endpoint": "CORS-Middleware",
+        "issue": "allow_credentials=True kombiniert mit allow_origins=['*'] (CORS_ORIGINS='*') ist eine ungueltige Kombination - Browser lehnen credentialed Requests dann ab. Aktuell unkritisch, da Auth ueber Bearer-Token aus localStorage laeuft, aber fuer die Live-Konfiguration explizite Origins setzen."
+      },
+      {
+        "endpoint": "Auth-Design",
+        "issue": "Playbook-Abweichung: Kein httpOnly-Cookie, JWT wird im localStorage ('cleanora_admin_token') gehalten (XSS-Exfiltrationsrisiko). Funktional ok, bewusst zu entscheiden. bcrypt-Hash-Format ($2b$) und seed_admin-Update bei geaendertem Passwort wurden verifiziert und sind korrekt."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "AdminDashboard / LogoScale (Karte 'Logo-Größe')",
+        "issue": "Die Größen-Vorschau nutzt src={base}/media/logo OHNE Cache-Buster und ohne Reaktion auf media/info. Folge: (a) direkt nach dem ersten Upload bleibt die Vorschau ein kaputtes Bild-Icon (naturalWidth=0, das 404 vom Mount-Zeitpunkt bleibt haengen), (b) nach dem Löschen zeigt sie weiter das gelöschte Logo. Der Slider-Wert/Prozentanzeige und die Live-Höhe (40*scale px) funktionieren korrekt - nur das Bild ist stale/broken. Genau das wirkt fuer den Nutzer wie 'Slider-Vorschau kaputt'. Fix: gleiche ?v={media.updated_at}-Logik wie in MediaCard + Reload nach Upload/Delete.",
+        "selector": "[data-testid=\"logo-scale-preview\"]",
+        "priority": "HIGH"
+      },
+      {
+        "component": "AdminDashboard / MediaCard (Logo)",
+        "issue": "Wenn kein Logo hinterlegt ist (GET /api/media/logo -> 404, kein Fallback), zeigt die Vorschau ein kaputtes Bild-Icon mit Alt-Text 'Logo Vorschau' und erzeugt einen 404 in der Browser-Konsole. Besser: Platzhalter/Wordmark-Preview rendern statt <img> mit 404 (z.B. nur rendern wenn info.logo === true).",
+        "selector": "[data-testid=\"media-logo-preview\"]",
+        "priority": "MEDIUM"
+      },
+      {
+        "component": "AdminDashboard Header-Logo / SiteContext",
+        "issue": "Nach Upload/Delete zeigt das Logo im Admin-Header (und in der Navbar der Website) noch den alten Zustand, bis die Seite neu geladen wird - SiteContext laedt /media/info + /site-settings nur einmal beim Mount. Toast weist zwar auf 'nach Neu laden' hin, ein Refresh-Trigger waere aber sauberer.",
+        "selector": "[data-testid=\"logo-link\"]",
+        "priority": "LOW"
+      },
+      {
+        "component": "MediaCard Upload-Validierung",
+        "issue": "Der File-Input hat accept=\"image/png,...\", eine per Drag/Alle-Dateien gewaehlte .txt wird aber nicht clientseitig geblockt: der Upload-Button ist aktiv und erst der Server antwortet 415. Die deutsche Fehlermeldung ('Nicht unterstuetztes Format. Erlaubt: PNG, SVG, WebP oder JPG (max. 512 KB)') erscheint korrekt als Toast, kein Crash - daher nur kosmetisch (clientseitige MIME-Pruefung in pick() ergaenzen).",
+        "selector": "[data-testid=\"media-logo-input\"]",
+        "priority": "LOW"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Startseite Desktop 1920px",
+        "issues": [
+          "Kein horizontaler Overflow (scrollWidth == clientWidth == 1920) - OK.",
+          "Sektions-Padding ist weiterhin sehr gross: Sektionen 1-4 haben padding-top UND padding-bottom je 160px -> ~320px Leerraum zwischen benachbarten Sektionen; Sektionen 5-7 je 128px. Gesamt-Dokumenthoehe 8759px. Wenn der Nutzer 'zu grosse/zerstreute Abstaende' meldete, ist das der Hebel (py-40 -> py-24/py-28 auf lg).",
+          "Hero-Sektion ist 1296px hoch mit einer auffaellig grossen Leerflaeche (~150px) zwischen Headline-Block und Intro-Absatz/CTAs (linke Spalte), waehrend rechts das Bild laeuft - wirkt 'zerstreut'."
+        ]
+      },
+      {
+        "screen": "Startseite Mobile 390px",
+        "issues": [
+          "Kein horizontaler Overflow (390/390), auch bei geoeffnetem Menue - OK.",
+          "Mobile-Menue oeffnet/schliesst korrekt, X-Button sichtbar (44x44px, aria-label 'Menü schließen') - OK.",
+          "Hinweis: bei logo_scale 180% wird das Logo mobil 216x72px gross und ruecht dicht an den Menue-Button (right=240 vs Button x=322) - bei breiten Kundenlogos + hoher Skalierung wird es eng; ggf. mobiles Max-Height cappen."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_media_logo.py",
+    "/app/backend/tests/conftest.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "CRITICAL: server.py:83 - locked_until aus MongoDB als UTC-aware behandeln (oder Motor mit tz_aware=True), damit Login nach 5 Fehlversuchen 429 statt 500 liefert und die Sperre wirklich greift. Ohne Fix kann der Kunde sich mit Tippfehlern per 500-Fehler 15 Min. aussperren.",
+    "HIGH: logo-scale-preview mit ?v={media.updated_at} cache-busten und nach Upload/Delete neu laden (aktuell stale/kaputtes Bild).",
+    "MEDIUM: MediaCard-Vorschau nur rendern wenn info[key] === true, sonst Platzhalter (vermeidet 404 + Broken-Image-Icon).",
+    "MEDIUM: Desktop-Sektionsabstaende reduzieren (py-40 = 160px oben+unten) und die Leerflaeche im Hero zwischen Headline und Absatz straffen.",
+    "LOW: request.client.host durch X-Forwarded-For-Auswertung ersetzen (Kontakt-Rate-Limit wirkt hinter Proxy global).",
+    "LOW: CORS_ORIGINS live auf explizite Domains setzen (allow_credentials=True + '*' ist ungueltig)."
+  ],
+  "critical_code_review_comments": [
+    "server.py:83 naive/aware datetime-Vergleich -> 500er im Login-Pfad (bestaetigt im Backend-Traceback).",
+    "AdminDashboard.jsx:480 - Vorschau-URL ohne Cache-Buster, im Gegensatz zu MediaCard (Zeile 347) inkonsistent; DRY-Verletzung: Preview-URL-Logik zweimal implementiert.",
+    "AdminDashboard.jsx ist 631 Zeilen mit 6 Panels in einer Datei - fuer die Wartbarkeit in Panel-Komponenten aufteilen.",
+    "LogoScale.save() sendet das komplette site-settings-Objekt inkl. abgeleitetem 'phone_href' zurueck; funktioniert (Pydantic ignoriert Extras), sollte aber gefiltert werden.",
+    "MEDIA_CONFIG['logo'] hat fallback=None -> GET /api/media/logo liefert absichtlich 404; jede UI, die das Bild bedingungslos rendert, produziert Broken-Images/Console-404s."
+  ],
+  "updated_files": [
+    "/app/backend/tests/conftest.py (neu)",
+    "/app/backend/tests/test_media_logo.py (neu)"
+  ],
+  "success_rate": {"backend": "96% (26/27)", "frontend": "100% der Logo-Flows funktional; 4 UI-Vorschau/Design-Findings"},
+  "seed_data_creation": "Nur temporaer: Logo-Uploads (transparentes PNG + JPEG, per PIL erzeugt in /tmp) und login_attempts-Eintraege fuer 'TEST_lockout_probe@example.com'. Alles aufgeraeumt: /api/media/logo liefert wieder 404, /app/backend/uploads leer, logo_scale zurueck auf 1.0, Standard-Wordmark CLEANORA aktiv, Probe-Lockout-Eintraege aus DB entfernt. test_credentials.md unveraendert.",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "kontakt@cleanora-reinigung.de / Mercedes6699@ - Login funktioniert (200, JWT), bcrypt-Hash $2b$, /api/auth/me OK",
+  "context_for_next_testing_agent": "Backend-Suite: /app/backend/tests/test_media_logo.py (mit pytest.ini: 'cd /app/backend/tests && python -m pytest . -n 0 -v' ausfuehren; -n 0 wichtig, da Logo-State geteilt ist). Der einzige rote Test ist TestBruteForceLockout::test_lockout_after_5_failures und dokumentiert den 500er-Auth-Bug; nach dem Fix muss er 429 sehen. ACHTUNG: dieser Test hinterlaesst login_attempts-Dokumente fuer 'test_lockout_probe@example.com' (nur diese E-Mail, der echte Admin ist nicht betroffen) - bei Bedarf loeschen. Der komplette Logo-Lifecycle (transparentes PNG, JPEG, Ersetzen, Loeschen, Navbar Desktop/Mobile, Slider-Persistenz) wurde bereits verifiziert und funktioniert; beim Retest bitte primaer den Auth-500-Fix, die logo-scale-preview Cache-Busting-Korrektur und die Desktop-Abstaende pruefen.",
+  "rca_of_the_issue": "Logo-Upload/Delete des Nutzers ist serverseitig fehlerfrei (alle 200/415/413/400 korrekt, Alpha-Kanal bleibt erhalten, Byte-identische Auslieferung). Die vom Nutzer wahrgenommenen 'Fehler' erklaeren sich durch zwei Frontend-Vorschau-Defekte: die Karte 'Logo-Größe' laedt /api/media/logo ohne Cache-Buster und ohne Re-Fetch, weshalb sie nach dem ersten Upload ein Broken-Image und nach dem Loeschen das bereits geloeschte Logo zeigt; zusaetzlich rendert die MediaCard bei fehlendem Logo ein <img> auf einen bewusst 404-liefernden Endpunkt (Broken-Image + Console-404). Unabhaengig davon existiert ein kritischer Auth-Bug: server.py:83 vergleicht das naive Mongo-datetime 'locked_until' mit tz-aware 'now', was einen TypeError und damit HTTP 500 fuer 15 Minuten nach 5 Fehlversuchen erzeugt (Traceback in /var/log/supervisor/backend.err.log verifiziert) - das kann sich auf dem Live-VPS als 'Login/Admin kaputt' aeussern."
+}

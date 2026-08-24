@@ -74,13 +74,23 @@ class LoginInput(BaseModel):
     password: str = Field(min_length=1, max_length=200)
 
 
+def client_ip(request: Request) -> str:
+    forwarded = request.headers.get("x-forwarded-for", "")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
 @api_router.post("/auth/login")
 async def login(data: LoginInput, request: Request):
     email = data.email.lower().strip()
-    identifier = f"{request.client.host}:{email}"
+    identifier = f"{client_ip(request)}:{email}"
     now = datetime.now(timezone.utc)
     attempt = await db.login_attempts.find_one({"_id": identifier})
-    if attempt and attempt.get("locked_until") and attempt["locked_until"] > now:
+    locked_until = (attempt or {}).get("locked_until")
+    if locked_until and locked_until.tzinfo is None:
+        locked_until = locked_until.replace(tzinfo=timezone.utc)
+    if locked_until and locked_until > now:
         raise HTTPException(status_code=429, detail="Zu viele Fehlversuche. Bitte in 15 Minuten erneut versuchen.")
 
     user = await db.users.find_one({"email": email})
@@ -307,10 +317,10 @@ async def send_email(data: ContactInput) -> bool:
 async def contact(data: ContactInput, request: Request):
     if data.website:  # Honeypot: still accept silently
         return {"ok": True}
-    check_rate_limit(request.client.host)
+    check_rate_limit(client_ip(request))
     doc = data.model_dump(exclude={"website", "privacy"})
     doc["created_at"] = datetime.now(timezone.utc)
-    doc["ip"] = request.client.host
+    doc["ip"] = client_ip(request)
     try:
         doc["email_sent"] = await send_email(data)
     except Exception:

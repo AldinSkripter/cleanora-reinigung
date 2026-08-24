@@ -367,6 +367,7 @@ function MediaCard({ kind, title, hint, accept, maxBytes, testid }) {
       toast.success(`${title} gespeichert`);
       setFile(null);
       load();
+      window.dispatchEvent(new Event("cleanora-media-changed"));
     } catch (err) {
       toast.error(err?.response?.data?.detail || "Upload fehlgeschlagen");
     } finally {
@@ -380,6 +381,7 @@ function MediaCard({ kind, title, hint, accept, maxBytes, testid }) {
       await api.delete(`/admin/media/${kind}`);
       toast.success(`${title} entfernt — Standard wird verwendet`);
       load();
+      window.dispatchEvent(new Event("cleanora-media-changed"));
     } catch {
       toast.error("Löschen fehlgeschlagen");
     } finally {
@@ -393,12 +395,21 @@ function MediaCard({ kind, title, hint, accept, maxBytes, testid }) {
       <p className="mt-2 text-xs leading-relaxed text-white/40">{hint}</p>
       <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-start">
         <div className="w-full max-w-xs shrink-0 border border-white/10 bg-precision">
-          <img
-            data-testid={`${testid}-preview`}
-            src={previewUrl}
-            alt={`${title} Vorschau`}
-            className={kind === "share-image" ? "aspect-[1200/630] w-full object-cover" : "h-24 w-24 object-contain p-4"}
-          />
+          {hasImage ? (
+            <img
+              data-testid={`${testid}-preview`}
+              src={previewUrl}
+              alt={`${title} Vorschau`}
+              className={kind === "share-image" ? "aspect-[1200/630] w-full object-cover" : "h-24 w-24 object-contain p-4"}
+            />
+          ) : (
+            <div
+              data-testid={`${testid}-preview-placeholder`}
+              className={`flex items-center justify-center text-center text-xs text-white/35 ${kind === "share-image" ? "aspect-[1200/630] w-full p-4" : "h-24 w-24 p-2"}`}
+            >
+              Standard aktiv
+            </div>
+          )}
         </div>
         <div className="flex w-full flex-col gap-4">
           <input
@@ -442,6 +453,7 @@ function LogoScale() {
   const [cfg, setCfg] = useState(null);
   const [scale, setScale] = useState(1);
   const [saving, setSaving] = useState(false);
+  const [logoStamp, setLogoStamp] = useState(null);
   const base = api.defaults.baseURL;
 
   useEffect(() => {
@@ -449,6 +461,11 @@ function LogoScale() {
       setCfg(data);
       setScale(data.logo_scale || 1);
     });
+    const loadMedia = () =>
+      api.get("/media/info").then(({ data }) => setLogoStamp(data?.logo ? data.updated_at : null));
+    loadMedia();
+    window.addEventListener("cleanora-media-changed", loadMedia);
+    return () => window.removeEventListener("cleanora-media-changed", loadMedia);
   }, []);
 
   async function save() {
@@ -475,13 +492,19 @@ function LogoScale() {
       </p>
       <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-center">
         <div className="flex h-24 w-full max-w-xs items-center justify-center border border-white/10 bg-white p-4">
-          <img
-            data-testid="logo-scale-preview"
-            src={`${base}/media/logo`}
-            alt="Logo Größenvorschau"
-            style={{ height: `${Math.round(40 * scale)}px` }}
-            className="w-auto object-contain"
-          />
+          {logoStamp ? (
+            <img
+              data-testid="logo-scale-preview"
+              src={`${base}/media/logo?v=${encodeURIComponent(logoStamp)}`}
+              alt="Logo Größenvorschau"
+              style={{ height: `${Math.round(40 * scale)}px` }}
+              className="w-auto object-contain"
+            />
+          ) : (
+            <p data-testid="logo-scale-preview-placeholder" className="text-center text-xs text-precision/50">
+              Standard-Schriftzug aktiv — laden Sie ein Logo hoch
+            </p>
+          )}
         </div>
         <div className="flex w-full flex-col gap-4">
           <div className="flex items-center gap-4">

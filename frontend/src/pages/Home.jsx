@@ -64,7 +64,7 @@ function Hero() {
           <MaskedLine delay={0.4} className="italic text-precision/45">in Achern &amp; Umgebung.</MaskedLine>
         </h1>
 
-        <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:items-center">
+        <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
             <motion.p
               initial={reduce ? false : { opacity: 0, y: 24 }}
@@ -159,7 +159,7 @@ function Hero() {
 
 function Intro() {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-24 md:px-12 md:py-32 lg:py-40">
+    <section className="mx-auto max-w-7xl px-6 py-24 md:px-12 md:py-32 lg:py-28">
       <ChapterHeading number="01" label="Vorstellung" title="Sauberkeit ist kein Zufall. Sie ist Handwerk, System und Verlässlichkeit." />
       <div className="grid gap-16 lg:grid-cols-12">
         <Reveal className="lg:col-span-5">
@@ -202,7 +202,7 @@ function Intro() {
 function ServicesList() {
   const [active, setActive] = useState(0);
   return (
-    <section className="bg-pristine/60 py-24 md:py-32 lg:py-40">
+    <section className="bg-pristine/60 py-24 md:py-32 lg:py-28">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <ChapterHeading number="02" label="Leistungen" title="Alles, was sauber werden soll. Aus einer Hand." />
         <div className="grid gap-16 lg:grid-cols-12">
@@ -260,7 +260,7 @@ const WHY_POINTS = [
 
 function WhyUs() {
   return (
-    <section className="relative overflow-hidden bg-precision py-24 text-white grain md:py-32 lg:py-40">
+    <section className="relative overflow-hidden bg-precision py-24 text-white grain md:py-32 lg:py-28">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <ChapterHeading dark number="03" label="Warum Cleanora" title="Unser Qualitätsversprechen — schwarz auf weiß." />
         <div className="grid gap-px bg-white/10 md:grid-cols-2">
@@ -286,7 +286,7 @@ function WhyUs() {
 
 function Process() {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-24 md:px-12 md:py-32 lg:py-40">
+    <section className="mx-auto max-w-7xl px-6 py-24 md:px-12 md:py-32 lg:py-28">
       <ChapterHeading number="04" label="Ablauf" title="Von der Anfrage zur sauberen Fläche — in vier Schritten." />
       <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
         {PROCESS_STEPS.map((step, i) => (
