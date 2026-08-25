@@ -33,7 +33,6 @@ def blue_png():
 class TestStandardLogoAssets:
     @pytest.mark.parametrize("path", [
         "/logo-standard.png", "/logo-standard-light.png",
-        "/logo-compact.png", "/logo-compact-light.png",
     ])
     def test_png_served(self, path):
         r = requests.get(f"{BASE_URL}{path}", timeout=30)

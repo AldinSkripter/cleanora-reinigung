@@ -1,5 +1,18 @@
 # Changelog — Cleanora Gebäudereinigung
 
+## 2026-07 — Mobiles Logo: vollständige Darstellung statt Kompakt-Crop
+- Problem: Die Kompakt-Variante (ohne „GEBÄUDEREINIGUNG“-Sub-Zeile) wirkte auf Mobil wie ein
+  abgeschnittenes Logo.
+- Fix: Kompakt-Varianten entfernt (Dateien gelöscht, Tests angepasst); auf allen Bildschirmgrößen
+  wird das vollständige Logo inkl. Sub-Zeile gezeigt. Mobile Höhe 44px → 48px, Tablet 56px.
+- Verifiziert per Pixel-Messung + Screenshots auf 320/360/390/430/768 px, Header geschlossen und
+  Menü geöffnet: vollständiges Logo (helles im dunklen Menü), exaktes Seitenverhältnis,
+  kein Overlap mit Menü-Button, kein horizontaler Overflow. Desktop unverändert.
+- 55/55 Backend-Tests grün (4 Kompakt-Asset-Tests entfernt), Build fehlerfrei.
+
+
+# Changelog — Cleanora Gebäudereinigung
+
 ## 2026-07 — Logo-Skalierung repariert: echtes visuelles Skalierungsmodell (Commit nach ba1a128)
 - Problem: max-width-Caps ließen den Slider ab ~360 % wirkungslos wirken; Logo wirkte begrenzt.
 - Fix: Logo.jsx komplett neu — keine Breiten-Caps mehr auf Desktop, Höhe = 40px × Skala linear
