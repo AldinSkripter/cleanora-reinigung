@@ -337,11 +337,15 @@ function MediaCard({ kind, title, hint, accept, maxBytes, testid }) {
   const [info, setInfo] = useState(null);
   const [file, setFile] = useState(null);
   const [busy, setBusy] = useState(false);
-  const key = { "share-image": "share_image", favicon: "favicon", logo: "logo" }[kind];
+  const key = { "share-image": "share_image", favicon: "favicon", logo: "logo", "logo-light": "logo_light" }[kind];
   const base = api.defaults.baseURL;
 
   const load = () => api.get("/media/info").then(({ data }) => setInfo(data));
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+    window.addEventListener("cleanora-media-changed", load);
+    return () => window.removeEventListener("cleanora-media-changed", load);
+  }, []);
 
   const hasImage = Boolean(info?.[key]);
   const previewUrl = `${base}/media/${kind}?v=${encodeURIComponent(info?.updated_at || "")}`;
@@ -394,7 +398,7 @@ function MediaCard({ kind, title, hint, accept, maxBytes, testid }) {
       <h2 className="font-display text-lg font-light text-white">{title}</h2>
       <p className="mt-2 text-xs leading-relaxed text-white/40">{hint}</p>
       <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-start">
-        <div className="w-full max-w-xs shrink-0 border border-white/10 bg-precision">
+        <div className={`w-full max-w-xs shrink-0 border border-white/10 ${kind === "logo" ? "bg-white" : "bg-precision"}`}>
           {hasImage ? (
             <img
               data-testid={`${testid}-preview`}
@@ -407,7 +411,14 @@ function MediaCard({ kind, title, hint, accept, maxBytes, testid }) {
               data-testid={`${testid}-preview-placeholder`}
               className="flex h-24 w-full items-center justify-center bg-white p-4"
             >
-              <img src="/logo-standard.svg" alt="Cleanora Standard-Logo" className="h-12 w-auto object-contain" />
+              <img src="/logo-standard.png" alt="Cleanora Standard-Logo" className="h-12 w-auto object-contain" />
+            </div>
+          ) : kind === "logo-light" ? (
+            <div
+              data-testid={`${testid}-preview-placeholder`}
+              className="flex h-24 w-full items-center justify-center p-4"
+            >
+              <img src="/logo-standard-light.png" alt="Cleanora Standard-Logo (hell)" className="h-12 w-auto object-contain" />
             </div>
           ) : (
             <div
@@ -503,7 +514,7 @@ function LogoScale() {
         <div className="flex min-h-24 w-full max-w-xs items-center justify-center border border-white/10 bg-white p-4">
           <img
             data-testid="logo-scale-preview"
-            src={logoStamp ? `${base}/media/logo?v=${encodeURIComponent(logoStamp)}` : "/logo-standard.svg"}
+            src={logoStamp ? `${base}/media/logo?v=${encodeURIComponent(logoStamp)}` : "/logo-standard.png"}
             alt="Logo Größenvorschau"
             style={{ height: `${Math.round(40 * scale)}px` }}
             className="w-auto max-w-full object-contain"
@@ -549,24 +560,24 @@ function StandardLogoCard() {
       <h2 className="font-display text-lg font-light text-white">Standard-Logo</h2>
       <p className="mt-2 text-xs leading-relaxed text-white/40">
         Das offizielle Cleanora-Logo — aktiv, solange kein eigenes Logo hochgeladen ist. Es existiert in zwei Varianten:
-        für helle und für dunkle Hintergründe (z. B. mobiles Menü). Beide stehen als SVG (verlustfrei skalierbar,
-        geeignet für Website, Visitenkarten, Fahrzeuge und Social Media) zum Download bereit.
+        für helle und für dunkle Hintergründe (z. B. dunkler Footer, mobiles Menü). Beide stehen als PNG
+        (1600 px breit, transparent, geeignet für Website, Visitenkarten und Social Media) zum Download bereit.
       </p>
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-3">
           <div className="flex h-28 items-center justify-center border border-white/10 bg-white p-4">
-            <img data-testid="standard-logo-dark" src="/logo-standard.svg" alt="Cleanora Standard-Logo für helle Hintergründe" className="h-14 w-auto object-contain" />
+            <img data-testid="standard-logo-dark" src="/logo-standard.png" alt="Cleanora Standard-Logo für helle Hintergründe" className="h-14 w-auto object-contain" />
           </div>
-          <a data-testid="standard-logo-download-dark" href="/logo-standard.svg" download="cleanora-logo.svg" className={btn}>
-            <Download className="h-3.5 w-3.5" /> Variante für helle Hintergründe (SVG)
+          <a data-testid="standard-logo-download-dark" href="/logo-standard.png" download="cleanora-logo.png" className={btn}>
+            <Download className="h-3.5 w-3.5" /> Variante für helle Hintergründe (PNG)
           </a>
         </div>
         <div className="flex flex-col gap-3">
           <div className="flex h-28 items-center justify-center border border-white/10 bg-precision p-4">
-            <img data-testid="standard-logo-light" src="/logo-standard-light.svg" alt="Cleanora Standard-Logo für dunkle Hintergründe" className="h-14 w-auto object-contain" />
+            <img data-testid="standard-logo-light" src="/logo-standard-light.png" alt="Cleanora Standard-Logo für dunkle Hintergründe" className="h-14 w-auto object-contain" />
           </div>
-          <a data-testid="standard-logo-download-light" href="/logo-standard-light.svg" download="cleanora-logo-hell.svg" className={btn}>
-            <Download className="h-3.5 w-3.5" /> Variante für dunkle Hintergründe (SVG)
+          <a data-testid="standard-logo-download-light" href="/logo-standard-light.png" download="cleanora-logo-hell.png" className={btn}>
+            <Download className="h-3.5 w-3.5" /> Variante für dunkle Hintergründe (PNG)
           </a>
         </div>
       </div>
@@ -585,6 +596,14 @@ function MediaPanel() {
         accept="image/png,image/svg+xml,image/webp,image/jpeg"
         maxBytes={512 * 1024}
         testid="media-logo"
+      />
+      <MediaCard
+        kind="logo-light"
+        title="Logo für dunklen Hintergrund / Helles Logo"
+        hint="Optionale helle Variante Ihres Logos (z. B. weiß oder transparent), die automatisch auf dunklen Flächen verwendet wird: dunkler Footer und dunkles mobiles Menü. Erlaubt: PNG, SVG, WebP oder JPG (max. 512 KB). Ohne Upload wird auf dunklen Flächen Ihr normales Logo bzw. das helle Cleanora Standard-Logo verwendet."
+        accept="image/png,image/svg+xml,image/webp,image/jpeg"
+        maxBytes={512 * 1024}
+        testid="media-logo-light"
       />
       <LogoScale />
       <MediaCard

@@ -8,6 +8,7 @@ import { SiteProvider } from "@/lib/SiteContext";
 import api from "@/lib/api";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CookieConsent from "@/components/CookieConsent";
 import Home from "@/pages/Home";
 
 const Leistungen = lazy(() => import("@/pages/Leistungen"));
@@ -83,6 +84,7 @@ function App() {
       <BrowserRouter>
         <SiteProvider>
           <ScrollToTop />
+          <CookieConsent />
           <Suspense fallback={<div className="min-h-screen bg-background" />}>
             <Routes>
               <Route element={<SiteLayout />}>

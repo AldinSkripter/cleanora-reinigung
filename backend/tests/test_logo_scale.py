@@ -59,14 +59,16 @@ class TestLogoScaleBounds:
 
 
 class TestStandardLogoAssets:
-    @pytest.mark.parametrize("path", ["/logo-standard.svg", "/logo-standard-light.svg"])
-    def test_svg_served(self, path):
+    @pytest.mark.parametrize("path", [
+        "/logo-standard.png", "/logo-standard-light.png",
+        "/logo-compact.png", "/logo-compact-light.png",
+    ])
+    def test_png_served(self, path):
         r = requests.get(f"{BASE_URL}{path}", timeout=30)
         assert r.status_code == 200, f"{path} -> {r.status_code}"
         ctype = r.headers.get("content-type", "")
-        assert "svg" in ctype, f"{path} content-type {ctype}"
-        assert "<svg" in r.text[:200]
-        assert "CLEANORA" in r.text.upper() or "cleanora" in r.text
+        assert "png" in ctype, f"{path} content-type {ctype}"
+        assert r.content[:8] == b"\x89PNG\r\n\x1a\n"
 
 
 class TestMediaInfo:
@@ -75,6 +77,6 @@ class TestMediaInfo:
         assert r.status_code == 200
         d = r.json()
         assert "_id" not in d
-        for k in ("logo", "favicon", "share_image"):
+        for k in ("logo", "logo_light", "favicon", "share_image"):
             assert k in d
             assert isinstance(d[k], bool)

@@ -1,13 +1,26 @@
 import { Link } from "react-router-dom";
 import { useSite } from "@/lib/SiteContext";
 
-const STANDARD_LOGO = { dark: "/logo-standard.svg", light: "/logo-standard-light.svg" };
-const COMPACT_LOGO = { dark: "/logo-compact.svg", light: "/logo-compact-light.svg" };
+const STANDARD_LOGO = { dark: "/logo-standard.png", light: "/logo-standard-light.png" };
+const COMPACT_LOGO = { dark: "/logo-compact.png", light: "/logo-compact-light.png" };
 
 export default function Logo({ dark = false }) {
   const { media, logo_scale } = useSite();
   const height = Math.round(40 * (logo_scale || 1.5));
   const variant = dark ? "light" : "dark";
+  const stamp = encodeURIComponent(media?.updated_at || "");
+  const apiBase = import.meta.env.REACT_APP_BACKEND_URL;
+  // Eigene Uploads: helles Logo (logo_light) nur für dunkle Flächen, sonst Fallback auf normales Logo.
+  const customSrc = dark
+    ? media?.logo_light
+      ? `${apiBase}/api/media/logo-light?v=${stamp}`
+      : media?.logo
+        ? `${apiBase}/api/media/logo?v=${stamp}`
+        : null
+    : media?.logo
+      ? `${apiBase}/api/media/logo?v=${stamp}`
+      : null;
+
   return (
     <Link
       to="/"
@@ -15,9 +28,9 @@ export default function Logo({ dark = false }) {
       aria-label="Cleanora Startseite"
       className="group flex items-center gap-2"
     >
-      {media?.logo ? (
+      {customSrc ? (
         <img
-          src={`${import.meta.env.REACT_APP_BACKEND_URL}/api/media/logo?v=${encodeURIComponent(media.updated_at || "")}`}
+          src={customSrc}
           alt="Cleanora — Gebäudereinigung Achern"
           style={{ height: `${height}px` }}
           className="max-h-11 w-auto max-w-[200px] object-contain md:max-h-14 md:max-w-[260px] lg:max-h-none lg:max-w-[560px]"

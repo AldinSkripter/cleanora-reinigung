@@ -381,6 +381,13 @@ MEDIA_CONFIG = {
         "fallback": None,
         "allowed": "PNG, SVG, WebP oder JPG (max. 512 KB)",
     },
+    "logo-light": {
+        "key": "logo_light",
+        "mimes": {"image/png": ".png", "image/jpeg": ".jpg", "image/svg+xml": ".svg", "image/webp": ".webp"},
+        "max_bytes": 512 * 1024,
+        "fallback": None,
+        "allowed": "PNG, SVG, WebP oder JPG (max. 512 KB)",
+    },
 }
 
 
@@ -395,6 +402,7 @@ async def media_info():
         "share_image": bool(state.get("share_image")),
         "favicon": bool(state.get("favicon")),
         "logo": bool(state.get("logo")),
+        "logo_light": bool(state.get("logo_light")),
         "updated_at": state.get("updated_at"),
     }
 

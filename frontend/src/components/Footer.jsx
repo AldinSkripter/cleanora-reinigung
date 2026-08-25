@@ -97,6 +97,14 @@ export default function Footer() {
             <Link data-testid="footer-datenschutz" to="/datenschutz" className="transition-colors duration-300 hover:text-white">
               Datenschutz
             </Link>
+            <button
+              type="button"
+              data-testid="footer-cookie-settings"
+              onClick={() => window.dispatchEvent(new Event("cleanora-open-consent"))}
+              className="transition-colors duration-300 hover:text-white"
+            >
+              Cookie-Einstellungen
+            </button>
             <Link data-testid="footer-admin" to="/admin" className="inline-flex items-center gap-1 transition-colors duration-300 hover:text-white">
               Login <ArrowUpRight className="h-3 w-3" />
             </Link>

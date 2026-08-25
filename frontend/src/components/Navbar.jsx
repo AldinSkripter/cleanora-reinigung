@@ -38,7 +38,7 @@ export default function Navbar() {
     <>
       <header
         data-testid="main-nav"
-        className={`fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color] duration-500 ${
+        className={`fixed inset-x-0 top-0 z-[90] border-b transition-[background-color,border-color] duration-500 ${
           open ? "border-transparent bg-precision" : scrolled ? "border-black/10 bg-white/80 backdrop-blur-xl" : "border-transparent bg-transparent"
         }`}
       >
@@ -92,7 +92,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 flex flex-col justify-between bg-precision px-6 pb-10 pt-28 lg:hidden"
+            className="fixed inset-0 z-[80] flex flex-col justify-between bg-precision px-6 pb-10 pt-28 lg:hidden"
           >
             <nav className="flex flex-col gap-2" aria-label="Mobile Navigation">
               {LINKS.map((l, i) => (
