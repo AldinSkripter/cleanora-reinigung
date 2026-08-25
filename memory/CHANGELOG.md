@@ -1,5 +1,27 @@
 # Changelog — Cleanora Gebäudereinigung
 
+## 2026-07 — Cookie-Consent + offizielles Kunden-Logo + Helles-Logo-Slot (Commit ba1a128)
+- Eigenes Cookie-Consent-System (kein externes Plugin): Banner beim Erstbesuch (nicht auf /admin),
+  Buttons Alle akzeptieren / Nur notwendige / Einstellungen; Settings-Modal mit 4 Kategorien
+  (Notwendig locked, Statistik, Marketing, Externe Medien — letzte drei aktuell ohne aktive Dienste,
+  ehrlich deklariert); Speicherung localStorage 'cleanora_consent' mit CONSENT_VERSION=1
+  (Versionsänderung → erneute Einholung); Footer-Link 'Cookie-Einstellungen' für Widerruf;
+  Fokus-Trap, ESC, role=dialog/switch; loadScriptWhenConsented() für künftige Dienste vorbereitet.
+  Ist-Analyse: keine Cookies/Tracking auf der Website, nur notwendige localStorage-Einträge.
+- Offizielles Kunden-Logo als neuer Standard (PNG transparent, 4 Varianten in frontend/public:
+  standard/standard-light + kompakt ohne Sub-Zeile für <lg); generierte SVGs entfernt.
+- Neuer Admin-Medien-Slot 'Logo für dunklen Hintergrund' (MEDIA_CONFIG logo-light, key logo_light):
+  unabhängig hochladbar/ersetzbar/löschbar; Logo.jsx nutzt auf dunklen Flächen (Mobile-Menü, Footer)
+  automatisch helles Upload → Fallback normales Upload → Fallback helles Standard-Logo.
+- Fix: Cookie-Banner überdeckte mobiles Menü (z-Index: Header 90 > Menü 80 > Banner 70, Modal 100);
+  Banner-Buttons whitespace-nowrap; MediaCards refreshen bei cleanora-media-changed.
+- npm: Lockfile synchronisiert (npm install), clean-room npm ci → 0 Vulnerabilities, Build fehlerfrei.
+- Verifiziert (iteration_4): 59/59 Backend-Tests (14 neue logo-light-Tests), 16/16 Frontend-Checks
+  (Consent komplett inkl. Persistenz/Versionierung/Widerruf/Keyboard, Logo-System, Regression Kontakt/Admin).
+
+
+# Changelog — Cleanora Gebäudereinigung
+
 ## 2026-07 — Professionelles Standard-Logo + Skalierung 50–700 % (Commit 2a66515)
 - Neues Standard-Logo als SVG: Wassertropfen mit Glanz-Stern + CLEANORA-Schriftzug + GEBÄUDEREINIGUNG.
   4 Varianten in frontend/public: logo-standard.svg / logo-standard-light.svg (hell/dunkel),
