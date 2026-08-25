@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ShieldCheck, X } from "lucide-react";
 import { CONSENT_CATEGORIES, loadConsent, saveConsent } from "@/lib/consent";
+import { LogoImage } from "@/components/Logo";
 
 const ALL_ON = { statistics: true, marketing: true, external: true };
 const ALL_OFF = { statistics: false, marketing: false, external: false };
@@ -97,6 +98,7 @@ export default function CookieConsent() {
               className="mx-auto flex max-w-4xl flex-col gap-6 border border-white/10 bg-precision p-6 text-white shadow-[0_24px_80px_rgba(15,23,42,0.35)] md:flex-row md:items-end md:justify-between md:p-8"
             >
               <div className="max-w-xl">
+                <LogoImage dark height={30} className="mb-4" />
                 <p className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.25em] text-white/50">
                   <ShieldCheck className="h-4 w-4 text-emerald-400" /> Ihre Privatsphäre
                 </p>
@@ -167,7 +169,10 @@ export default function CookieConsent() {
               className="flex max-h-[90vh] w-full max-w-2xl flex-col border border-white/10 bg-precision text-white"
             >
               <div className="flex items-center justify-between border-b border-white/10 p-6 md:p-8">
-                <h2 className="font-display text-xl font-light tracking-tight md:text-2xl">Cookie-Einstellungen</h2>
+                <div className="flex items-center gap-5">
+                  <LogoImage dark height={26} />
+                  <h2 className="font-display text-xl font-light tracking-tight md:text-2xl">Cookie-Einstellungen</h2>
+                </div>
                 <button
                   type="button"
                   data-testid="cookie-settings-close"

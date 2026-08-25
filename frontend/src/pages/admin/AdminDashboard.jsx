@@ -511,13 +511,13 @@ function LogoScale() {
         Skalieren Sie Ihr Logo, bis es perfekt in der Navigation sitzt — die Vorschau zeigt die Wirkung sofort.
       </p>
       <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-center">
-        <div className="flex min-h-24 w-full max-w-xs items-center justify-center border border-white/10 bg-white p-4">
+        <div className="min-h-24 w-full overflow-x-auto border border-white/10 bg-white p-4">
           <img
             data-testid="logo-scale-preview"
             src={logoStamp ? `${base}/media/logo?v=${encodeURIComponent(logoStamp)}` : "/logo-standard.png"}
             alt="Logo Größenvorschau"
             style={{ height: `${Math.round(40 * scale)}px` }}
-            className="w-auto max-w-full object-contain"
+            className="w-auto max-w-none object-contain"
           />
         </div>
         <div className="flex w-full flex-col gap-4">
@@ -536,7 +536,7 @@ function LogoScale() {
               {Math.round(scale * 100)} %
             </span>
           </div>
-          <p className="text-xs text-white/30">50 % – 700 % · Standard: 150 % · Mobil wird die Höhe automatisch begrenzt, damit das Menü frei bleibt.</p>
+          <p className="text-xs text-white/30">50 % – 700 % · Standard: 150 % · Die Vorschau zeigt die Originalgröße wie im Header (bei großen Werten horizontal scrollen). Mobil wird die Höhe automatisch begrenzt, damit das Menü frei bleibt.</p>
           <button
             data-testid="logo-scale-save"
             onClick={save}

@@ -1,5 +1,22 @@
 # Changelog — Cleanora Gebäudereinigung
 
+## 2026-07 — Logo-Skalierung repariert: echtes visuelles Skalierungsmodell (Commit nach ba1a128)
+- Problem: max-width-Caps ließen den Slider ab ~360 % wirkungslos wirken; Logo wirkte begrenzt.
+- Fix: Logo.jsx komplett neu — keine Breiten-Caps mehr auf Desktop, Höhe = 40px × Skala linear
+  (verifiziert: 50 %→20px, 100 %→40px, 200 %→80px, 400 %→160px, 700 %→280px, Seitenverhältnis
+  immer exakt 1181:307). Navbar-Container wrapt (flex-wrap) bei großen Logos in eine zweite Zeile,
+  statt das Logo zu stutzen. Mobile/Tablet behalten nur Anti-Overlap-Caps (44/56px), Effekt 50–110 % sichtbar.
+- Neue LogoImage-Komponente (Bild ohne Link) — geteilt von Navbar, Footer, AdminLogin, Cookie-Consent.
+- Cookie-Consent zeigt jetzt das weiße Cleanora-Logo im Banner- und Modal-Kopf; nutzt automatisch
+  ein hochgeladenes „Logo für dunklen Hintergrund“, falls vorhanden.
+- Admin Logo-Größen-Vorschau zeigt Originalgröße (overflow-x-auto statt Stutzung auf 320px).
+- Verifiziert mit echten Screenshots: Desktop 50–700 %, Mobile (Kompakt-Logo, kein Overlap),
+  geöffnetes dunkles Menü (helles Logo), Footer (helles Logo, 60px), Admin-Vorschau 300 % = 120px echt.
+- Regression: 59/59 Backend-Tests, npm ci 0 Vulnerabilities, Build fehlerfrei.
+
+
+# Changelog — Cleanora Gebäudereinigung
+
 ## 2026-07 — Cookie-Consent + offizielles Kunden-Logo + Helles-Logo-Slot (Commit ba1a128)
 - Eigenes Cookie-Consent-System (kein externes Plugin): Banner beim Erstbesuch (nicht auf /admin),
   Buttons Alle akzeptieren / Nur notwendige / Einstellungen; Settings-Modal mit 4 Kategorien

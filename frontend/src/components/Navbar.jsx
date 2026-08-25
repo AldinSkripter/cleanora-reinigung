@@ -42,8 +42,8 @@ export default function Navbar() {
           open ? "border-transparent bg-precision" : scrolled ? "border-black/10 bg-white/80 backdrop-blur-xl" : "border-transparent bg-transparent"
         }`}
       >
-        <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between px-6 py-2 md:min-h-20 md:px-12">
-          <Logo dark={open} />
+        <div className="mx-auto flex min-h-16 max-w-7xl flex-wrap items-center justify-between gap-x-8 gap-y-3 px-6 py-2 md:min-h-20 md:px-12">
+          <Logo dark={open} inNav />
           <nav className="hidden items-center gap-8 lg:flex" aria-label="Hauptnavigation">
             {LINKS.map((l) => (
               <NavLink
