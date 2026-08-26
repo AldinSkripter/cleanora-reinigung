@@ -176,7 +176,7 @@ function Intro() {
           <Link
             to="/ueber-uns"
             data-testid="intro-about-link"
-            className="mt-10 inline-flex items-center gap-2 border-b border-precision pb-1 text-sm font-medium text-precision transition-colors duration-300 hover:text-precision/60"
+            className="mt-10 inline-flex items-center gap-2 border-b border-precision pb-1 text-sm font-medium text-precision transition-colors duration-300 hover:border-aqua-deep hover:text-aqua-deep"
           >
             Mehr über Cleanora <ArrowRight className="h-4 w-4" />
           </Link>
@@ -217,12 +217,12 @@ function ServicesList() {
                     className="group flex items-center justify-between gap-6 py-5 transition-colors duration-300 hover:bg-white/70 md:py-6"
                   >
                     <div className="flex items-baseline gap-5">
-                      <span className="text-xs font-medium text-precision/40">{String(i + 1).padStart(2, "0")}</span>
-                      <span className="font-display text-xl font-light tracking-tight text-precision transition-all duration-300 group-hover:translate-x-1.5 group-hover:text-precision/60 md:text-2xl">
+                      <span className="text-xs font-medium text-aqua-deep">{String(i + 1).padStart(2, "0")}</span>
+                      <span className="font-display text-xl font-light tracking-tight text-precision transition-all duration-300 group-hover:translate-x-1.5 group-hover:text-aqua-deep md:text-2xl">
                         {s.title}
                       </span>
                     </div>
-                    <ArrowUpRight className="h-5 w-5 shrink-0 text-precision/30 transition-all duration-300 group-hover:translate-x-1 group-hover:text-precision" />
+                    <ArrowUpRight className="h-5 w-5 shrink-0 text-precision/30 transition-all duration-300 group-hover:translate-x-1 group-hover:text-aqua-deep" />
                   </Link>
                 </li>
               ))}
@@ -265,15 +265,15 @@ function WhyUs() {
         <ChapterHeading dark number="03" label="Warum Cleanora" title="Unser Qualitätsversprechen — schwarz auf weiß." />
         <div className="grid gap-px bg-white/10 md:grid-cols-2">
           {WHY_POINTS.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.08} className="bg-precision p-10 transition-colors duration-500 hover:bg-[#141f3a] md:p-14">
-              <span className="text-xs font-medium tracking-[0.25em] text-white/40">{String(i + 1).padStart(2, "0")}</span>
+            <Reveal key={p.title} delay={i * 0.08} className="bg-precision p-10 transition-colors duration-500 hover:bg-[#0e3d5c] md:p-14">
+              <span className="text-xs font-medium tracking-[0.25em] text-aqua">{String(i + 1).padStart(2, "0")}</span>
               <h3 className="mt-6 font-display text-2xl font-light tracking-tight">{p.title}</h3>
               <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">{p.text}</p>
             </Reveal>
           ))}
         </div>
         <Reveal delay={0.2} className="mt-16 flex items-start gap-4">
-          <Check className="mt-1 h-5 w-5 shrink-0 text-white/60" strokeWidth={1.5} />
+          <Check className="mt-1 h-5 w-5 shrink-0 text-aqua" strokeWidth={1.5} />
           <p className="max-w-2xl text-base leading-relaxed text-white/70">
             Unser Versprechen: Sollte einmal etwas nicht Ihren Erwartungen entsprechen, sagen Sie es uns —
             und wir bessern unverzüglich nach. Ohne Diskussion, ohne Zusatzkosten.
@@ -290,8 +290,8 @@ function Process() {
       <ChapterHeading number="04" label="Ablauf" title="Von der Anfrage zur sauberen Fläche — in vier Schritten." />
       <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
         {PROCESS_STEPS.map((step, i) => (
-          <Reveal key={step.n} delay={i * 0.1} className="group border-t border-precision/20 pt-8 transition-colors duration-500 hover:border-precision">
-            <span className="font-display text-5xl font-extralight tracking-tighter text-precision/25 transition-colors duration-500 group-hover:text-precision/60">{step.n}</span>
+          <Reveal key={step.n} delay={i * 0.1} className="group border-t border-precision/20 pt-8 transition-colors duration-500 hover:border-aqua-deep">
+            <span className="font-display text-5xl font-extralight tracking-tighter text-precision/25 transition-colors duration-500 group-hover:text-aqua-deep">{step.n}</span>
             <h3 className="mt-6 font-display text-xl font-light tracking-tight text-precision">{step.title}</h3>
             <p className="mt-3 text-sm leading-relaxed text-precision/60">{step.text}</p>
           </Reveal>
@@ -316,7 +316,7 @@ function ServiceArea() {
             <Link
               to="/einsatzgebiet"
               data-testid="area-link"
-              className="mt-8 inline-flex items-center gap-2 border-b border-precision pb-1 text-sm font-medium text-precision transition-colors duration-300 hover:text-precision/60"
+              className="mt-8 inline-flex items-center gap-2 border-b border-precision pb-1 text-sm font-medium text-precision transition-colors duration-300 hover:border-aqua-deep hover:text-aqua-deep"
             >
               Alle Einsatzorte ansehen <ArrowRight className="h-4 w-4" />
             </Link>
@@ -327,7 +327,7 @@ function ServiceArea() {
             {SERVICE_AREA_PLACES.map((place) => (
               <li
                 key={place}
-                className="border border-precision/15 bg-white px-5 py-2.5 text-sm text-precision/70 transition-colors duration-300 hover:border-precision hover:text-precision"
+                className="border border-precision/15 bg-white px-5 py-2.5 text-sm text-precision/70 transition-colors duration-300 hover:border-aqua-deep hover:text-aqua-deep"
               >
                 {place}
               </li>
@@ -349,7 +349,7 @@ function FaqSection() {
           <Reveal>
             <p className="text-sm leading-relaxed text-precision/60">
               Ihre Frage ist nicht dabei? Rufen Sie uns an unter{" "}
-              <a data-testid="faq-phone" href={`tel:${site.phone_href}`} className="font-medium text-precision underline underline-offset-4">
+              <a data-testid="faq-phone" href={`tel:${site.phone_href}`} className="font-medium text-aqua-deep underline underline-offset-4">
                 {site.phone}
               </a>{" "}
               — wir helfen gern persönlich weiter.
@@ -379,7 +379,7 @@ function ContactCta() {
             <a
               data-testid="cta-phone"
               href={`tel:${site.phone_href}`}
-              className="mt-6 flex items-center gap-3 font-display text-2xl font-light tracking-tight text-precision transition-colors duration-300 hover:text-precision/60"
+              className="mt-6 flex items-center gap-3 font-display text-2xl font-light tracking-tight text-precision transition-colors duration-300 hover:text-aqua-deep"
             >
               <Phone className="h-5 w-5" strokeWidth={1.5} /> {site.phone}
             </a>

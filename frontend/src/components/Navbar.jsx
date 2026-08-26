@@ -52,7 +52,7 @@ export default function Navbar() {
                 data-testid={`nav-${l.label.toLowerCase().replace(/ü/g, "ue")}`}
                 className={({ isActive }) =>
                   `text-sm tracking-wide transition-colors duration-300 ${
-                    isActive ? "text-precision font-medium" : "text-precision/60 hover:text-precision"
+                    isActive ? "text-precision font-medium underline decoration-aqua decoration-2 underline-offset-8" : "text-precision/60 hover:text-precision"
                   }`
                 }
               >

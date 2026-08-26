@@ -18,7 +18,7 @@ const initial = {
 };
 
 const inputCls =
-  "w-full border-b border-precision/20 bg-transparent py-3 text-sm text-precision placeholder:text-precision/35 outline-none transition-colors duration-300 focus:border-precision";
+  "w-full border-b border-precision/20 bg-transparent py-3 text-sm text-precision placeholder:text-precision/35 outline-none transition-colors duration-300 focus:border-aqua-deep";
 const labelCls = "text-xs font-medium uppercase tracking-[0.2em] text-precision/50";
 
 export default function ContactForm({ dark = false }) {
@@ -178,7 +178,7 @@ export default function ContactForm({ dark = false }) {
           className="mt-1 h-4 w-4 shrink-0 cursor-pointer appearance-none border border-precision/40 transition-colors duration-200 checked:bg-precision"
         />
         <span>
-          Ich habe die <a href="/datenschutz" className="underline underline-offset-4 hover:text-precision">Datenschutzerklärung</a> gelesen
+          Ich habe die <a href="/datenschutz" className="underline underline-offset-4 hover:text-aqua-deep">Datenschutzerklärung</a> gelesen
           und bin mit der Verarbeitung meiner Daten zur Bearbeitung der Anfrage einverstanden. *
         </span>
       </label>

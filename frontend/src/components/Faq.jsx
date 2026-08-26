@@ -15,13 +15,13 @@ export default function Faq() {
               data-testid={`faq-question-${i}`}
               onClick={() => setOpen(isOpen ? null : i)}
               aria-expanded={isOpen}
-              className="flex w-full items-center justify-between gap-6 py-6 text-left transition-colors duration-300 hover:text-precision/60"
+              className="flex w-full items-center justify-between gap-6 py-6 text-left transition-colors duration-300 hover:text-aqua-deep"
             >
               <span className="font-display text-lg font-light tracking-tight text-precision md:text-xl">
                 {item.q}
               </span>
               <motion.span animate={{ rotate: isOpen ? 45 : 0 }} transition={{ duration: 0.3 }} className="shrink-0">
-                <Plus className="h-5 w-5 text-precision" strokeWidth={1.5} />
+                <Plus className={`h-5 w-5 transition-colors duration-300 ${isOpen ? "text-aqua-deep" : "text-precision"}`} strokeWidth={1.5} />
               </motion.span>
             </button>
             <AnimatePresence initial={false}>

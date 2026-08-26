@@ -8,7 +8,7 @@ export default function Marquee({ dark = false }) {
           <span className={`font-display font-light uppercase tracking-[0.3em] text-2xl md:text-4xl ${dark ? "text-white/25" : "text-precision/30"}`}>
             {item}
           </span>
-          <span className={`mx-10 h-1.5 w-1.5 rounded-full ${dark ? "bg-white/25" : "bg-precision/30"}`} />
+          <span className={`mx-10 h-1.5 w-1.5 rounded-full ${dark ? "bg-aqua/50" : "bg-aqua/70"}`} />
         </span>
       ))}
     </div>

@@ -39,7 +39,7 @@ export default function LeistungDetail() {
           <Link
             to="/leistungen"
             data-testid="detail-back"
-            className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-precision/50 transition-colors duration-300 hover:text-precision"
+            className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-precision/50 transition-colors duration-300 hover:text-aqua-deep"
           >
             <ArrowLeft className="h-4 w-4" /> Alle Leistungen
           </Link>
@@ -74,7 +74,7 @@ export default function LeistungDetail() {
             <ul className="mt-8 space-y-4">
               {service.includes.map((item) => (
                 <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-precision/80">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-precision" strokeWidth={2} />
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-aqua-deep" strokeWidth={2} />
                   {item}
                 </li>
               ))}
@@ -111,11 +111,11 @@ export default function LeistungDetail() {
         </div>
 
         <Reveal className="mt-16 flex items-center justify-between border-t border-precision/10 pt-10">
-          <span className="text-xs font-medium uppercase tracking-[0.25em] text-precision/40">Nächste Leistung</span>
+          <span className="text-xs font-medium uppercase tracking-[0.25em] text-aqua-deep">Nächste Leistung</span>
           <Link
             to={`/leistungen/${next.slug}`}
             data-testid="detail-next-service"
-            className="group flex items-center gap-3 font-display text-xl font-light tracking-tight text-precision transition-colors duration-300 hover:text-precision/60 md:text-2xl"
+            className="group flex items-center gap-3 font-display text-xl font-light tracking-tight text-precision transition-colors duration-300 hover:text-aqua-deep md:text-2xl"
           >
             {next.title}
             <ArrowUpRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />

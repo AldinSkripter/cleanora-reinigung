@@ -1,5 +1,18 @@
 # Changelog — Cleanora Gebäudereinigung
 
+## 2026-07 — Aqua-Markenfarbe durchgängig auf allen Seiten
+- Türkis (#16bfae / aqua-deep #0f8c7f) jetzt systematisch auf allen Seiten: Eyebrow-Striche
+  (Leistungen, Über uns, Einsatzgebiet, Kontakt), alle Listen-/Kapitel-Nummern, Hover-Zustände
+  von Links und Pfeilen, Check-Icons (Leistungsumfang, Vertrauenszeile, WhyUs), FAQ (Hover +
+  geöffnetes Plus-Icon), Marquee-Punkte, aktive Nav-Unterstreichung (decoration-aqua),
+  Formular-Fokusrahmen, Kontakt-Icon-Boxen, Orte-Chips-Hover, Prozess-Border-Hover,
+  WhyUs-Karten (aqua Nummern + passender Hover-Navy #0e3d5c), dunkle CTA-Labels.
+- Verifiziert per Screenshots (Intro/Services, WhyUs dunkel, Navbar-Unterstreichung) +
+  55/55 Backend-Tests, Build fehlerfrei.
+
+
+# Changelog — Cleanora Gebäudereinigung
+
 ## 2026-07 — Markenfarben aus dem Logo + Footer-Credit
 - Exakte Logo-Farben per PIL extrahiert: Türkis #16bfae (aqua), Navy #0b3048.
 - Tailwind: precision → hsl(204 73% 16%) (= Logo-Navy), neue Farben aqua/aqua-deep (#0f8c7f).

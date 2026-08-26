@@ -28,7 +28,7 @@ export default function Einsatzgebiet() {
       <section className="mx-auto max-w-7xl px-6 pt-32 md:px-12 md:pt-44">
         <Reveal>
           <p className="mb-8 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.25em] text-precision/50">
-            <span className="h-px w-10 bg-precision/40" />
+            <span className="h-px w-10 bg-aqua" />
             Einsatzgebiet
           </p>
           <h1 className="max-w-4xl font-display text-4xl font-light leading-[1.05] tracking-tighter text-precision sm:text-5xl lg:text-6xl">
@@ -50,7 +50,7 @@ export default function Einsatzgebiet() {
             />
             <div className="absolute bottom-6 left-6 border border-white/20 bg-precision/70 px-5 py-3 backdrop-blur-xl">
               <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-white">
-                <MapPin className="h-3.5 w-3.5" /> 77855 Achern · Ortenau
+                <MapPin className="h-3.5 w-3.5 text-aqua" /> 77855 Achern · Ortenau
               </p>
             </div>
           </div>
@@ -63,7 +63,7 @@ export default function Einsatzgebiet() {
           {DISTRICTS.map((d, i) => (
             <Reveal key={d.name} delay={i * 0.04}>
               <div className="grid gap-2 py-6 md:grid-cols-12 md:items-baseline md:gap-8">
-                <span className="text-xs font-medium text-precision/40 md:col-span-1">{String(i + 1).padStart(2, "0")}</span>
+                <span className="text-xs font-medium text-aqua-deep md:col-span-1">{String(i + 1).padStart(2, "0")}</span>
                 <h2 className="font-display text-xl font-light tracking-tight text-precision md:col-span-4 md:text-2xl">
                   {d.name}
                 </h2>
@@ -101,7 +101,7 @@ export default function Einsatzgebiet() {
             <a
               href={`tel:${site.phone_href}`}
               data-testid="area-phone"
-              className="inline-flex items-center justify-center gap-2 border border-precision/25 px-8 py-4 text-sm font-medium text-precision transition-colors duration-300 hover:border-precision"
+              className="inline-flex items-center justify-center gap-2 border border-precision/25 px-8 py-4 text-sm font-medium text-precision transition-colors duration-300 hover:border-aqua-deep hover:text-aqua-deep"
             >
               {site.phone}
             </a>

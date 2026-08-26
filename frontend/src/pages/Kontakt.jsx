@@ -16,7 +16,7 @@ export default function Kontakt() {
       <section className="mx-auto max-w-7xl px-6 pb-24 pt-32 md:px-12 md:pt-44">
         <Reveal>
           <p className="mb-8 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.25em] text-precision/50">
-            <span className="h-px w-10 bg-precision/40" />
+            <span className="h-px w-10 bg-aqua" />
             Kontakt
           </p>
           <h1 className="max-w-4xl font-display text-4xl font-light leading-[1.05] tracking-tighter text-precision sm:text-5xl lg:text-6xl">
@@ -39,7 +39,7 @@ export default function Kontakt() {
                   icon: Phone,
                   label: "Telefon",
                   content: (
-                    <a data-testid="kontakt-phone" href={`tel:${site.phone_href}`} className="transition-colors duration-300 hover:text-precision/60">
+                    <a data-testid="kontakt-phone" href={`tel:${site.phone_href}`} className="transition-colors duration-300 hover:text-aqua-deep">
                       {site.phone}
                     </a>
                   ),
@@ -48,7 +48,7 @@ export default function Kontakt() {
                   icon: Mail,
                   label: "E-Mail",
                   content: (
-                    <a data-testid="kontakt-email" href={`mailto:${site.public_email}`} className="transition-colors duration-300 hover:text-precision/60">
+                    <a data-testid="kontakt-email" href={`mailto:${site.public_email}`} className="transition-colors duration-300 hover:text-aqua-deep">
                       {site.public_email}
                     </a>
                   ),
@@ -65,7 +65,7 @@ export default function Kontakt() {
                 },
               ].map((item) => (
                 <Reveal key={item.label} className="flex items-start gap-5">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center border border-precision/15 text-precision">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center border border-aqua-deep/30 text-aqua-deep">
                     <item.icon className="h-4 w-4" strokeWidth={1.5} />
                   </span>
                   <div>

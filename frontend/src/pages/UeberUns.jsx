@@ -43,7 +43,7 @@ export default function UeberUns() {
       <section className="mx-auto max-w-7xl px-6 pt-32 md:px-12 md:pt-44">
         <Reveal>
           <p className="mb-8 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.25em] text-precision/50">
-            <span className="h-px w-10 bg-precision/40" />
+            <span className="h-px w-10 bg-aqua" />
             Über uns
           </p>
           <h1 className="max-w-4xl font-display text-4xl font-light leading-[1.05] tracking-tighter text-precision sm:text-5xl lg:text-6xl">
@@ -85,7 +85,7 @@ export default function UeberUns() {
         <div className="grid gap-px border border-precision/10 bg-precision/10 md:grid-cols-2 lg:grid-cols-3">
           {VALUES.map((v, i) => (
             <Reveal key={v.title} delay={i * 0.06} className="bg-background p-10">
-              <span className="text-xs font-medium tracking-[0.25em] text-precision/40">{String(i + 1).padStart(2, "0")}</span>
+              <span className="text-xs font-medium tracking-[0.25em] text-aqua-deep">{String(i + 1).padStart(2, "0")}</span>
               <h2 className="mt-6 font-display text-xl font-light tracking-tight text-precision">{v.title}</h2>
               <p className="mt-4 text-sm leading-relaxed text-precision/60">{v.text}</p>
             </Reveal>
@@ -95,7 +95,7 @@ export default function UeberUns() {
 
       <section className="mx-auto max-w-7xl px-6 pb-24 md:px-12 md:pb-32">
         <Reveal className="relative overflow-hidden bg-precision p-10 text-white grain md:p-20">
-          <p className="text-xs font-medium uppercase tracking-[0.25em] text-white/50">Lokale Nähe</p>
+          <p className="text-xs font-medium uppercase tracking-[0.25em] text-aqua">Lokale Nähe</p>
           <h2 className="mt-6 max-w-2xl font-display text-3xl font-light leading-tight tracking-tight md:text-4xl">
             Aus Achern, für Achern — und die ganze Region.
           </h2>
