@@ -20,14 +20,14 @@ export default function Footer() {
               <a
                 data-testid="footer-phone"
                 href={`tel:${site.phone_href}`}
-                className="flex items-center gap-3 text-white/80 transition-colors duration-300 hover:text-white"
+                className="flex items-center gap-3 text-white/80 transition-colors duration-300 hover:text-aqua"
               >
                 <Phone className="h-4 w-4" /> {site.phone}
               </a>
               <a
                 data-testid="footer-email"
                 href={`mailto:${site.public_email}`}
-                className="flex items-center gap-3 text-white/80 transition-colors duration-300 hover:text-white"
+                className="flex items-center gap-3 text-white/80 transition-colors duration-300 hover:text-aqua"
               >
                 <Mail className="h-4 w-4" /> {site.public_email}
               </a>
@@ -47,7 +47,7 @@ export default function Footer() {
                 ["/kontakt", "Kontakt"],
               ].map(([to, label]) => (
                 <li key={to}>
-                  <Link to={to} className="text-white/70 transition-colors duration-300 hover:text-white">
+                  <Link to={to} className="text-white/70 transition-colors duration-300 hover:text-aqua">
                     {label}
                   </Link>
                 </li>
@@ -61,7 +61,7 @@ export default function Footer() {
                 <li key={s.slug}>
                   <Link
                     to={`/leistungen/${s.slug}`}
-                    className="text-white/70 transition-colors duration-300 hover:text-white"
+                    className="text-white/70 transition-colors duration-300 hover:text-aqua"
                   >
                     {s.title}
                   </Link>
@@ -81,7 +81,7 @@ export default function Footer() {
               fontWeight="900"
               fontSize="172"
               letterSpacing="-5"
-              fill="rgba(255,255,255,0.05)"
+              fill="rgba(22,191,174,0.07)"
             >
               CLEANORA
             </text>
@@ -90,22 +90,34 @@ export default function Footer() {
 
         <div className="mt-8 flex flex-col items-start justify-between gap-6 border-t border-white/10 pt-8 text-xs text-white/40 md:flex-row md:items-center">
           <p>© {new Date().getFullYear()} {site.legal_name} · Achern &amp; Umgebung</p>
+          <p>
+            Design &amp; Entwicklung:{" "}
+            <a
+              data-testid="footer-credit"
+              href="https://jonuzovicdesign.de"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-white/60 transition-colors duration-300 hover:text-aqua"
+            >
+              Jonuzovic Design
+            </a>
+          </p>
           <div className="flex gap-8">
-            <Link data-testid="footer-impressum" to="/impressum" className="transition-colors duration-300 hover:text-white">
+            <Link data-testid="footer-impressum" to="/impressum" className="transition-colors duration-300 hover:text-aqua">
               Impressum
             </Link>
-            <Link data-testid="footer-datenschutz" to="/datenschutz" className="transition-colors duration-300 hover:text-white">
+            <Link data-testid="footer-datenschutz" to="/datenschutz" className="transition-colors duration-300 hover:text-aqua">
               Datenschutz
             </Link>
             <button
               type="button"
               data-testid="footer-cookie-settings"
               onClick={() => window.dispatchEvent(new Event("cleanora-open-consent"))}
-              className="transition-colors duration-300 hover:text-white"
+              className="transition-colors duration-300 hover:text-aqua"
             >
               Cookie-Einstellungen
             </button>
-            <Link data-testid="footer-admin" to="/admin" className="inline-flex items-center gap-1 transition-colors duration-300 hover:text-white">
+            <Link data-testid="footer-admin" to="/admin" className="inline-flex items-center gap-1 transition-colors duration-300 hover:text-aqua">
               Login <ArrowUpRight className="h-3 w-3" />
             </Link>
           </div>

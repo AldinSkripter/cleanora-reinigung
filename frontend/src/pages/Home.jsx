@@ -54,14 +54,14 @@ function Hero() {
           transition={{ delay: 0.2, duration: 0.8 }}
           className="mb-8 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.25em] text-precision/50"
         >
-          <span className="h-px w-10 bg-precision/40" />
+          <span className="h-px w-10 bg-aqua" />
           Cleanora · Gebäudereinigung Achern
         </motion.p>
 
         <h1 className="font-display text-[2.55rem] font-light leading-[1.02] tracking-tighter text-precision [hyphens:auto] sm:text-6xl sm:[hyphens:none] lg:text-[5.6rem]">
           <MaskedLine delay={0.1}>Professionelle</MaskedLine>
           <MaskedLine delay={0.25}>Gebäudereinigung</MaskedLine>
-          <MaskedLine delay={0.4} className="italic text-precision/45">in Achern &amp; Umgebung.</MaskedLine>
+          <MaskedLine delay={0.4} className="italic text-aqua-deep">in Achern &amp; Umgebung.</MaskedLine>
         </h1>
 
         <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:items-start">
@@ -110,8 +110,8 @@ function Hero() {
             >
               {["Kostenlos & unverbindlich", "Fester Ansprechpartner", "Termintreu & gründlich"].map((t) => (
                 <li key={t} className="flex items-center gap-2.5 text-sm text-precision/60">
-                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-precision/20">
-                    <Check className="h-3 w-3 text-precision" strokeWidth={2.5} />
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-aqua-deep/40">
+                    <Check className="h-3 w-3 text-aqua-deep" strokeWidth={2.5} />
                   </span>
                   {t}
                 </li>

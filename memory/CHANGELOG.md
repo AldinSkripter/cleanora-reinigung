@@ -1,5 +1,18 @@
 # Changelog — Cleanora Gebäudereinigung
 
+## 2026-07 — Markenfarben aus dem Logo + Footer-Credit
+- Exakte Logo-Farben per PIL extrahiert: Türkis #16bfae (aqua), Navy #0b3048.
+- Tailwind: precision → hsl(204 73% 16%) (= Logo-Navy), neue Farben aqua/aqua-deep (#0f8c7f).
+- Aqua-Akzente: Hero-Kursive „in Achern & Umgebung.“, Eyebrow-Strich, Vertrauens-Checks,
+  Kapitel-Nummern (ChapterHeading), Footer-Link-Hover, Consent/Admin emerald-400 → aqua,
+  Footer-Riesen-Wordmark in Aqua-Tönung.
+- Footer: Credit „Design & Entwicklung: Jonuzovic Design“ → https://jonuzovicdesign.de
+  (target _blank, noopener, data-testid footer-credit).
+- Verifiziert per Screenshots (Hero, Footer, Leistungen) + 55/55 Backend-Tests, Build fehlerfrei.
+
+
+# Changelog — Cleanora Gebäudereinigung
+
 ## 2026-07 — Mobiles Logo: vollständige Darstellung statt Kompakt-Crop
 - Problem: Die Kompakt-Variante (ohne „GEBÄUDEREINIGUNG“-Sub-Zeile) wirkte auf Mobil wie ein
   abgeschnittenes Logo.

@@ -18,7 +18,7 @@ function Toggle({ id, checked, locked, onChange }) {
       data-testid={`cookie-toggle-${id}`}
       onClick={() => !locked && onChange(!checked)}
       className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-300 ${
-        locked || checked ? "bg-emerald-400" : "bg-white/15"
+        locked || checked ? "bg-aqua" : "bg-white/15"
       } ${locked ? "cursor-not-allowed opacity-80" : "cursor-pointer"}`}
     >
       <span
@@ -100,7 +100,7 @@ export default function CookieConsent() {
               <div className="max-w-xl">
                 <LogoImage dark height={30} className="mb-4" />
                 <p className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.25em] text-white/50">
-                  <ShieldCheck className="h-4 w-4 text-emerald-400" /> Ihre Privatsphäre
+                  <ShieldCheck className="h-4 w-4 text-aqua" /> Ihre Privatsphäre
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-white/75">
                   Wir nutzen Cookies und ähnliche Technologien, um unsere Website technisch bereitzustellen.
@@ -195,7 +195,7 @@ export default function CookieConsent() {
                         <p className="text-sm font-medium">
                           {cat.label}
                           {cat.locked && (
-                            <span className="ml-3 text-[11px] font-normal uppercase tracking-[0.15em] text-emerald-400">
+                            <span className="ml-3 text-[11px] font-normal uppercase tracking-[0.15em] text-aqua">
                               Immer aktiv
                             </span>
                           )}

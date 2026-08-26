@@ -20,7 +20,11 @@ module.exports = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         pristine: 'hsl(195 30% 94%)',
-        precision: 'hsl(222 47% 11%)',
+        precision: 'hsl(204 73% 16%)',
+        aqua: {
+          DEFAULT: '#16bfae',
+          deep: '#0f8c7f'
+        },
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'

@@ -79,7 +79,7 @@ function EmailSettings() {
           </div>
           <div>
             <label htmlFor="es-pass" className={labelCls}>
-              Passwort {cfg.password_set && <span className="normal-case tracking-normal text-emerald-400/80">(gespeichert — leer lassen zum Beibehalten)</span>}
+              Passwort {cfg.password_set && <span className="normal-case tracking-normal text-aqua/80">(gespeichert — leer lassen zum Beibehalten)</span>}
             </label>
             <input id="es-pass" data-testid="settings-smtp-password" type="password" autoComplete="new-password" value={cfg.smtp_password} onChange={set("smtp_password")} className={`${inputCls} mt-2`} placeholder={cfg.password_set ? "••••••••" : "Postfach-Passwort"} />
           </div>
@@ -153,7 +153,7 @@ function Requests() {
             <div className="flex items-center gap-3">
               <span title={r.email_sent ? "Per E-Mail zugestellt" : "Nur gespeichert (SMTP nicht konfiguriert)"}>
                 {r.email_sent
-                  ? <MailCheck className="h-4 w-4 text-emerald-400" />
+                  ? <MailCheck className="h-4 w-4 text-aqua" />
                   : <MailX className="h-4 w-4 text-amber-400" />}
               </span>
               <span className="text-xs text-white/30">
