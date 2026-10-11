@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
-# Cleanora — Update/Deploy-Skript für den Plesk-VPS.
-# Einmalig ausführbar machen:  chmod +x deploy.sh
-# Danach genügt bei jedem Update:  ./deploy.sh
+# Cleanora — Build & Restart-Skript für den Plesk-VPS.
 #
-# Voraussetzung: Erstinstallation ist bereits erfolgt (siehe README Abschnitt 7)
+# Ablauf bei jedem Update:
+#   1. In Plesk über die Git-Erweiterung „Pull/Deploy“ klicken (holt die Dateien von GitHub)
+#   2. Danach nur noch:  ./deploy.sh
+#
+# Einmalig ausführbar machen:  chmod +x deploy.sh
+# Voraussetzung: Erstinstallation ist erfolgt (siehe README Abschnitt 7)
 # und der Dienst "cleanora-api" läuft auf 127.0.0.1:8002.
 
 set -euo pipefail
@@ -11,16 +14,13 @@ cd "$(dirname "$0")"
 
 SERVICE="cleanora-api"
 
-echo "==> 1/4 Änderungen von GitHub holen (git pull) ..."
-git pull origin main
-
-echo "==> 2/4 Frontend bauen (npm ci && npm run build) ..."
+echo "==> 1/3 Frontend bauen (npm ci && npm run build) ..."
 cd frontend
 npm ci
 npm run build
 cd ..
 
-echo "==> 3/4 Backend-Abhängigkeiten aktualisieren ..."
+echo "==> 2/3 Backend-Abhängigkeiten aktualisieren ..."
 cd backend
 if [ ! -d .venv ]; then
   echo "FEHLER: backend/.venv fehlt — bitte zuerst die Erstinstallation nach README Abschnitt 7 ausführen."
@@ -30,7 +30,7 @@ source .venv/bin/activate
 pip install -r requirements.txt --quiet
 cd ..
 
-echo "==> 4/4 Backend-Dienst neu starten ($SERVICE) ..."
+echo "==> 3/3 Backend-Dienst neu starten ($SERVICE) ..."
 sudo systemctl restart "$SERVICE"
 sleep 2
 
