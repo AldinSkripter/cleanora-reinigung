@@ -22,8 +22,8 @@ Separater, nicht vorangekreuzter Haken für bezahlte sofortige digitale Inhalte:
 
 Bestätigungs-E-Mail enthält Vertragsinhalt, wirksam einbezogene Bedingungen, Widerrufsbelehrung/Formular und die erteilte Zustimmung/Kenntnisbestätigung. Nicht pauschal für laufende digitale Dienstleistungen/SaaS verwenden; dort andere Regeln.
 
-## Elektronische Widerrufsfunktion (§ 356a BGB)
-Bei einschlägigen über Online-Oberflächen geschlossenen Fernabsatzverträgen: deutlich zugänglicher Button „Vertrag widerrufen“, Eingabe von Name, Vertragskennung und Bestätigungs-E-Mail; zweiter Button „Widerruf bestätigen“; unverzügliche Bestätigung auf dauerhaftem Datenträger mit Erklärung, Datum und Uhrzeit. Kein unnötiger Login-Zwang. Funktion während Widerrufsfrist verfügbar halten. Link und Platzierung in der passenden Belehrung nennen, sobald implementiert.
+## Elektronische Widerrufsfunktion (§ 356a BGB) — im Entwurfs-PR implementiert
+Bei einschlägigen über Online-Oberflächen geschlossenen Fernabsatzverträgen: deutlich zugänglicher Button „Vertrag widerrufen“, Eingabe von Name, Vertragskennung und Bestätigungs-E-Mail; zweiter Button „Widerruf bestätigen“; unverzügliche Bestätigung auf dauerhaftem Datenträger mit Erklärung, Datum und Uhrzeit. Kein unnötiger Login-Zwang. Funktion während Widerrufsfrist verfügbar halten. Die Implementierung liegt im Entwurfs-PR: /widerruf, öffentlicher Empfang, eindeutige Referenz, dauerhafter Datenbankeintrag und E-Mail-Outbox mit Wiederholungen. Nach dem Deploy müssen SMTP-Livebetrieb, Empfang, Zugänglichkeit und Hintergrundprozess überprüft werden. Erst dann den vorbereiteten Online-Hinweis in die Belehrungen aufnehmen. Staff-Zugriff auf die Erklärungsliste: GET /api/withdrawals/admin. Rückzahlung und Prüfung der Rechtsfolgen erfolgen gesondert.
 
 ## Abonnements / Kündigung
 Bei einschlägigen online angebotenen entgeltlichen Dauerschuldverhältnissen zusätzlich Kündigungsfunktion nach § 312k BGB prüfen/umsetzen. Laufzeiten und Kündigung pro Produkt konkret anzeigen. Widerruf und Kündigung sind unterschiedliche Funktionen.
