@@ -1,5 +1,18 @@
 # Changelog — Cleanora Gebäudereinigung
 
+## 2026-10 — Neue Rechtsseiten: AGB + Widerrufsbelehrung (Commit 85a1c83)
+- Zwei neue Seiten /agb und /widerrufsbelehrung mit professionellen Standardtexten
+  (nutzen hinterlegte Firmendaten aus dem Admin). Wie bei Impressum/Datenschutz:
+  eigener Text im Admin (Rechtstexte-Tab, je bis 200.000 Zeichen, mit Zeichenzähler)
+  ersetzt den Standard komplett; leer = Standard.
+- Backend: LegalTextsInput um agb + widerruf erweitert, /api/legal-texts liefert alle vier.
+- Footer-Links (footer-agb, footer-widerruf) + Sitemap-Einträge ergänzt.
+- Verifiziert: Seiten rendern komplett (6/4 Abschnitte), PUT/GET-Backend-Flow, Footer-Links,
+  55/55 Tests grün, Build fehlerfrei.
+
+
+# Changelog — Cleanora Gebäudereinigung
+
 ## 2026-10 — Rechtstexte: kein Abschneiden mehr + Parser-Fix
 - Backend-Limit Impressum/Datenschutz 30.000 → 200.000 Zeichen (vorher: 422-Fehler bei
   typischen generierten DSGVO-Texten). Verifiziert: 112.760 Zeichen speichern + lesen OK.
