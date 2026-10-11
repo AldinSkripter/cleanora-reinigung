@@ -1,5 +1,18 @@
 # Changelog — Cleanora Gebäudereinigung
 
+## 2026-10 — Google-taugliches Marken-Favicon (Commit 14afc90)
+- Google zeigte Generik-Globus, weil nur eine alte SVG-Datei ohne klare Größen existierte.
+- Neues Favicon-Set aus dem Logo (türkises C auf Navy #0b3048, abgerundet): favicon.ico (16/32/48),
+  favicon.png 48px, favicon-192.png, apple-touch-icon.png 180px, neues brandetes favicon.svg.
+- index.html: saubere link-Tags mit sizes (Google-Richtlinie: Vielfache von 48px), theme-color #0b3048.
+- Backend-Fallback für /api/media/favicon → /favicon.png; JS-Override entfernt jetzt übrige
+  icon-Links bei Admin-Upload.
+- WICHTIG für Live: Google cached Favicons — nach Deploy Tage bis Wochen bis sichtbar;
+  Beschleunigung über Google Search Console (URL-Prüfung → Indexierung beantragen).
+
+
+# Changelog — Cleanora Gebäudereinigung
+
 ## 2026-10 — Favicon-Verwaltung verifiziert + Marken-Favicon gesetzt
 - Favicon-Bearbeitung existierte bereits vollständig im Admin (Medien → Favicon/Browser-Icon:
   Upload PNG/SVG/ICO, Vorschau, Ersetzen, Entfernen). End-to-end verifiziert: Upload via API,
