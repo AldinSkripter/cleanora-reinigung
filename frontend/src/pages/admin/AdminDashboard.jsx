@@ -273,8 +273,9 @@ function LegalTextsForm() {
     try {
       await api.put("/admin/settings/legal", texts);
       toast.success("Rechtstexte gespeichert — nach Neu laden auf der Website sichtbar");
-    } catch {
-      toast.error("Speichern fehlgeschlagen");
+    } catch (err) {
+      const detail = err?.response?.data?.detail;
+      toast.error(typeof detail === "string" ? `Speichern fehlgeschlagen: ${detail}` : "Speichern fehlgeschlagen");
     } finally {
       setSaving(false);
     }
@@ -306,6 +307,9 @@ function LegalTextsForm() {
             className={areaCls}
             placeholder={"## Angaben gemäß § 5 TMG\nCleanora Gebäudereinigung\n…"}
           />
+          <p data-testid="legal-impressum-count" className="mt-1.5 text-right text-[11px] text-white/30">
+            {texts.impressum.length.toLocaleString("de-DE")} Zeichen
+          </p>
         </div>
         <div className="mt-6">
           <label htmlFor="lt-datenschutz" className={labelCls}>Datenschutzerklärung (eigener Text)</label>
@@ -318,6 +322,9 @@ function LegalTextsForm() {
             className={areaCls}
             placeholder={"## 1. Verantwortlicher\n…"}
           />
+          <p data-testid="legal-datenschutz-count" className="mt-1.5 text-right text-[11px] text-white/30">
+            {texts.datenschutz.length.toLocaleString("de-DE")} Zeichen
+          </p>
         </div>
       </div>
       <button

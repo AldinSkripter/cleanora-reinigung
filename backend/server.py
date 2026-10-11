@@ -480,8 +480,8 @@ async def delete_media(kind: str, admin=Depends(get_admin)):
 # ------------------------------------------------------- legal texts
 
 class LegalTextsInput(BaseModel):
-    impressum: str = Field(default="", max_length=30000)
-    datenschutz: str = Field(default="", max_length=30000)
+    impressum: str = Field(default="", max_length=200000)
+    datenschutz: str = Field(default="", max_length=200000)
 
 
 @api_router.get("/legal-texts")
