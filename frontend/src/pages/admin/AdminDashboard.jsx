@@ -326,6 +326,36 @@ function LegalTextsForm() {
             {texts.datenschutz.length.toLocaleString("de-DE")} Zeichen
           </p>
         </div>
+        <div className="mt-6">
+          <label htmlFor="lt-agb" className={labelCls}>AGB (eigener Text)</label>
+          <textarea
+            id="lt-agb"
+            data-testid="legal-agb"
+            rows={12}
+            value={texts.agb || ""}
+            onChange={(e) => setTexts((t) => ({ ...t, agb: e.target.value }))}
+            className={areaCls}
+            placeholder={"## 1. Geltungsbereich\n…"}
+          />
+          <p data-testid="legal-agb-count" className="mt-1.5 text-right text-[11px] text-white/30">
+            {(texts.agb || "").length.toLocaleString("de-DE")} Zeichen
+          </p>
+        </div>
+        <div className="mt-6">
+          <label htmlFor="lt-widerruf" className={labelCls}>Widerrufsbelehrung (eigener Text)</label>
+          <textarea
+            id="lt-widerruf"
+            data-testid="legal-widerruf"
+            rows={12}
+            value={texts.widerruf || ""}
+            onChange={(e) => setTexts((t) => ({ ...t, widerruf: e.target.value }))}
+            className={areaCls}
+            placeholder={"## Widerrufsrecht\n…"}
+          />
+          <p data-testid="legal-widerruf-count" className="mt-1.5 text-right text-[11px] text-white/30">
+            {(texts.widerruf || "").length.toLocaleString("de-DE")} Zeichen
+          </p>
+        </div>
       </div>
       <button
         data-testid="legal-save"

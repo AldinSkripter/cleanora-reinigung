@@ -18,6 +18,8 @@ const Einsatzgebiet = lazy(() => import("@/pages/Einsatzgebiet"));
 const Kontakt = lazy(() => import("@/pages/Kontakt"));
 const Impressum = lazy(() => import("@/pages/Impressum"));
 const Datenschutz = lazy(() => import("@/pages/Datenschutz"));
+const Agb = lazy(() => import("@/pages/Agb"));
+const Widerruf = lazy(() => import("@/pages/Widerruf"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const AdminLogin = lazy(() => import("@/pages/admin/AdminLogin"));
 const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"));
@@ -100,6 +102,8 @@ function App() {
                 <Route path="/kontakt" element={<Kontakt />} />
                 <Route path="/impressum" element={<Impressum />} />
                 <Route path="/datenschutz" element={<Datenschutz />} />
+                <Route path="/agb" element={<Agb />} />
+                <Route path="/widerrufsbelehrung" element={<Widerruf />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
               <Route path="/admin" element={<AdminLogin />} />

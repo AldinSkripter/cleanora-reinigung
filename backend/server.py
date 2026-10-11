@@ -482,12 +482,19 @@ async def delete_media(kind: str, admin=Depends(get_admin)):
 class LegalTextsInput(BaseModel):
     impressum: str = Field(default="", max_length=200000)
     datenschutz: str = Field(default="", max_length=200000)
+    agb: str = Field(default="", max_length=200000)
+    widerruf: str = Field(default="", max_length=200000)
 
 
 @api_router.get("/legal-texts")
 async def public_legal_texts():
     saved = await db.settings.find_one({"_id": "legal"}) or {}
-    return {"impressum": saved.get("impressum", ""), "datenschutz": saved.get("datenschutz", "")}
+    return {
+        "impressum": saved.get("impressum", ""),
+        "datenschutz": saved.get("datenschutz", ""),
+        "agb": saved.get("agb", ""),
+        "widerruf": saved.get("widerruf", ""),
+    }
 
 
 @api_router.put("/admin/settings/legal")
