@@ -1,6 +1,7 @@
 import Seo from "@/components/Seo";
 import Reveal from "@/components/Reveal";
 import LegalText from "@/components/LegalText";
+import { FileDown } from "lucide-react";
 import { useSite } from "@/lib/SiteContext";
 
 const buildSections = (site) => [
@@ -53,6 +54,34 @@ export default function Widerruf() {
             ))}
           </div>
         )}
+        <Reveal>
+          <div
+            data-testid="kuendigung-download"
+            className="mt-16 flex flex-col gap-6 border border-aqua-deep/25 bg-pristine/40 p-8 sm:flex-row sm:items-center sm:justify-between md:p-10"
+          >
+            <div>
+              <p className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.25em] text-aqua-deep">
+                <FileDown className="h-4 w-4" /> Formular
+              </p>
+              <h2 className="mt-3 font-display text-xl font-light tracking-tight text-precision md:text-2xl">
+                Kündigungsformular (PDF)
+              </h2>
+              <p className="mt-3 max-w-lg text-sm leading-relaxed text-precision/60">
+                Sie möchten Ihren Reinigungsvertrag kündigen? Laden Sie hier unser vorbereitetes
+                Formular herunter — ausfüllen und per Post oder E-Mail an uns senden. Eine formlos
+                formulierte Kündigung in Textform (z. B. per E-Mail) ist selbstverständlich ebenso gültig.
+              </p>
+            </div>
+            <a
+              data-testid="kuendigung-download-btn"
+              href="/downloads/cleanora-kuendigungsformular.pdf"
+              download="Cleanora-Kuendigungsformular.pdf"
+              className="inline-flex shrink-0 items-center gap-2.5 border border-precision bg-precision px-7 py-4 text-sm font-medium text-white transition-colors duration-300 hover:bg-transparent hover:text-precision"
+            >
+              <FileDown className="h-4 w-4" /> PDF herunterladen
+            </a>
+          </div>
+        </Reveal>
       </section>
     </>
   );

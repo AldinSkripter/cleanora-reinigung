@@ -1,5 +1,16 @@
 # Changelog — Cleanora Gebäudereinigung
 
+## 2026-10 — Kündigungsformular-PDF zum Download (Commit 391224f)
+- Vom Kunden bereitgestelltes PDF (Cleanora_Kuendigungsformular.pdf, 125 KB, mit Branding)
+  unter frontend/public/downloads/cleanora-kuendigungsformular.pdf abgelegt.
+- Download-Karte auf /widerrufsbelehrung: IMMER sichtbar (auch bei eigenem Rechtstext),
+  Markenstil (aqua Label, navy Button), erklärt dass Textform-Kündigung ebenso gültig ist.
+- Verifiziert: PDF wird mit 200 application/pdf ausgeliefert, Karte rendert korrekt
+  (Screenshot), Download-Attribut vorhanden. Build fehlerfrei.
+
+
+# Changelog — Cleanora Gebäudereinigung
+
 ## 2026-10 — Neue Rechtsseiten: AGB + Widerrufsbelehrung (Commit 85a1c83)
 - Zwei neue Seiten /agb und /widerrufsbelehrung mit professionellen Standardtexten
   (nutzen hinterlegte Firmendaten aus dem Admin). Wie bei Impressum/Datenschutz:
