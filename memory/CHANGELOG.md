@@ -1,5 +1,15 @@
 # Changelog — Cleanora Gebäudereinigung
 
+## 2026-10 — Favicon-Verwaltung verifiziert + Marken-Favicon gesetzt
+- Favicon-Bearbeitung existierte bereits vollständig im Admin (Medien → Favicon/Browser-Icon:
+  Upload PNG/SVG/ICO, Vorschau, Ersetzen, Entfernen). End-to-end verifiziert: Upload via API,
+  <link rel="icon"> wird nach Seitenaufruf automatisch auf /api/media/favicon?v=… umgeschaltet
+  (App.jsx), HTTP 200 image/png, Admin-Vorschau zeigt das Icon.
+- Tirkizno C iz loga postavljeno kao aktivni favicon (256px, izrezano iz logo-standard.png).
+
+
+# Changelog — Cleanora Gebäudereinigung
+
 ## 2026-07 — Aqua-Markenfarbe durchgängig auf allen Seiten
 - Türkis (#16bfae / aqua-deep #0f8c7f) jetzt systematisch auf allen Seiten: Eyebrow-Striche
   (Leistungen, Über uns, Einsatzgebiet, Kontakt), alle Listen-/Kapitel-Nummern, Hover-Zustände
