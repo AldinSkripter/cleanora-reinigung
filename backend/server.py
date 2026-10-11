@@ -371,7 +371,7 @@ MEDIA_CONFIG = {
         "mimes": {"image/png": ".png", "image/jpeg": ".jpg", "image/svg+xml": ".svg",
                   "image/x-icon": ".ico", "image/vnd.microsoft.icon": ".ico"},
         "max_bytes": 512 * 1024,
-        "fallback": "/favicon.svg",
+        "fallback": "/favicon.png",
         "allowed": "PNG, SVG oder ICO (max. 512 KB)",
     },
     "logo": {

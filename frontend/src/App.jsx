@@ -51,13 +51,17 @@ function App() {
   useEffect(() => {
     api.get("/media/info").then(({ data }) => {
       if (data.favicon) {
-        let link = document.querySelector('link[rel="icon"]');
-        if (!link) {
-          link = document.createElement("link");
-          link.rel = "icon";
-          document.head.appendChild(link);
-        }
-        link.href = `${import.meta.env.REACT_APP_BACKEND_URL}/api/media/favicon?v=${encodeURIComponent(data.updated_at || "")}`;
+        const url = `${import.meta.env.REACT_APP_BACKEND_URL}/api/media/favicon?v=${encodeURIComponent(data.updated_at || "")}`;
+        const links = document.querySelectorAll('link[rel="icon"]');
+        links.forEach((link, i) => {
+          if (i === 0) {
+            link.removeAttribute("sizes");
+            link.removeAttribute("type");
+            link.href = url;
+          } else {
+            link.remove();
+          }
+        });
       }
     }).catch(() => {});
   }, []);
