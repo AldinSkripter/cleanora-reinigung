@@ -1,5 +1,18 @@
 # Changelog — Cleanora Gebäudereinigung
 
+## 2026-10 — Rechtstexte: kein Abschneiden mehr + Parser-Fix
+- Backend-Limit Impressum/Datenschutz 30.000 → 200.000 Zeichen (vorher: 422-Fehler bei
+  typischen generierten DSGVO-Texten). Verifiziert: 112.760 Zeichen speichern + lesen OK.
+- LegalText-Parser repariert: Überschrift + Fließtext im selben Block wurden komplett als
+  Überschrift gerendert (ganzer Text uppercase/„abgeschnitten“ wirkend); jetzt erste Zeile = H2,
+  Rest = Absatz. CRLF-Normalisierung, „## “ auch ohne Leerzeile davor erkannt. H2 jetzt aqua-deep.
+- Admin Rechtstexte: Zeichenzähler unter beiden Textareas, Fehler-Toast zeigt Server-Detail.
+- Verifiziert: realistischer 4-Abschnitt-DSGVO-Text rendert vollständig bis zum letzten Satz.
+- 55/55 Backend-Tests grün, Build fehlerfrei.
+
+
+# Changelog — Cleanora Gebäudereinigung
+
 ## 2026-10 — Google-taugliches Marken-Favicon (Commit 14afc90)
 - Google zeigte Generik-Globus, weil nur eine alte SVG-Datei ohne klare Größen existierte.
 - Neues Favicon-Set aus dem Logo (türkises C auf Navy #0b3048, abgerundet): favicon.ico (16/32/48),
