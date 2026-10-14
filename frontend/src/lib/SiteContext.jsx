@@ -4,12 +4,12 @@ import { SITE } from "@/data/site";
 
 const DEFAULTS = {
   legal_name: SITE.legalName,
-  public_email: SITE.email,
-  phone: SITE.phone,
-  phone_href: SITE.phoneHref,
-  street: SITE.street,
-  city: SITE.city,
-  owner_name: "",
+  public_email: "kontakt@cleanora-reinigung.de",
+  phone: "+49 157 76139350",
+  phone_href: "tel:+4915776139350",
+  street: "Omerskopfstr. 60",
+  city: "77855 Achern",
+  owner_name: "Alihamna Jonuzovic",
   ust_id: "",
   hours: "Mo–Fr 8:00–17:00 Uhr · Termine nach Vereinbarung",
   logo_scale: 1.5,
@@ -44,3 +44,4 @@ export function SiteProvider({ children }) {
 }
 
 export const useSite = () => useContext(SiteContext);
+

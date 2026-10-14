@@ -114,7 +114,7 @@ async def me(admin=Depends(get_admin)):
 # ------------------------------------------------------- email settings
 
 DEFAULT_SETTINGS = {
-    "recipient_email": os.environ.get("CONTACT_RECIPIENT", "kontak@cleanora-reinigung.de"),
+    "recipient_email": os.environ.get("CONTACT_RECIPIENT", "kontakt@cleanora-reinigung.de"),
     "smtp_host": os.environ.get("SMTP_HOST", ""),
     "smtp_port": int(os.environ.get("SMTP_PORT", "587")),
     "smtp_user": os.environ.get("SMTP_USER", ""),
@@ -191,7 +191,7 @@ class ContactInput(BaseModel):
     object_type: str = Field(default="", max_length=120)
     location: str = Field(default="", max_length=120)
     message: str = Field(min_length=10, max_length=5000)
-    privacy: bool
+    privacy: bool = False  # Legacy client field; inquiry processing does not require consent.
     website: str = Field(default="", max_length=120)  # Honeypot
 
     @field_validator("name", "message", "phone", "service", "object_type", "location")
@@ -201,23 +201,15 @@ class ContactInput(BaseModel):
             raise ValueError("Ungültige Zeichen")
         return v.strip()
 
-    @field_validator("privacy")
-    @classmethod
-    def privacy_accepted(cls, v: bool) -> bool:
-        if not v:
-            raise ValueError("Datenschutz-Zustimmung erforderlich")
-        return v
-
-
 # ------------------------------------------------------- site settings
 
 SITE_DEFAULTS = {
     "legal_name": os.environ.get("LEGAL_NAME", "Cleanora Gebäudereinigung"),
-    "public_email": os.environ.get("PUBLIC_EMAIL", "kontak@cleanora-reinigung.de"),
-    "phone": os.environ.get("PUBLIC_PHONE", "+49 (0) 7841 000 000"),
-    "street": os.environ.get("PUBLIC_STREET", "Musterstraße 12"),
+    "public_email": os.environ.get("PUBLIC_EMAIL", "kontakt@cleanora-reinigung.de"),
+    "phone": os.environ.get("PUBLIC_PHONE", "+49 157 76139350"),
+    "street": os.environ.get("PUBLIC_STREET", "Omerskopfstr. 60"),
     "city": os.environ.get("PUBLIC_CITY", "77855 Achern"),
-    "owner_name": "",
+    "owner_name": "Alihamna Jonuzovic",
     "ust_id": "",
     "hours": "Mo–Fr 8:00–17:00 Uhr · Termine nach Vereinbarung",
     "logo_scale": 1.5,
@@ -547,3 +539,4 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+

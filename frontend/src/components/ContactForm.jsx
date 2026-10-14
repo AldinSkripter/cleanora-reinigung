@@ -13,7 +13,6 @@ const initial = {
   object_type: "",
   location: "",
   message: "",
-  privacy: false,
   website: "",
 };
 
@@ -168,20 +167,10 @@ export default function ContactForm({ dark = false }) {
         className="absolute -left-[9999px] h-0 w-0 opacity-0"
       />
 
-      <label className="flex cursor-pointer items-start gap-3 text-sm text-precision/70">
-        <input
-          type="checkbox"
-          data-testid="contact-privacy"
-          required
-          checked={form.privacy}
-          onChange={set("privacy")}
-          className="mt-1 h-4 w-4 shrink-0 cursor-pointer appearance-none border border-precision/40 transition-colors duration-200 checked:bg-precision"
-        />
-        <span>
-          Ich habe die <a href="/datenschutz" className="underline underline-offset-4 hover:text-aqua-deep">Datenschutzerklärung</a> gelesen
-          und bin mit der Verarbeitung meiner Daten zur Bearbeitung der Anfrage einverstanden. *
-        </span>
-      </label>
+      <p className="text-sm text-precision/70">
+        Wir verwenden Ihre Angaben zur Bearbeitung Ihrer Anfrage. Weitere Informationen finden Sie in unserer{" "}
+        <a href="/datenschutz" className="underline underline-offset-4 hover:text-aqua-deep">Datenschutzerklärung</a>.
+      </p>
 
       {status === "error" && (
         <p data-testid="contact-error" role="alert" className="border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
@@ -202,3 +191,4 @@ export default function ContactForm({ dark = false }) {
     </form>
   );
 }
+
